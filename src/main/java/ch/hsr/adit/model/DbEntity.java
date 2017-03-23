@@ -1,7 +1,9 @@
 package ch.hsr.adit.model;
 
-public interface DbEntity {
-  public Long getId();
+import java.io.Serializable;
 
-  public void setId(Long id);
+public interface DbEntity extends Serializable {
+  public int getId();
+
+  public void setId(int id);
 }
