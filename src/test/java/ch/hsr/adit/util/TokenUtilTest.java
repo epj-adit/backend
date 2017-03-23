@@ -2,8 +2,10 @@ package ch.hsr.adit.util;
 
 import static org.junit.Assert.assertEquals;
 
-import ch.hsr.adit.model.User;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+
+import ch.hsr.adit.domain.model.User;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

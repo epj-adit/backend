@@ -1,4 +1,4 @@
-package ch.hsr.adit.app;
+package ch.hsr.adit.application.app;
 
 import static ch.hsr.adit.util.JsonUtil.toJson;
 import static spark.Spark.after;
@@ -18,12 +18,12 @@ import javax.crypto.SecretKey;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 
-import ch.hsr.adit.business.controller.UserController;
-import ch.hsr.adit.business.service.UserService;
+import ch.hsr.adit.application.controller.UserController;
+import ch.hsr.adit.application.service.UserService;
+import ch.hsr.adit.domain.model.User;
+import ch.hsr.adit.domain.persistence.GenericDao;
+import ch.hsr.adit.domain.persistence.UserDao;
 import ch.hsr.adit.exception.ErrorResponse;
-import ch.hsr.adit.model.User;
-import ch.hsr.adit.persistence.GenericDao;
-import ch.hsr.adit.persistence.UserDao;
 import ch.hsr.adit.util.AuthenticationUtil;
 import ch.hsr.adit.util.HibernateUtil;
 import ch.hsr.adit.util.KeyStore;

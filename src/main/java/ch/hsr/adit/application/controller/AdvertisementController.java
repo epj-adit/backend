@@ -1,4 +1,4 @@
-package ch.hsr.adit.business.controller;
+package ch.hsr.adit.application.controller;
 
 import static spark.Spark.post;
 
@@ -8,7 +8,7 @@ import javax.servlet.MultipartConfigElement;
 
 import org.apache.log4j.Logger;
 
-import ch.hsr.adit.business.service.UserService;
+import ch.hsr.adit.application.service.UserService;
 
 public class AdvertisementController {
 

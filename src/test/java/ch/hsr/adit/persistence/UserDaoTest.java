@@ -13,7 +13,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import ch.hsr.adit.model.User;
+import ch.hsr.adit.domain.model.User;
+import ch.hsr.adit.domain.persistence.GenericDao;
+import ch.hsr.adit.domain.persistence.UserDao;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserDaoTest {

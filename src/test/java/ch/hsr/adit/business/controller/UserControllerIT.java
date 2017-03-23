@@ -15,7 +15,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ch.hsr.adit.app.App;
+import ch.hsr.adit.application.app.App;
 import ch.hsr.adit.test.TestResponse;
 import ch.hsr.adit.test.TestUtil;
 import spark.Spark;

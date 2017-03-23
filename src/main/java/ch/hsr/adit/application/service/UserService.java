@@ -1,4 +1,4 @@
-package ch.hsr.adit.business.service;
+package ch.hsr.adit.application.service;
 
 import java.util.List;
 
@@ -7,9 +7,9 @@ import javax.persistence.OptimisticLockException;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 
+import ch.hsr.adit.domain.model.User;
+import ch.hsr.adit.domain.persistence.GenericDao;
 import ch.hsr.adit.exception.DatabaseException;
-import ch.hsr.adit.model.User;
-import ch.hsr.adit.persistence.GenericDao;
 import spark.Request;
 
 

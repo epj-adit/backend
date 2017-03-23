@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import ch.hsr.adit.model.User;
+import ch.hsr.adit.domain.model.User;
 import lombok.Data;
 
 import java.io.IOException;

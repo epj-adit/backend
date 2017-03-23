@@ -1,4 +1,4 @@
-package ch.hsr.adit.persistence;
+package ch.hsr.adit.domain.persistence;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -10,7 +10,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-import ch.hsr.adit.model.DbEntity;
+import ch.hsr.adit.domain.model.DbEntity;
 
 public abstract class GenericDao<T extends DbEntity, PK extends Serializable> {
 

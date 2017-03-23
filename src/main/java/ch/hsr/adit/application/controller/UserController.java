@@ -1,4 +1,4 @@
-package ch.hsr.adit.business.controller;
+package ch.hsr.adit.application.controller;
 
 import static ch.hsr.adit.util.JsonUtil.jsonTransformer;
 import static spark.Spark.delete;
@@ -6,8 +6,8 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
-import ch.hsr.adit.business.service.UserService;
-import ch.hsr.adit.model.User;
+import ch.hsr.adit.application.service.UserService;
+import ch.hsr.adit.domain.model.User;
 
 public class UserController {
 

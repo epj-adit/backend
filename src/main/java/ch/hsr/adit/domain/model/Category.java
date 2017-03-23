@@ -1,4 +1,4 @@
-package ch.hsr.adit.model;
+package ch.hsr.adit.domain.model;
 // Generated 23.03.2017 08:47:58 by Hibernate Tools 5.2.1.Final
 
 import java.util.HashSet;
@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Table(name = "category", schema = "public")
 public class Category implements DbEntity {
 
-	private int id;
+	private long id;
 	private Category category;
 	private String name;
 	private Set categories = new HashSet(0);
@@ -29,12 +29,12 @@ public class Category implements DbEntity {
 	public Category() {
 	}
 
-	public Category(int id, String name) {
+	public Category(long id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 
-	public Category(int id, Category category, String name, Set categories, Set advertisements, Set subscriptions) {
+	public Category(long id, Category category, String name, Set categories, Set advertisements, Set subscriptions) {
 		this.id = id;
 		this.category = category;
 		this.name = name;
@@ -46,11 +46,11 @@ public class Category implements DbEntity {
 	@Id
 
 	@Column(name = "id", unique = true, nullable = false)
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

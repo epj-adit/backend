@@ -1,9 +1,9 @@
-package ch.hsr.adit.persistence;
+package ch.hsr.adit.domain.persistence;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-import ch.hsr.adit.model.User;
+import ch.hsr.adit.domain.model.User;
 
 
 public class UserDao extends GenericDao<User, Long> {
