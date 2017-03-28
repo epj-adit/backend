@@ -2,6 +2,8 @@ package ch.hsr.adit.util;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
 import ch.hsr.adit.domain.model.User;
@@ -13,35 +15,37 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TokenUtilTest {
-  User user;
-  TokenUtil token;
+  private User user;
+  private Token token;
+  private KeyStore keyStore;
 
   @Before
   public void setUp() {
     user = new User();
     user.setEmail("student@hsr.ch");
+    keyStore = KeyStore.getInstance(new File("KeyStore.properties"));
   }
 
   @Test
   public void createTokenTest() {
     User user = new User();
     user.setEmail("student@hsr.ch");
-    token = new TokenUtil(user);
-    assertEquals(user.getJwtToken(), token.getToken());
+    token = new Token(user);
+    assertEquals(user.getToken(), token.getToken());
   }
 
   @Test
   public void verifyTokenTest() {
-    token = new TokenUtil(user);
+    token = new Token(user);
     token.verify(user);
   }
 
   @Test(expected = JWTVerificationException.class)
   public void verifyWrongTokenTest() {
-    token = new TokenUtil(user);
+    token = new Token(user);
     User user2 = new User();
     user2.setEmail("professor@hsr.ch");
-    TokenUtil token2 = new TokenUtil(user2);
+    Token token2 = new Token(user2);
     token2.verify(user);
   }
 }

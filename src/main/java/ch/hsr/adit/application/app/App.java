@@ -9,6 +9,10 @@ import static spark.Spark.halt;
 import static spark.Spark.internalServerError;
 import static spark.Spark.notFound;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 
@@ -20,11 +24,12 @@ import ch.hsr.adit.domain.persistence.UserDao;
 import ch.hsr.adit.exception.SystemException;
 import ch.hsr.adit.util.AuthenticationUtil;
 import ch.hsr.adit.util.HibernateUtil;
+import ch.hsr.adit.util.KeyStore;
 
 public class App {
 
   private static final Logger logger = Logger.getLogger(App.class);
-
+  private final static File KEY_FILE = new File("KeyStore.properties");
 
   public static void main(String[] args) {
 
@@ -35,17 +40,15 @@ public class App {
     // wait for jetty
     awaitInitialization();
 
-    // TODO: init secret
-    // try {
-    // KeyStore.generateKey();
-    // KeyStore.saveKey();
-    // } catch (NoSuchAlgorithmException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // } catch (IOException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
+    try {
+      KeyStore keyStore = KeyStore.getInstance(KEY_FILE);
+      keyStore.generateKey();
+      keyStore.saveKey();
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
   }
 
