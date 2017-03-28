@@ -1,5 +1,6 @@
 package ch.hsr.adit.domain.model;
-// Generated 23.03.2017 08:47:58 by Hibernate Tools 5.2.1.Final
+// Generated 23.03.2017 11:05:29 by Hibernate Tools 5.2.1.Final
+
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -18,6 +19,8 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "subscription", schema = "public")
 public class Subscription implements DbEntity {
+  
+  private static final long serialVersionUID = 1L;
 
   private long id;
   private Category category;
@@ -36,7 +39,6 @@ public class Subscription implements DbEntity {
   }
 
   @Id
-
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
     return this.id;
@@ -46,7 +48,7 @@ public class Subscription implements DbEntity {
     this.id = id;
   }
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "category_id", nullable = false)
   public Category getCategory() {
     return this.category;
@@ -56,7 +58,7 @@ public class Subscription implements DbEntity {
     this.category = category;
   }
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", nullable = false)
   public User getUser() {
     return this.user;
@@ -65,6 +67,7 @@ public class Subscription implements DbEntity {
   public void setUser(User user) {
     this.user = user;
   }
+
 
   @Column(name = "interval", nullable = false)
   public long getInterval() {
@@ -85,4 +88,8 @@ public class Subscription implements DbEntity {
     this.lastUpdated = lastUpdated;
   }
 
+
+
 }
+
+

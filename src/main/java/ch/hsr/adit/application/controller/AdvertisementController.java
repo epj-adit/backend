@@ -6,13 +6,9 @@ import java.io.InputStream;
 
 import javax.servlet.MultipartConfigElement;
 
-import org.apache.log4j.Logger;
-
 import ch.hsr.adit.application.service.UserService;
 
 public class AdvertisementController {
-
-  private static final Logger logger = Logger.getLogger(AdvertisementController.class);
 
   /**
    * API Controller for /user requests.

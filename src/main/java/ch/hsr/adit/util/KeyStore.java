@@ -1,9 +1,8 @@
 package ch.hsr.adit.util;
 
-import static org.apache.commons.codec.binary.Hex.*;
-import static org.apache.commons.io.FileUtils.*;
+import static org.apache.commons.codec.binary.Hex.decodeHex;
+import static org.apache.commons.codec.binary.Hex.encodeHex;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,8 +25,9 @@ public final class KeyStore {
   private static SecretKey secretKey = null;
 
   /**
-   * Generates a new SecretKey thats used by jwt
-   * Should only be called once since the secret is permanent
+   * Generates a new SecretKey thats used by jwt Should only be called once since the secret is
+   * permanent
+   * 
    * @throws NoSuchAlgorithmException
    */
   public static void generateKey() throws NoSuchAlgorithmException {
@@ -35,8 +35,10 @@ public final class KeyStore {
     keyGenerator.init(256); // 128 default; 192 and 256 also possible
     secretKey = keyGenerator.generateKey();
   }
+
   /**
    * Saves the generated Key
+   * 
    * @throws IOException
    */
   public static void saveKey() throws IOException {
@@ -60,6 +62,7 @@ public final class KeyStore {
 
     }
   }
+
   /**
    * Loads the permanent Key from the KeyStore.properties file
    * 

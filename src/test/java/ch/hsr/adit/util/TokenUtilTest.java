@@ -27,7 +27,7 @@ public class TokenUtilTest {
     User user = new User();
     user.setEmail("student@hsr.ch");
     token = new TokenUtil(user);
-    assertEquals(user.getToken(), token.getToken());
+    assertEquals(user.getJwtToken(), token.getToken());
   }
 
   @Test

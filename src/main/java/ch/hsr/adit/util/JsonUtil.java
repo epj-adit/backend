@@ -4,7 +4,8 @@ import com.google.gson.Gson;
 
 import spark.ResponseTransformer;
 
-public final class JsonUtil {
+public class JsonUtil {
+  private static Gson gson = new Gson();
 
   /**
    * Converts the given object to json using Gson.
@@ -13,11 +14,11 @@ public final class JsonUtil {
    * @return the json string
    */
   public static final String toJson(Object object) {
-    return new Gson().toJson(object);
+    return gson.toJson(object);
   }
 
   /**
-   * Returns a JSON response transformer as functional interface.
+   * Returns a JSON response transformer as function reference.
    * 
    * @return ResponseTransformer
    */

@@ -26,8 +26,8 @@ public class UserController {
 
     // read
     get("/user/:id", (request, response) -> {
-      long id = Long.parseLong(request.params(":id"));
-      return userService.get(id);
+      User user = userService.transformToUser(request);
+      return userService.get(user);
     }, jsonTransformer());
 
     get("/users", (request, response) -> {
@@ -42,8 +42,8 @@ public class UserController {
 
     // delete
     delete("user/:id", (request, response) -> {
-      long id = Long.parseLong(request.params(":id"));
-      return userService.deleteUser(id);
+      User user = userService.transformToUser(request);
+      return userService.deleteUser(user);
     }, jsonTransformer());
   }
 }

@@ -12,7 +12,7 @@ CREATE TABLE "user" (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	username TEXT NOT NULL,
   	email TEXT NOT NULL,
-  	passwort_hash TEXT NOT NULL,
+  	password_hash TEXT NOT NULL,
   	is_private BOOLEAN NOT NULL DEFAULT FALSE,
   	wants_notification BOOLEAN NOT NULL DEFAULT FALSE,
   	is_active BOOLEAN NOT NULL DEFAULT FALSE,

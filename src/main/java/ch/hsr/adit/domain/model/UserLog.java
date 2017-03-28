@@ -1,5 +1,6 @@
 package ch.hsr.adit.domain.model;
-// Generated 23.03.2017 08:47:58 by Hibernate Tools 5.2.1.Final
+// Generated 23.03.2017 11:05:29 by Hibernate Tools 5.2.1.Final
+
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -19,6 +20,8 @@ import javax.persistence.TemporalType;
 @Table(name = "user_log", schema = "public")
 public class UserLog implements DbEntity {
 
+  private static final long serialVersionUID = 1L;
+
   private long id;
   private User user;
   private String ip;
@@ -36,7 +39,6 @@ public class UserLog implements DbEntity {
   }
 
   @Id
-
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
     return this.id;
@@ -46,7 +48,7 @@ public class UserLog implements DbEntity {
     this.id = id;
   }
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", nullable = false)
   public User getUser() {
     return this.user;
@@ -56,6 +58,7 @@ public class UserLog implements DbEntity {
     this.user = user;
   }
 
+
   @Column(name = "ip", nullable = false)
   public String getIp() {
     return this.ip;
@@ -64,6 +67,7 @@ public class UserLog implements DbEntity {
   public void setIp(String ip) {
     this.ip = ip;
   }
+
 
   @Column(name = "action", nullable = false)
   public String getAction() {
@@ -75,7 +79,8 @@ public class UserLog implements DbEntity {
   }
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(name = "created", nullable = false, length = 29)
+  @Column(name = "created", insertable = false, updatable = false, nullable = false, length = 29,
+      columnDefinition = "TIMESTAMP DEFAULT NOW()")
   public Date getCreated() {
     return this.created;
   }
@@ -84,4 +89,8 @@ public class UserLog implements DbEntity {
     this.created = created;
   }
 
+
+
 }
+
+

@@ -9,29 +9,22 @@ import static spark.Spark.halt;
 import static spark.Spark.internalServerError;
 import static spark.Spark.notFound;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.SecretKey;
-
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 
 import ch.hsr.adit.application.controller.UserController;
+import ch.hsr.adit.application.service.RoleService;
 import ch.hsr.adit.application.service.UserService;
-import ch.hsr.adit.domain.model.User;
-import ch.hsr.adit.domain.persistence.GenericDao;
+import ch.hsr.adit.domain.persistence.RoleDao;
 import ch.hsr.adit.domain.persistence.UserDao;
-import ch.hsr.adit.exception.ErrorResponse;
+import ch.hsr.adit.exception.SystemException;
 import ch.hsr.adit.util.AuthenticationUtil;
 import ch.hsr.adit.util.HibernateUtil;
-import ch.hsr.adit.util.KeyStore;
 
 public class App {
 
   private static final Logger logger = Logger.getLogger(App.class);
-  
+
 
   public static void main(String[] args) {
 
@@ -41,8 +34,8 @@ public class App {
 
     // wait for jetty
     awaitInitialization();
-    
-    //TODO: init secret
+
+    // TODO: init secret
     // try {
     // KeyStore.generateKey();
     // KeyStore.saveKey();
@@ -67,15 +60,15 @@ public class App {
     after((request, response) -> {
       response.type("application/json");
       response.header("Content-Encoding", "gzip");
-      //TODO: send jwt on successfull auth
-//    response.header("Authorization", "Bearer " + jwt");
+      // TODO: send jwt on successfull auth
+      // response.header("Authorization", "Bearer " + jwt");
     });
 
-    exception(Exception.class, (e, req, res) -> {
-      logger.error("Unexpected exception occured: " + e.getMessage());
+    exception(SystemException.class, (e, req, res) -> {
+      logger.error("Adit Exception occured: " + e.getMessage());
 
       res.status(200);
-      res.body(toJson(new ErrorResponse(e)));
+      res.body(toJson(e));
     });
 
     notFound((req, res) -> {
@@ -94,9 +87,13 @@ public class App {
   private static void setupApiController() {
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
+    // Role
+    RoleDao roleDao = new RoleDao(sessionFactory);
+    RoleService roleService = new RoleService(roleDao);
+
     // User
-    GenericDao<User, Long> userDao = new UserDao(sessionFactory);
-    UserService userService = new UserService(userDao);
+    UserDao userDao = new UserDao(sessionFactory);
+    UserService userService = new UserService(userDao, roleService);
     new UserController(userService);
   }
 }

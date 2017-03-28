@@ -1,5 +1,6 @@
 package ch.hsr.adit.domain.model;
-// Generated 23.03.2017 08:47:58 by Hibernate Tools 5.2.1.Final
+// Generated 23.03.2017 11:05:29 by Hibernate Tools 5.2.1.Final
+
 
 import java.util.Date;
 import java.util.HashSet;
@@ -14,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
 
@@ -22,64 +25,57 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name = "user", schema = "public")
+@Table(name = "user", schema = "public",
+    uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User implements DbEntity {
+  
+  private static final long serialVersionUID = 1L;
+
+  @Transient
+  private String jwtToken;
 
   private long id;
   private Role role;
   private String username;
   private String email;
-  private String passwortHash;
+  private String passwordHash;
   private boolean isPrivate;
   private boolean wantsNotification;
   private boolean isActive;
   private Date created;
   private Date updated;
-  private Set userLogs = new HashSet(0);
-  private Set messagesForSenderUserId = new HashSet(0);
-  private Set messagesForRecipientUserId = new HashSet(0);
-  private Set subscriptions = new HashSet(0);
-  private Set advertisements = new HashSet(0);
-  private String token;
 
   public User() {}
 
-  public User(long id, Role role, String username, String email, String passwortHash,
+
+  public User(long id, Role role, String username, String email, String passwordHash,
       boolean isPrivate, boolean wantsNotification, boolean isActive, Date created) {
     this.id = id;
     this.role = role;
     this.username = username;
     this.email = email;
-    this.passwortHash = passwortHash;
+    this.passwordHash = passwordHash;
     this.isPrivate = isPrivate;
     this.wantsNotification = wantsNotification;
     this.isActive = isActive;
     this.created = created;
   }
 
-  public User(long id, Role role, String username, String email, String passwortHash,
-      boolean isPrivate, boolean wantsNotification, boolean isActive, Date created, Date updated,
-      Set userLogs, Set messagesForSenderUserId, Set messagesForRecipientUserId, Set subscriptions,
-      Set advertisements) {
+  public User(long id, Role role, String username, String email, String passwordHash,
+      boolean isPrivate, boolean wantsNotification, boolean isActive, Date created, Date updated) {
     this.id = id;
     this.role = role;
     this.username = username;
     this.email = email;
-    this.passwortHash = passwortHash;
+    this.passwordHash = passwordHash;
     this.isPrivate = isPrivate;
     this.wantsNotification = wantsNotification;
     this.isActive = isActive;
     this.created = created;
     this.updated = updated;
-    this.userLogs = userLogs;
-    this.messagesForSenderUserId = messagesForSenderUserId;
-    this.messagesForRecipientUserId = messagesForRecipientUserId;
-    this.subscriptions = subscriptions;
-    this.advertisements = advertisements;
   }
 
   @Id
-
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
     return this.id;
@@ -89,7 +85,7 @@ public class User implements DbEntity {
     this.id = id;
   }
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "role_id", nullable = false)
   public Role getRole() {
     return this.role;
@@ -98,6 +94,7 @@ public class User implements DbEntity {
   public void setRole(Role role) {
     this.role = role;
   }
+
 
   @Column(name = "username", nullable = false)
   public String getUsername() {
@@ -108,7 +105,8 @@ public class User implements DbEntity {
     this.username = username;
   }
 
-  @Column(name = "email", nullable = false)
+
+  @Column(name = "email", unique = true, nullable = false)
   public String getEmail() {
     return this.email;
   }
@@ -117,14 +115,16 @@ public class User implements DbEntity {
     this.email = email;
   }
 
-  @Column(name = "passwort_hash", nullable = false)
-  public String getPasswortHash() {
-    return this.passwortHash;
+
+  @Column(name = "password_hash", nullable = false)
+  public String getPasswordHash() {
+    return this.passwordHash;
   }
 
-  public void setPasswortHash(String passwortHash) {
-    this.passwortHash = passwortHash;
+  public void setPasswordHash(String passwordHash) {
+    this.passwordHash = passwordHash;
   }
+
 
   @Column(name = "is_private", nullable = false)
   public boolean isIsPrivate() {
@@ -135,6 +135,7 @@ public class User implements DbEntity {
     this.isPrivate = isPrivate;
   }
 
+
   @Column(name = "wants_notification", nullable = false)
   public boolean isWantsNotification() {
     return this.wantsNotification;
@@ -143,6 +144,7 @@ public class User implements DbEntity {
   public void setWantsNotification(boolean wantsNotification) {
     this.wantsNotification = wantsNotification;
   }
+
 
   @Column(name = "is_active", nullable = false)
   public boolean isIsActive() {
@@ -154,7 +156,8 @@ public class User implements DbEntity {
   }
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(name = "created", nullable = false, length = 29)
+  @Column(name = "created", insertable = false, updatable = false, nullable = false, length = 29,
+      columnDefinition = "TIMESTAMP DEFAULT NOW()")
   public Date getCreated() {
     return this.created;
   }
@@ -173,49 +176,6 @@ public class User implements DbEntity {
     this.updated = updated;
   }
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-  public Set getUserLogs() {
-    return this.userLogs;
-  }
-
-  public void setUserLogs(Set userLogs) {
-    this.userLogs = userLogs;
-  }
-
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "userBySenderUserId")
-  public Set getMessagesForSenderUserId() {
-    return this.messagesForSenderUserId;
-  }
-
-  public void setMessagesForSenderUserId(Set messagesForSenderUserId) {
-    this.messagesForSenderUserId = messagesForSenderUserId;
-  }
-
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "userByRecipientUserId")
-  public Set getMessagesForRecipientUserId() {
-    return this.messagesForRecipientUserId;
-  }
-
-  public void setMessagesForRecipientUserId(Set messagesForRecipientUserId) {
-    this.messagesForRecipientUserId = messagesForRecipientUserId;
-  }
-
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-  public Set getSubscriptions() {
-    return this.subscriptions;
-  }
-
-  public void setSubscriptions(Set subscriptions) {
-    this.subscriptions = subscriptions;
-  }
-
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-  public Set getAdvertisements() {
-    return this.advertisements;
-  }
-
-  public void setAdvertisements(Set advertisements) {
-    this.advertisements = advertisements;
-  }
-
 }
+
+

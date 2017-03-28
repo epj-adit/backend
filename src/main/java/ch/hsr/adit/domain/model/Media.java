@@ -1,5 +1,6 @@
 package ch.hsr.adit.domain.model;
-// Generated 23.03.2017 08:47:58 by Hibernate Tools 5.2.1.Final
+// Generated 23.03.2017 11:05:29 by Hibernate Tools 5.2.1.Final
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "media", schema = "public")
 public class Media implements DbEntity {
+  
+  private static final long serialVersionUID = 1L;
 
   private long id;
   private Advertisement advertisement;
@@ -23,6 +26,7 @@ public class Media implements DbEntity {
   private byte[] media;
 
   public Media() {}
+
 
   public Media(long id, Advertisement advertisement, String filename, byte[] media) {
     this.id = id;
@@ -41,7 +45,6 @@ public class Media implements DbEntity {
   }
 
   @Id
-
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
     return this.id;
@@ -51,7 +54,7 @@ public class Media implements DbEntity {
     this.id = id;
   }
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "advertisement_id", nullable = false)
   public Advertisement getAdvertisement() {
     return this.advertisement;
@@ -60,6 +63,7 @@ public class Media implements DbEntity {
   public void setAdvertisement(Advertisement advertisement) {
     this.advertisement = advertisement;
   }
+
 
   @Column(name = "filename", nullable = false)
   public String getFilename() {
@@ -70,6 +74,7 @@ public class Media implements DbEntity {
     this.filename = filename;
   }
 
+
   @Column(name = "description")
   public String getDescription() {
     return this.description;
@@ -78,6 +83,7 @@ public class Media implements DbEntity {
   public void setDescription(String description) {
     this.description = description;
   }
+
 
   @Column(name = "media", nullable = false)
   public byte[] getMedia() {
@@ -88,4 +94,8 @@ public class Media implements DbEntity {
     this.media = media;
   }
 
+
+
 }
+
+

@@ -1,7 +1,10 @@
 package ch.hsr.adit.domain.model;
-// Generated 23.03.2017 08:47:58 by Hibernate Tools 5.2.1.Final
+// Generated 23.03.2017 11:05:29 by Hibernate Tools 5.2.1.Final
+
 
 import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,6 +22,8 @@ import javax.persistence.TemporalType;
 @Table(name = "message", schema = "public")
 public class Message implements DbEntity {
 
+  private static final long serialVersionUID = 1L;
+  
   private long id;
   private Advertisement advertisement;
   private MessageState messageState;
@@ -28,6 +33,7 @@ public class Message implements DbEntity {
   private Date created;
 
   public Message() {}
+
 
   public Message(long id, User userByRecipientUserId, String message, Date created) {
     this.id = id;
@@ -48,7 +54,6 @@ public class Message implements DbEntity {
   }
 
   @Id
-
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
     return this.id;
@@ -58,7 +63,7 @@ public class Message implements DbEntity {
     this.id = id;
   }
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "advertisement_id")
   public Advertisement getAdvertisement() {
     return this.advertisement;
@@ -68,7 +73,7 @@ public class Message implements DbEntity {
     this.advertisement = advertisement;
   }
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "message_state_id")
   public MessageState getMessageState() {
     return this.messageState;
@@ -78,7 +83,7 @@ public class Message implements DbEntity {
     this.messageState = messageState;
   }
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "sender_user_id")
   public User getUserBySenderUserId() {
     return this.userBySenderUserId;
@@ -88,7 +93,7 @@ public class Message implements DbEntity {
     this.userBySenderUserId = userBySenderUserId;
   }
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "recipient_user_id", nullable = false)
   public User getUserByRecipientUserId() {
     return this.userByRecipientUserId;
@@ -97,6 +102,7 @@ public class Message implements DbEntity {
   public void setUserByRecipientUserId(User userByRecipientUserId) {
     this.userByRecipientUserId = userByRecipientUserId;
   }
+
 
   @Column(name = "message", nullable = false)
   public String getMessage() {
@@ -108,7 +114,8 @@ public class Message implements DbEntity {
   }
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(name = "created", nullable = false, length = 29)
+  @Column(name = "created", insertable = false, updatable = false, nullable = false, length = 29,
+      columnDefinition = "TIMESTAMP DEFAULT NOW()")
   public Date getCreated() {
     return this.created;
   }
@@ -117,4 +124,8 @@ public class Message implements DbEntity {
     this.created = created;
   }
 
+
+
 }
+
+
