@@ -3,7 +3,6 @@ package ch.hsr.adit.util;
 import static org.apache.commons.codec.binary.Hex.decodeHex;
 import static org.apache.commons.codec.binary.Hex.encodeHex;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,7 +26,7 @@ public class KeyStore {
   private static Properties prop = new Properties();
   private OutputStream out;
   private static InputStream in;
-  private static SecretKey secretKey;
+  private SecretKey secretKey = null;
   private int secretHash;
 
   private KeyStore(File file) {
@@ -36,21 +35,15 @@ public class KeyStore {
 
   public static KeyStore getInstance(File file) {
     if (instance == null) {
-
-      synchronized (KeyStore.class) {
-        // check twice. could be set in the meantime
-        if (instance == null) {
-          // allocate space only if needed
-          instance = new KeyStore(file);
-        }
-      }
+      // allocate space only if needed
+      instance = new KeyStore(file);
     }
-
     return instance;
   }
-  
+
   /**
    * Call only when instance has been created with a file earlier
+   * 
    * @return Keystore instance
    * @throws FileNotFoundException when theres no KeyStore file
    */
@@ -58,14 +51,6 @@ public class KeyStore {
     if (instance == null) {
       throw new FileNotFoundException("Instance doesnt exist yet.");
     }
-    synchronized (KeyStore.class) {
-      // check twice. could be set in the meantime
-      if (instance == null) {
-        // allocate space only if needed
-        instance = new KeyStore(file);
-      }
-    }
-
     return instance;
   }
 
@@ -77,8 +62,7 @@ public class KeyStore {
   public boolean generateKey() throws NoSuchAlgorithmException, IOException {
     if (secretKey != null) {
       throw new IllegalStateException("Secret already exists!");
-    }
-    else {
+    } else {
       KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
       keyGenerator.init(256); // 128 default; 192 and 256 also possible
       secretKey = keyGenerator.generateKey();
@@ -93,7 +77,7 @@ public class KeyStore {
    */
   public void saveKey() throws IOException {
     char[] hex = encodeHex(secretKey.getEncoded());
-    secretHash = hex.hashCode();
+    secretHash = String.valueOf(hex).hashCode();
     try {
       out = new FileOutputStream(file);
       prop.setProperty("secret", String.valueOf(hex));
@@ -105,7 +89,6 @@ public class KeyStore {
       if (out != null) {
         try {
           out.close();
-          prop = null;
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -136,7 +119,7 @@ public class KeyStore {
     return new SecretKeySpec(encoded, "AES");
   }
 
-  
+
   public int getSecretHash() {
     return secretHash;
   }
