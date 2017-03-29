@@ -5,12 +5,12 @@ ENV SONAR_VERSION=$SONAR_VERSION
 ARG NODE_ENV=dev
 ENV NODE_ENV=$NODE_ENV
 
-RUN adduser -D -u 1000
+RUN adduser -D -u 1000 java
 
-RUN apk add --no-cache maven unzip
+RUN apk add --no-cache maven unzip openssl
 
 # Add sonar scanner
-RUN cd /opt && wget --quiet https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_VERSION}-linux.zip \
+RUN mkdir /opt && cd /opt && wget -q https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_VERSION}-linux.zip \
     && unzip sonar-scanner-cli-${SONAR_VERSION}-linux.zip && rm sonar-scanner-cli-${SONAR_VERSION}-linux.zip && mv sonar-scanner-${SONAR_VERSION}-linux sonar-scanner
 RUN /bin/sh -c 'echo "export PATH=/opt/sonar-scanner/bin:\$PATH" >> /etc/profile'
 
