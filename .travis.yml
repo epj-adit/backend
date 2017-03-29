@@ -2,6 +2,9 @@ sudo: required
 language: generic
 services:
   - docker
+cache:
+  directories:
+    - .m2
 
 script:
   - make postgres-start
