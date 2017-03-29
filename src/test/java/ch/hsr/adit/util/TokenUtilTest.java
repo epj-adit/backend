@@ -4,14 +4,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 
-import com.auth0.jwt.exceptions.JWTVerificationException;
-
-import ch.hsr.adit.domain.model.User;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import com.auth0.jwt.exceptions.JWTVerificationException;
+
+import ch.hsr.adit.domain.model.User;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TokenUtilTest {
@@ -31,7 +31,7 @@ public class TokenUtilTest {
     User user = new User();
     user.setEmail("student@hsr.ch");
     token = new Token(user);
-    assertEquals(user.getToken(), token.getToken());
+    assertEquals(user.getJwtToken(), token.getToken());
   }
 
   @Test

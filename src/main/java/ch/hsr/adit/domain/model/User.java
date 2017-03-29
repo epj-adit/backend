@@ -44,7 +44,6 @@ public class User implements DbEntity {
   private boolean isActive;
   private Date created;
   private Date updated;
-  private String token;
 
   public User() {}
 

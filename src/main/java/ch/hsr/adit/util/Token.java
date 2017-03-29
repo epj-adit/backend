@@ -45,7 +45,7 @@ public final class Token {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    user.setToken(token);
+    user.setJwtToken(token);
     verifier = JWT.require(algorithm).withIssuer("adit").withSubject(user.getEmail()).build();
   }
 
@@ -55,6 +55,6 @@ public final class Token {
    * @param token to identify the user
    */
   public void verify(User user) {
-    jwt = verifier.verify(user.getToken());
+    jwt = verifier.verify(user.getJwtToken());
   }
 }
