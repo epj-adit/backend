@@ -38,12 +38,12 @@ postgres-start:
 	@echo "===================================================================="
 	@echo "Starting testing postgres docker container"
 	@echo "===================================================================="
-	docker run --rm --detach \
+	docker run --detach \
 		--env POSTGRES_USER=adit \
 		--env POSTGRES_PASSWORD='+!r8Ywd\H~#;YR{' \
 		--env POSTGRES_DB=adit \
 		--volume $(shell pwd)/database.sql:/docker-entrypoint-initdb.d/database.sql:ro \
-		--publish 5432:5432
+		--publish 5432:5432 \
 		--name engineering-projekt-server-testing-postgres postgres:9.6-alpine
 	@sleep 2
 
@@ -52,6 +52,7 @@ postgres-stop:
 	@echo "Stopping testing postgres docker container"
 	@echo "===================================================================="
 	docker stop engineering-projekt-server-testing-postgres
+	docker rm engineering-projekt-server-testing-postgres
 
 
 deploy-live: DEPLOY_SYSTEM=live
