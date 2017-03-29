@@ -61,15 +61,15 @@ public class UserControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.post, "/user", params);
 
     // assert
-    Map<String, String> json = response.json();
+    Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
     assertNotNull(json.get("id"));
     assertEquals(username, json.get("username"));
     assertEquals(email, json.get("email"));
     assertEquals(password, json.get("passwordHash"));
-    assertEquals(isPrivate, json.get("isPrivate"));
-    assertEquals(wantsNotification, json.get("wantsNotification"));
-    assertEquals(isActive, json.get("isActive"));
+    assertEquals(isPrivate, (boolean) json.get("isPrivate"));
+    assertEquals(wantsNotification, (boolean) json.get("wantsNotification"));
+    assertEquals(isActive, (boolean) json.get("isActive"));
     assertNotNull(json.get("role"));
   }
   
@@ -83,7 +83,7 @@ public class UserControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.post, "/user", params);
 
     // assert
-    Map<String, String> json = response.json();
+    Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
     assertNotNull(json.get("errorCode"));
   }
@@ -97,7 +97,7 @@ public class UserControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.get, "/user/3", null);
 
     // assert
-    Map<String, String> json = response.json();
+    Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
     assertEquals(expected, json.get("email"));
     assertNotNull(json.get("id"));
@@ -109,7 +109,7 @@ public class UserControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.get, "/user/1000", null);
 
     // assert
-    Map<String, String> json = response.json();
+    Map<String, Object> json = response.json();
 
     assertEquals(200, response.statusCode);
     assertNotNull(json.get("errorCode"));
@@ -137,7 +137,7 @@ public class UserControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.put, "/user/1", params);
 
     // assert
-    Map<String, String> json = response.json();
+    Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
     assertEquals(expectedUpdatedValue, json.get("email"));
     assertNotNull(json.get("id"));
@@ -152,7 +152,7 @@ public class UserControllerIT {
     TestResponse updateResponse = TestUtil.request(HttpMethod.put, "/user/5", params);
 
     // assert
-    Map<String, String> json = updateResponse.json();
+    Map<String, Object> json = updateResponse.json();
     assertEquals(200, updateResponse.statusCode);
     assertNotNull(json.get("errorCode"));
   }
@@ -163,9 +163,9 @@ public class UserControllerIT {
     TestResponse deleteResponse = TestUtil.request(HttpMethod.delete, "/user/2", null);
 
     // assert
-    Map<String, String> json = deleteResponse.json();
+    Map<String, Object> json = deleteResponse.json();
     assertEquals(200, deleteResponse.statusCode);
-    assertEquals(1005.0, json.get("errorCode"));
+    assertEquals(1005.0, (double) json.get("errorCode"), 0.1);
   }
 
   @Test

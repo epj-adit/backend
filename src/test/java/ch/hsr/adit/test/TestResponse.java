@@ -17,7 +17,7 @@ public class TestResponse {
   }
 
   @SuppressWarnings("unchecked")
-  public Map<String, String> json() {
+  public Map<String, Object> json() {
     return new Gson().fromJson(body, HashMap.class);
   }
   
