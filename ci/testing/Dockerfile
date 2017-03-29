@@ -15,5 +15,6 @@ RUN mkdir /opt && cd /opt && wget -q https://sonarsource.bintray.com/Distributio
 RUN /bin/sh -c 'echo "export PATH=/opt/sonar-scanner/bin:\$PATH" >> /etc/profile'
 
 USER java
+VOLUME [ "/home/java/.m2" ]
 VOLUME [ "/home/java/project" ]
 WORKDIR /home/java/project

@@ -1,8 +1,11 @@
 # External Variables: SSH_KEY, SONAR_KEY, DOCKER_USERNAME, DOCKER_PASSWORD
 .SILENT:
 
-DOCKER_RUN=docker run -ti --rm --name "engineering-projekt-server-testing" --env NODE_ENV \
-		   --volume "$(shell pwd):/home/java/project" fabianhauser/engineering-projekt-server-testing
+DOCKER_RUN=docker run -ti --rm --name "engineering-projekt-server-testing" \
+		   --volume $(shell pwd)/.m2:/home/java/.m2 --volume "$(shell pwd):/home/java/project" \
+		   fabianhauser/engineering-projekt-server-testing
+
+
 
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 VERSION=$(shell ./ci/version.bash)
