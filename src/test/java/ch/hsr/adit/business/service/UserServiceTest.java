@@ -35,12 +35,8 @@ public class UserServiceTest {
     UserService userService = new UserService(userDao, roleService);
     User transientUser = new User();
     transientUser = userService.createUser(transientUser);
-    
-<<<<<<< Upstream, based on branch 'develop' of https://github.com/fabianhauser/engineering-projekt-server.git
     assertEquals(1L, transientUser.getId());
-=======
-    //assertEquals(new Long(1), transientUser.getId());
->>>>>>> 818ebd5 KeyStore & Token refactoring done
+
   }
 
 }
