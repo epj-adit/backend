@@ -1,4 +1,4 @@
-package ch.hsr.adit.business.service;
+package ch.hsr.adit.application.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;

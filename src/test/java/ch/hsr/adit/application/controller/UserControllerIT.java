@@ -1,4 +1,4 @@
-package ch.hsr.adit.business.controller;
+package ch.hsr.adit.application.controller;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
