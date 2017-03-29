@@ -54,8 +54,10 @@ public class KeyStoreTest {
   }
   
   @Test
-  public void loadKeyTest() throws IOException {  
+  public void loadKeyTest() throws IOException, NoSuchAlgorithmException {  
     keyStore = KeyStore.getInstance(file);
+    keyStore.generateKey();
+    keyStore.saveKey();
     int secretHash2 = KeyStore.loadKey().hashCode();
     assertEquals(secretHash2, secretHash2);
   }
