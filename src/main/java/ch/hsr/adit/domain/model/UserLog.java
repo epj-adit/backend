@@ -28,16 +28,6 @@ public class UserLog implements DbEntity {
   private String action;
   private Date created;
 
-  public UserLog() {}
-
-  public UserLog(long id, User user, String ip, String action, Date created) {
-    this.id = id;
-    this.user = user;
-    this.ip = ip;
-    this.action = action;
-    this.created = created;
-  }
-
   @Id
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {

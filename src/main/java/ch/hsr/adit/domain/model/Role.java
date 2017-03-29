@@ -30,20 +30,6 @@ public class Role implements DbEntity {
   private String name;
   private Set<Permission> permissions = new HashSet<Permission>(0);
 
-  public Role() {}
-
-
-  public Role(long id, String name) {
-    this.id = id;
-    this.name = name;
-  }
-
-  public Role(long id, String name, Set<Permission> permissions) {
-    this.id = id;
-    this.name = name;
-    this.permissions = permissions;
-  }
-
   @Id
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {

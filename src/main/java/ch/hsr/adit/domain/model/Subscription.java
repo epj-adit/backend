@@ -28,16 +28,6 @@ public class Subscription implements DbEntity {
   private long interval;
   private Date lastUpdated;
 
-  public Subscription() {}
-
-  public Subscription(long id, Category category, User user, long interval, Date lastUpdated) {
-    this.id = id;
-    this.category = category;
-    this.user = user;
-    this.interval = interval;
-    this.lastUpdated = lastUpdated;
-  }
-
   @Id
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {

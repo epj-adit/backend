@@ -25,20 +25,6 @@ public class Category implements DbEntity {
   private Category parentCategory;
   private String name;
 
-  public Category() {}
-
-
-  public Category(long id, String name) {
-    this.id = id;
-    this.name = name;
-  }
-
-  public Category(long id, Category parentCategory, String name) {
-    this.id = id;
-    this.parentCategory = parentCategory;
-    this.name = name;
-  }
-
   @Id
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {

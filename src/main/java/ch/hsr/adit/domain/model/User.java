@@ -47,34 +47,6 @@ public class User implements DbEntity {
 
   public User() {}
 
-
-  public User(long id, Role role, String username, String email, String passwordHash,
-      boolean isPrivate, boolean wantsNotification, boolean isActive, Date created) {
-    this.id = id;
-    this.role = role;
-    this.username = username;
-    this.email = email;
-    this.passwordHash = passwordHash;
-    this.isPrivate = isPrivate;
-    this.wantsNotification = wantsNotification;
-    this.isActive = isActive;
-    this.created = created;
-  }
-
-  public User(long id, Role role, String username, String email, String passwordHash,
-      boolean isPrivate, boolean wantsNotification, boolean isActive, Date created, Date updated) {
-    this.id = id;
-    this.role = role;
-    this.username = username;
-    this.email = email;
-    this.passwordHash = passwordHash;
-    this.isPrivate = isPrivate;
-    this.wantsNotification = wantsNotification;
-    this.isActive = isActive;
-    this.created = created;
-    this.updated = updated;
-  }
-
   @Id
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {

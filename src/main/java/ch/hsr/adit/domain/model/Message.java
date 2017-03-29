@@ -32,27 +32,6 @@ public class Message implements DbEntity {
   private String message;
   private Date created;
 
-  public Message() {}
-
-
-  public Message(long id, User userByRecipientUserId, String message, Date created) {
-    this.id = id;
-    this.userByRecipientUserId = userByRecipientUserId;
-    this.message = message;
-    this.created = created;
-  }
-
-  public Message(long id, Advertisement advertisement, MessageState messageState,
-      User userBySenderUserId, User userByRecipientUserId, String message, Date created) {
-    this.id = id;
-    this.advertisement = advertisement;
-    this.messageState = messageState;
-    this.userBySenderUserId = userBySenderUserId;
-    this.userByRecipientUserId = userByRecipientUserId;
-    this.message = message;
-    this.created = created;
-  }
-
   @Id
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {

@@ -39,35 +39,6 @@ public class Advertisement implements DbEntity {
   private Date updated;
   private Set<Tag> tags = new HashSet<Tag>(0);
 
-  public Advertisement() {}
-
-
-  public Advertisement(long id, AdvertisementState advertisementState, Category category, User user,
-      String title, String description, int price, Date created) {
-    this.id = id;
-    this.advertisementState = advertisementState;
-    this.category = category;
-    this.user = user;
-    this.title = title;
-    this.description = description;
-    this.price = price;
-    this.created = created;
-  }
-
-  public Advertisement(long id, AdvertisementState advertisementState, Category category, User user,
-      String title, String description, int price, Date created, Date updated, Set<Tag> tags) {
-    this.id = id;
-    this.advertisementState = advertisementState;
-    this.category = category;
-    this.user = user;
-    this.title = title;
-    this.description = description;
-    this.price = price;
-    this.created = created;
-    this.updated = updated;
-    this.tags = tags;
-  }
-
   @Id
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {

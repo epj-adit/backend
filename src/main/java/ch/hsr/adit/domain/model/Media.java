@@ -25,25 +25,6 @@ public class Media implements DbEntity {
   private String description;
   private byte[] media;
 
-  public Media() {}
-
-
-  public Media(long id, Advertisement advertisement, String filename, byte[] media) {
-    this.id = id;
-    this.advertisement = advertisement;
-    this.filename = filename;
-    this.media = media;
-  }
-
-  public Media(long id, Advertisement advertisement, String filename, String description,
-      byte[] media) {
-    this.id = id;
-    this.advertisement = advertisement;
-    this.filename = filename;
-    this.description = description;
-    this.media = media;
-  }
-
   @Id
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
