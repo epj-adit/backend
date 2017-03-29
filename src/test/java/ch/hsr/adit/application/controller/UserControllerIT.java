@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,9 +28,9 @@ public class UserControllerIT {
   private String username = "junitUser";
   private String email = "studen@hsr.ch";
   private String password = "ultasecure1234";
-  private boolean isPrivate = false;
-  private boolean wantsNotification = true;
-  private boolean isActive = true;
+  private Boolean isPrivate = false;
+  private Boolean wantsNotification = true;
+  private Boolean isActive = true;
   
 
   @BeforeClass

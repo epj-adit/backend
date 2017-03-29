@@ -72,8 +72,6 @@ public class KeyStore {
   /**
    * Saves the generated Key
    * 
-=======
->>>>>>> 818ebd5 KeyStore & Token refactoring done
    * @throws IOException
    */
   public boolean generateKey() throws NoSuchAlgorithmException, IOException {
