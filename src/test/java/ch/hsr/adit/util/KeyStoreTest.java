@@ -44,7 +44,7 @@ public class KeyStoreTest {
   public void generateNewKeyTest() throws NoSuchAlgorithmException, IOException {
     keyStore = KeyStore.getInstance();
     assertTrue(keyStore.generateKey(file));
-    assertTrue(file.exists());
+    assertTrue(file.isFile());
   }
 
   @Test(expected = FileNotFoundException.class)
@@ -65,6 +65,12 @@ public class KeyStoreTest {
 
     // assert
     assertEquals(firstKey, keyStore.loadKey());
+  }
+  
+  @Test(expected = FileNotFoundException.class)
+  public void loadKeyWithoutGenerateTest() throws IOException {
+    keyStore = KeyStore.getInstance();
+    keyStore.loadKey();
   }
 
 }
