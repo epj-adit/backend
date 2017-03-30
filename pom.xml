@@ -161,6 +161,7 @@
 				<configuration>
 					<effort>Max</effort>
 					<threshold>Low</threshold>
+					<excludeFilterFile>findbugs-excludes.xml</excludeFilterFile>
 					<xmlOutput>true</xmlOutput>
 					<xmlOutputDirectory>${project.build.directory}/findbug-report</xmlOutputDirectory>
 				</configuration>
