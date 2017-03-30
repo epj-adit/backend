@@ -2,7 +2,6 @@ package ch.hsr.adit.domain.persistence;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -42,15 +41,6 @@ public abstract class GenericDao<T extends DbEntity, PK extends Serializable> {
       sessionFactory.getCurrentSession().getTransaction().rollback();
       throw new SystemException(DatabaseError.USER_CONSTRAINT_VIOLATED, e);
     }
-  }
-
-  public List<T> persistAll(Collection<T> objects) {
-    List<T> entities = new ArrayList<T>();
-    objects.forEach(o -> {
-      T object = persist(o);
-      entities.add(object);
-    });
-    return entities;
   }
 
   public T get(Serializable id) {

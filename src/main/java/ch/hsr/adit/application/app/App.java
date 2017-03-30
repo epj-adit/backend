@@ -41,9 +41,8 @@ public class App {
     awaitInitialization();
 
     try {
-      KeyStore keyStore = KeyStore.getInstance(KEY_FILE);
-      keyStore.generateKey();
-      keyStore.saveKey();
+      KeyStore keyStore = KeyStore.getInstance();
+      keyStore.generateKey(KEY_FILE);
     } catch (NoSuchAlgorithmException e) {
       e.printStackTrace();
     } catch (IOException e) {
