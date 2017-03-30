@@ -3,6 +3,8 @@ package ch.hsr.adit.util;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.security.NoSuchAlgorithmException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,10 +22,13 @@ public class TokenUtilTest {
   private KeyStore keyStore;
 
   @Before
-  public void setUp() {
+  public void setUp() throws FileNotFoundException, NoSuchAlgorithmException {
+    File file = new File("KeyStore.properties");
+
     user = new User();
     user.setEmail("student@hsr.ch");
-    keyStore = KeyStore.getInstance(new File("KeyStore.properties"));
+    keyStore = KeyStore.getInstance();
+    keyStore.generateKey(file);
   }
 
   @Test

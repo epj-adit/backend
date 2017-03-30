@@ -18,110 +18,72 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.DecoderException;
+import org.apache.log4j.Logger;
 
 public class KeyStore {
 
-  private static KeyStore instance = null;
-  private static File file;
-  private static Properties prop = new Properties();
-  private OutputStream out;
-  private static InputStream in;
-  private SecretKey secretKey = null;
-  private int secretHash;
+  private static final Logger logger = Logger.getLogger(KeyStore.class);
 
-  private KeyStore(File file) {
+  private static volatile KeyStore instance;
+
+  private File file;
+  private Properties prop = new Properties();
+
+  private KeyStore() {}
+
+  public static KeyStore getInstance() {
+    if (instance == null) {
+      synchronized (KeyStore.class) {
+        if (instance == null) {
+          instance = new KeyStore();
+        }
+
+      }
+    }
+    return instance;
+  }
+
+  public boolean generateKey(File file) throws FileNotFoundException, NoSuchAlgorithmException {
+    if (file == null) {
+      throw new FileNotFoundException("Please provide a file for the keystore");
+    }
+    
     this.file = file;
-  }
-
-  public static KeyStore getInstance(File file) {
-    if (instance == null) {
-      // allocate space only if needed
-      instance = new KeyStore(file);
-    }
-    return instance;
-  }
-
-  /**
-   * Call only when instance has been created with a file earlier
-   * 
-   * @return Keystore instance
-   * @throws FileNotFoundException when theres no KeyStore file
-   */
-  public static KeyStore getInstance() throws FileNotFoundException {
-    if (instance == null) {
-      throw new FileNotFoundException("Instance doesnt exist yet.");
-    }
-    return instance;
-  }
-
-  /**
-   * Saves the generated Key
-   * 
-   * @throws IOException
-   */
-  public boolean generateKey() throws NoSuchAlgorithmException, IOException {
-    if (secretKey != null) {
-      throw new IllegalStateException("Secret already exists!");
-    } else {
+    
+    if (! file.exists()) {
       KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
       keyGenerator.init(256); // 128 default; 192 and 256 also possible
-      secretKey = keyGenerator.generateKey();
-      return true;
+      SecretKey secretKey = keyGenerator.generateKey();
+
+      saveKey(secretKey, file);
     }
+
+    return true;
   }
 
-  /**
-   * Saves the generated Key
-   * 
-   * @throws IOException
-   */
-  public void saveKey() throws IOException {
+  private void saveKey(SecretKey secretKey, File file) {
     char[] hex = encodeHex(secretKey.getEncoded());
-    secretHash = String.valueOf(hex).hashCode();
-    try {
-      out = new FileOutputStream(file);
+    try (OutputStream out = new FileOutputStream(file)) {
       prop.setProperty("secret", String.valueOf(hex));
       prop.store(out, null);
-
-    } catch (IOException io) {
-      io.printStackTrace();
-    } finally {
-      if (out != null) {
-        try {
-          out.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
-
+    } catch (IOException e) {
+      logger.error("Failed to store secretKey in file: " + file.getAbsolutePath());
     }
   }
 
-  /**
-   * Loads the permanent Key from the KeyStore.properties file
-   * 
-   * @return the SecretKey
-   * @throws IOException
-   */
-  public static SecretKey loadKey() throws IOException {
+  public SecretKey loadKey() throws IOException {
     if (file == null) {
-      throw new FileNotFoundException("Key file does not exist, call generateKey() first.");
+      throw new FileNotFoundException("Key file does not exist, call generateKey() first");
     }
     byte[] encoded = null;
-    try {
-      in = new FileInputStream(file);
+    try (InputStream in = new FileInputStream(file)) {
       prop.load(in);
       String secretString = prop.getProperty("secret");
       encoded = decodeHex(secretString.toCharArray());
     } catch (DecoderException e) {
-      e.printStackTrace();
+      logger.error("Cannot load and decode given secret " + file.getAbsolutePath());
     }
     return new SecretKeySpec(encoded, "AES");
-  }
-
-
-  public int getSecretHash() {
-    return secretHash;
   }
 
 }

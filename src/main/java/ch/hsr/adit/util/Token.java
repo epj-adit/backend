@@ -20,7 +20,7 @@ import javax.xml.bind.DatatypeConverter;
 
 @Data
 public final class Token {
-
+  
   // write token to DB?
   // TODO: claims (rollen / rechte)
   private Algorithm algorithm;
@@ -36,7 +36,7 @@ public final class Token {
   public Token(User user) {
     try {
       keyStore = KeyStore.getInstance();
-      secret = KeyStore.loadKey();
+      secret = keyStore.loadKey();
       algorithm = Algorithm.HMAC256(secret.getEncoded());
       token = JWT.create().withIssuer("adit").withSubject(user.getEmail()).sign(algorithm);
     } catch (IllegalArgumentException | UnsupportedEncodingException e) {

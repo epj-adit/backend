@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.SecretKey;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,20 +19,21 @@ public class KeyStoreTest {
 
   private File file;
   private KeyStore keyStore;
-  private int secretHash;
 
   @Before
-  public void setUp() throws SecurityException, NoSuchFieldException,
-      IllegalArgumentException, IllegalAccessException {
+  public void setUp() throws SecurityException, NoSuchFieldException, IllegalArgumentException,
+      IllegalAccessException {
     file = new File("temp.properties");
-    //reset Singleton so it can be tested
+
+    // reset Singleton so it can be tested
     Field instance = KeyStore.class.getDeclaredField("instance");
     instance.setAccessible(true);
     instance.set(null, null);
   }
 
   @After
-  public void teardown() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+  public void teardown() throws NoSuchFieldException, SecurityException, IllegalArgumentException,
+      IllegalAccessException {
     file.deleteOnExit();
     Field instance = KeyStore.class.getDeclaredField("instance");
     instance.setAccessible(true);
@@ -38,39 +41,30 @@ public class KeyStoreTest {
   }
 
   @Test
-  public void generateNewKeyTest() throws NoSuchAlgorithmException, IOException  {
-    keyStore = KeyStore.getInstance(file);
-    assertTrue(keyStore.generateKey());
-  }
-  
-  @Test
-  public void saveKeyTest() throws IOException, NoSuchAlgorithmException {
-    keyStore = KeyStore.getInstance(file);
-    keyStore.generateKey();
-    keyStore.saveKey();
-    secretHash = keyStore.getSecretHash();
+  public void generateNewKeyTest() throws NoSuchAlgorithmException, IOException {
+    keyStore = KeyStore.getInstance();
+    assertTrue(keyStore.generateKey(file));
     assertTrue(file.exists());
   }
-  
-  @Test
-  public void loadKeyTest() throws IOException, NoSuchAlgorithmException {  
-    keyStore = KeyStore.getInstance(file);
-    keyStore.generateKey();
-    keyStore.saveKey();
-    int secretHash2 = KeyStore.loadKey().hashCode();
-    assertEquals(secretHash2, secretHash2);
-  }
-  
+
   @Test(expected = FileNotFoundException.class)
-  public void getInstanceWithNoFile() throws FileNotFoundException {
+  public void generateKeyNoFileTest() throws FileNotFoundException, NoSuchAlgorithmException {
     keyStore = KeyStore.getInstance();
+    keyStore.generateKey(null);
   }
-  
+
   @Test
-  public void getInstanceWithFile() throws FileNotFoundException {
-    keyStore = KeyStore.getInstance(file);
-    KeyStore keyStore2 = KeyStore.getInstance();
-    assertEquals(keyStore, keyStore2);
+  public void generateKeyTwiceTest() throws IOException, NoSuchAlgorithmException {
+    // arrange
+    keyStore = KeyStore.getInstance();
+    keyStore.generateKey(file);
+    SecretKey firstKey = keyStore.loadKey();
+
+    // act
+    keyStore.generateKey(file);
+
+    // assert
+    assertEquals(firstKey, keyStore.loadKey());
   }
-  
+
 }
