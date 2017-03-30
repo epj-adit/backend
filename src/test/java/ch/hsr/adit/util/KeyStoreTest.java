@@ -73,4 +73,6 @@ public class KeyStoreTest {
     keyStore.loadKey();
   }
 
+    assertTrue(file.exists());
+  }
 }

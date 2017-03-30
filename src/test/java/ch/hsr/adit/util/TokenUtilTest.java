@@ -18,11 +18,20 @@ import ch.hsr.adit.domain.model.User;
 @RunWith(MockitoJUnitRunner.class)
 public class TokenUtilTest {
 
+<<<<<<< 8a9770eb74c98b029b767b848ae3b35674cbd733
   private static KeyStore keyStore;
 
   @BeforeClass
   public static void setUpClass() throws FileNotFoundException, NoSuchAlgorithmException {
     File file = new File("KeyStore.properties");
+=======
+  @Before
+  public void setUp() throws FileNotFoundException, NoSuchAlgorithmException {
+    File file = new File("KeyStore.properties");
+
+    user = new User();
+    user.setEmail("student@hsr.ch");
+>>>>>>> Refactorings Keystore
     keyStore = KeyStore.getInstance();
     keyStore.generateKey(file);
   }
