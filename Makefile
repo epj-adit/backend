@@ -26,7 +26,7 @@ build:
 	@echo "===================================================================="
 	@echo "Building application and container"
 	@echo "===================================================================="
-	$(DOCKER_RUN) mvn build
+	$(DOCKER_RUN) mvn install
 	docker build -f ci/production/Dockerfile \
 		-t "fabianhauser/engineering-projekt-server" ./
 
