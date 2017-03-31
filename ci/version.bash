@@ -12,6 +12,11 @@ DISTANCE=`description 2`
 HASH=`description 3`
 DATE=`date +'%Y%m%d'`
 
+
+if [ "${TAG}" == "" ]; then
+    TAG=0.0.1
+fi
+
 if [ $DISTANCE == 0 ]; then
 	# Production release
 	echo ${TAG}

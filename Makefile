@@ -9,12 +9,6 @@ DOCKER_RUN=docker run -ti --rm --name "engineering-projekt-server-testing" \
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 VERSION=$(shell ./ci/version.bash)
 
-tests:
-	@echo "===================================================================="
-	@echo "Executeing tests"
-	@echo "===================================================================="
-	$(DOCKER_RUN) mvn test
-
 upload-coverage:
 	@echo "===================================================================="
 	@echo "Upload Coverage results to Sonarqube"
@@ -23,7 +17,7 @@ upload-coverage:
 
 build:
 	@echo "===================================================================="
-	@echo "Building application and container"
+	@echo "Testing and building application and container"
 	@echo "===================================================================="
 	$(DOCKER_RUN) mvn install
 	docker build -f ci/production/Dockerfile \
