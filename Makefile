@@ -2,10 +2,9 @@
 .SILENT:
 
 DOCKER_RUN=docker run -ti --rm --name "engineering-projekt-server-testing" \
+		   --link engineering-projekt-server-testing-postgres \
 		   --volume $(shell pwd)/.m2:/home/java/.m2 --volume "$(shell pwd):/home/java/project" \
 		   fabianhauser/engineering-projekt-server-testing
-
-
 
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 VERSION=$(shell ./ci/version.bash)
@@ -41,12 +40,9 @@ postgres-start:
 	@echo "===================================================================="
 	@echo "Starting testing postgres docker container"
 	@echo "===================================================================="
-	docker run --detach \
-		--env POSTGRES_USER=adit \
-		--env POSTGRES_PASSWORD='+!r8Ywd\H~#;YR{' \
-		--env POSTGRES_DB=adit \
+	docker run --detach\
+		--env POSTGRES_DB=adit --env POSTGRES_USER=adit --env POSTGRES_PASSWORD=adit \
 		--volume $(shell pwd)/database.sql:/docker-entrypoint-initdb.d/database.sql:ro \
-		--publish 5432:5432 \
 		--name engineering-projekt-server-testing-postgres postgres:9.6-alpine
 	@sleep 2
 
@@ -70,7 +66,7 @@ deploy:
 	@echo "===================================================================="
 	@echo "Deploy to the $(DEPLOY_SYSTEM) system"
 	@echo "===================================================================="
-	@Echo Push docker image with new tags
+	@echo Push docker image with new tags
 	docker tag fabianhauser/engineering-projekt-server fabianhauser/engineering-projekt-server$(CONTAINER_SUFFIX):$(VERSION)
 	docker tag fabianhauser/engineering-projekt-server fabianhauser/engineering-projekt-server$(CONTAINER_SUFFIX)
 	docker login -u="$(DOCKER_USERNAME)" -p="$(DOCKER_PASSWORD)"
