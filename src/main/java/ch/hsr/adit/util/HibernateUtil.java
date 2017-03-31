@@ -14,8 +14,25 @@ public final class HibernateUtil {
 
   private static void buildSessionFactory() {
     try {
-      // Create the SessionFactory from hibernate.cfg.xml
-      sessionFactory = new Configuration().configure().buildSessionFactory();
+      Configuration hibernateConfiguration = new Configuration();
+      hibernateConfiguration = hibernateConfiguration.configure("hibernate.cfg.xml");
+
+      // Overwrite default values if there are no environment specific settings defined.
+      String dbUser = System.getenv("POSTGRES_USER");
+      String dbPassword = System.getenv("POSTGRES_PASSWORD");
+      String jdbcUrl = System.getenv("POSTGRES_URL");
+
+      if (dbUser != null) {
+        hibernateConfiguration.setProperty("hibernate.connection.username", dbUser);
+      }
+      if (dbPassword != null) {
+        hibernateConfiguration.setProperty("hibernate.connection.password", dbPassword);
+      }
+      if (jdbcUrl != null) {
+        hibernateConfiguration.setProperty("hibernate.connection.url", jdbcUrl);
+      }
+
+      sessionFactory = hibernateConfiguration.buildSessionFactory();
     } catch (HibernateException ex) {
       logger.error("SessionFactory creation failed. " + ex);
     }
