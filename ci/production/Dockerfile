@@ -7,7 +7,7 @@ ENV JAVA_OPTIONS=${JAVA_OPTIONS}
 RUN java -jar ${JETTY_HOME}/start.jar --create-startd --add-to-start=http2 --approve-all-licenses
 
 # Add application
-ADD target/*.jar /var/lib/jetty/webapps/
+ADD target/*.war /var/lib/jetty/webapps/
 
 EXPOSE 8080
 
