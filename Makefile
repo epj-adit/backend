@@ -15,7 +15,7 @@ upload-coverage:
 	@echo "===================================================================="
 	$(DOCKER_RUN) /opt/sonar-scanner/bin/sonar-scanner -X -Dsonar.login=$(SONAR_KEY) -Dsonar.branch=$(BRANCH)
 
-build:
+install:
 	@echo "===================================================================="
 	@echo "Testing and building application and container"
 	@echo "===================================================================="
