@@ -121,7 +121,7 @@ public class UserControllerIT {
     // act
     TestResponse response = TestUtil.request(HttpMethod.get, "/users", null);
 
-    // asert
+    // assert
     Map<String, String>[] jsonList = response.jsonList();
     assertEquals(200, response.statusCode);
     assertThat(jsonList.length, greaterThanOrEqualTo(3));
@@ -149,7 +149,7 @@ public class UserControllerIT {
     params.put("email", "updated@hsr.ch");
 
     // act
-    TestResponse updateResponse = TestUtil.request(HttpMethod.put, "/user/5", params);
+    TestResponse updateResponse = TestUtil.request(HttpMethod.put, "/user/1000", params);
 
     // assert
     Map<String, Object> json = updateResponse.json();
@@ -165,7 +165,7 @@ public class UserControllerIT {
     // assert
     Map<String, Object> json = deleteResponse.json();
     assertEquals(200, deleteResponse.statusCode);
-    assertEquals(1005.0, (double) json.get("errorCode"), 0.1);
+    assertEquals(1005, ((Double) json.get("errorCode")).intValue());
   }
 
   @Test
