@@ -36,19 +36,11 @@ public class App {
     setupApiController();
 
     setupSeverHandler();
+    
+    setupKeyStore();
 
     // wait for jetty
     awaitInitialization();
-
-    try {
-      KeyStore keyStore = KeyStore.getInstance();
-      keyStore.generateKey(KEY_FILE);
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
   }
 
   private static void setupSeverHandler() {
@@ -97,5 +89,14 @@ public class App {
     UserDao userDao = new UserDao(sessionFactory);
     UserService userService = new UserService(userDao, roleService);
     new UserController(userService);
+  }
+  
+  private static void setupKeyStore() {
+    try {
+      KeyStore keyStore = KeyStore.getInstance();
+      keyStore.generateKey(KEY_FILE);
+    } catch (NoSuchAlgorithmException | IOException e) {
+      logger.error("Cannot instantiate keystore: " + e.getMessage());
+    }
   }
 }
