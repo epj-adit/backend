@@ -17,7 +17,7 @@ if [ "${TAG}" == "" ]; then
     TAG=0.0.1
 fi
 
-if [ $DISTANCE == 0 ]; then
+if [ "$DISTANCE" == "0" ]; then
 	# Production release
 	echo ${TAG}
 else
