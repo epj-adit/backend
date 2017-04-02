@@ -72,5 +72,4 @@ public class KeyStoreTest {
     keyStore = KeyStore.getInstance();
     keyStore.loadKey();
   }
-
 }

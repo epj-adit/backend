@@ -42,6 +42,7 @@ public class App {
     // wait for jetty
     awaitInitialization();
   }
+ }
 
   private static void setupSeverHandler() {
     before((request, response) -> {
