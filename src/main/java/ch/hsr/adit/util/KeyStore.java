@@ -37,7 +37,6 @@ public class KeyStore {
         if (instance == null) {
           instance = new KeyStore();
         }
-
       }
     }
     return instance;
