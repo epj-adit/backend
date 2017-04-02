@@ -3,10 +3,7 @@ package ch.hsr.adit.application.service;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-
 import org.apache.log4j.Logger;
-import org.hibernate.exception.ConstraintViolationException;
 
 import ch.hsr.adit.domain.model.Role;
 import ch.hsr.adit.domain.model.User;
