@@ -1,4 +1,5 @@
 KeyStore.properties
+.project
 
 target/
 pom.xml.tag

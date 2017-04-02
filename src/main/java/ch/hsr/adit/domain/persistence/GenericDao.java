@@ -12,7 +12,7 @@ import ch.hsr.adit.domain.model.DbEntity;
 import ch.hsr.adit.exception.DatabaseError;
 import ch.hsr.adit.exception.SystemException;
 
-public abstract class GenericDao<T extends DbEntity, PK extends Serializable> {
+public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
 
   private Class<T> type;
   protected final SessionFactory sessionFactory;
