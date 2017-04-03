@@ -14,16 +14,13 @@ script:
 deploy:
   # Production
   - provider: script
-    # upload-coverage
-    script: make deploy-live
+    script: make deploy-live upload-coverage
     skip_cleanup: true
     on:
       branch: master
-      tags: true
   # Development
   - provider: script
-    # upload-coverage
-    script: make deploy-develop
+    script: make deploy-develop upload-coverage
     skip_cleanup: true
     on:
       branch: develop
