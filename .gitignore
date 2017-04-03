@@ -1,6 +1,7 @@
 KeyStore.properties
 .project
 
+.scannerwork
 target/
 pom.xml.tag
 pom.xml.releaseBackup
