@@ -6,8 +6,13 @@ DOCKER_RUN=docker run -ti --rm --name "engineering-projekt-server-testing" \
 		   --volume $(shell pwd)/.m2:/home/java/.m2 --volume "$(shell pwd):/home/java/project" \
 		   fabianhauser/engineering-projekt-server-testing
 
-BRANCH=`git rev-parse --abbrev-ref HEAD`
 VERSION=$(shell ./ci/version.bash)
+
+ifdef TRAVIS_BRANCH
+ BRANCH=$(TRAVIS_BRANCH)
+else
+ BRANCH=`git rev-parse --abbrev-ref HEAD`
+endif
 
 upload-coverage:
 	@echo "===================================================================="
