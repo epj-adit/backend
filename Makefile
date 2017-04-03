@@ -43,7 +43,7 @@ postgres-start:
 		--env POSTGRES_DB=adit --env POSTGRES_USER=adit --env POSTGRES_PASSWORD=adit \
 		--volume $(shell pwd)/database.sql:/docker-entrypoint-initdb.d/database.sql:ro \
 		--name engineering-projekt-server-testing-postgres postgres:9.6-alpine
-	@sleep 2
+	@sleep 4
 
 postgres-stop:
 	@echo "===================================================================="
