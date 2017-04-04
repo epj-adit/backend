@@ -20,13 +20,16 @@ upload-coverage:
 	@echo "===================================================================="
 	$(DOCKER_RUN) sonar-scanner -X -Dsonar.login=$(SONAR_KEY) -Dsonar.branch=$(BRANCH)
 
+build: install
+	docker build -f ci/production/Dockerfile \
+		-t "fabianhauser/engineering-projekt-server" ./
+
+
 install:
 	@echo "===================================================================="
 	@echo "Testing and building application and container"
 	@echo "===================================================================="
 	$(DOCKER_RUN) mvn install
-	docker build -f ci/production/Dockerfile \
-		-t "fabianhauser/engineering-projekt-server" ./
 
 build-container-testing:
 	@echo "===================================================================="

@@ -8,7 +8,7 @@ cache:
 
 script:
   - make postgres-start
-  - make install
+  - make build
 
 deploy:
   # Production
