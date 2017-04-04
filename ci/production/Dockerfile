@@ -2,7 +2,7 @@ FROM openjdk:8-alpine
 
 RUN adduser -D -u 1000 java
 
-EXPOSE 8080
+EXPOSE 4567
 
 USER java
 WORKDIR /home/java
