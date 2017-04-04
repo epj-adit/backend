@@ -29,19 +29,19 @@ import ch.hsr.adit.util.KeyStore;
 public class App {
 
   private static final Logger logger = Logger.getLogger(App.class);
-  private final static File KEY_FILE = new File("KeyStore.properties");
+  private static final File KEY_FILE = new File("KeyStore.properties");
 
   public static void main(String[] args) {
 
     setupApiController();
 
     setupSeverHandler();
-    
+
     setupKeyStore();
 
     // wait for jetty
     awaitInitialization();
- }
+  }
 
   private static void setupSeverHandler() {
     before((request, response) -> {
@@ -90,7 +90,7 @@ public class App {
     UserService userService = new UserService(userDao, roleService);
     new UserController(userService);
   }
-  
+
   private static void setupKeyStore() {
     try {
       KeyStore keyStore = KeyStore.getInstance();

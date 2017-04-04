@@ -1,5 +1,5 @@
 -- USER TABLES
-CREATE TABLE "user" (
+CREATE TABLE public."user" (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	username TEXT NOT NULL,
   	email TEXT NOT NULL,
@@ -12,23 +12,23 @@ CREATE TABLE "user" (
   	role_id BIGINT NOT NULL
 );
 
-CREATE TABLE role (
+CREATE TABLE public.role (
  	id BIGSERIAL NOT NULL PRIMARY KEY,
  	name TEXT NOT NULL
 );
 
-CREATE TABLE permission (
+CREATE TABLE public.permission (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	name TEXT NOT NULL
 );
 
-CREATE TABLE role_permission (
+CREATE TABLE public.role_permission (
 	role_id BIGINT NOT NULL,
   	permission_id BIGINT NOT NULL,
   	primary key (role_id, permission_id)
 );
 
-CREATE TABLE user_log (
+CREATE TABLE public.user_log (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	ip TEXT NOT NULL,
 	action TEXT NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE user_log (
 );
 
 -- AVERTISEMENT TABLES
-CREATE TABLE advertisement (
+CREATE TABLE public.advertisement (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	title TEXT NOT NULL,
 	description TEXT NOT NULL,
@@ -49,23 +49,23 @@ CREATE TABLE advertisement (
 	advertisement_state_id BIGINT NOT NULL
 );
 
-CREATE TABLE advertisement_state (
+CREATE TABLE public.advertisement_state (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	name TEXT NOT NULL
 );
 
-CREATE TABLE tag (
+CREATE TABLE public.tag (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	name TEXT NOT NULL
 );
 
-CREATE TABLE advertisement_tag (
+CREATE TABLE public.advertisement_tag (
 	advertisement_id BIGINT NOT NULL,
   	tag_id BIGINT NOT NULL,
   	primary key (advertisement_id, tag_id)
 );
 
-CREATE TABLE media (
+CREATE TABLE public.media (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	filename TEXT NOT NULL,
 	description TEXT,
@@ -73,13 +73,13 @@ CREATE TABLE media (
 	advertisement_id BIGINT NOT NULL
 );
 
-CREATE TABLE category (
+CREATE TABLE public.category (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	name TEXT NOT NULL,
 	parent_category_id BIGINT
 );
 
-CREATE TABLE subscription (
+CREATE TABLE public.subscription (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	interval INTEGER NOT NULL,
 	last_updated TIMESTAMP NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE subscription (
 );
 
 -- MESSAGE TABLES
-CREATE TABLE message (
+CREATE TABLE public.message (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	message TEXT NOT NULL,
 	created TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -98,33 +98,33 @@ CREATE TABLE message (
 	advertisement_id BIGINT
 );
 
-CREATE TABLE message_state (
+CREATE TABLE public.message_state (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	name TEXT NOT NULL
 );
 
 -- USER FOREIGN KEYS
-ALTER TABLE "user" ADD FOREIGN KEY(role_id) REFERENCES role(id);
-ALTER TABLE role_permission ADD FOREIGN KEY(role_id) REFERENCES role(id);
-ALTER TABLE role_permission ADD FOREIGN KEY(permission_id) REFERENCES permission(id);
-ALTER TABLE user_log ADD FOREIGN KEY(user_id) REFERENCES "user"(id);
+ALTER TABLE public."user" ADD FOREIGN KEY(role_id) REFERENCES role(id);
+ALTER TABLE public.role_permission ADD FOREIGN KEY(role_id) REFERENCES role(id);
+ALTER TABLE public.role_permission ADD FOREIGN KEY(permission_id) REFERENCES permission(id);
+ALTER TABLE public.user_log ADD FOREIGN KEY(user_id) REFERENCES "user"(id);
 
 -- USER UNIQUE KEYS
-ALTER TABLE "user" ADD CONSTRAINT email_unique UNIQUE (email);
+ALTER TABLE public."user" ADD CONSTRAINT email_unique UNIQUE (email);
 
 -- AVERTISEMENT FOREIGN KEYS
-ALTER TABLE advertisement ADD FOREIGN KEY(user_id) REFERENCES "user"(id);
-ALTER TABLE advertisement ADD FOREIGN KEY(category_id) REFERENCES category(id);
-ALTER TABLE advertisement ADD FOREIGN KEY(advertisement_state_id) REFERENCES advertisement_state(id);
-ALTER TABLE advertisement_tag ADD FOREIGN KEY(advertisement_id) REFERENCES advertisement(id);
-ALTER TABLE advertisement_tag ADD FOREIGN KEY(tag_id) REFERENCES tag(id);
-ALTER TABLE media ADD FOREIGN KEY(advertisement_id) REFERENCES advertisement(id);
-ALTER TABLE category ADD FOREIGN KEY(parent_category_id) REFERENCES category(id);
-ALTER TABLE subscription ADD FOREIGN KEY(category_id) REFERENCES category(id);
-ALTER TABLE subscription ADD FOREIGN KEY(user_id) REFERENCES "user"(id);
+ALTER TABLE public.advertisement ADD FOREIGN KEY(user_id) REFERENCES "user"(id);
+ALTER TABLE public.advertisement ADD FOREIGN KEY(category_id) REFERENCES category(id);
+ALTER TABLE public.advertisement ADD FOREIGN KEY(advertisement_state_id) REFERENCES advertisement_state(id);
+ALTER TABLE public.advertisement_tag ADD FOREIGN KEY(advertisement_id) REFERENCES advertisement(id);
+ALTER TABLE public.advertisement_tag ADD FOREIGN KEY(tag_id) REFERENCES tag(id);
+ALTER TABLE public.media ADD FOREIGN KEY(advertisement_id) REFERENCES advertisement(id);
+ALTER TABLE public.category ADD FOREIGN KEY(parent_category_id) REFERENCES category(id);
+ALTER TABLE public.subscription ADD FOREIGN KEY(category_id) REFERENCES category(id);
+ALTER TABLE public.subscription ADD FOREIGN KEY(user_id) REFERENCES "user"(id);
 
 -- MESSAGE FOREIGN KEYS
-ALTER TABLE message ADD FOREIGN KEY(sender_user_id) REFERENCES "user"(id);
-ALTER TABLE message ADD FOREIGN KEY(recipient_user_id) REFERENCES "user"(id);
-ALTER TABLE message ADD FOREIGN KEY(advertisement_id) REFERENCES advertisement(id);
-ALTER TABLE message ADD FOREIGN KEY(message_state_id) REFERENCES message_state(id);
+ALTER TABLE public.message ADD FOREIGN KEY(sender_user_id) REFERENCES "user"(id);
+ALTER TABLE public.message ADD FOREIGN KEY(recipient_user_id) REFERENCES "user"(id);
+ALTER TABLE public.message ADD FOREIGN KEY(advertisement_id) REFERENCES advertisement(id);
+ALTER TABLE public.message ADD FOREIGN KEY(message_state_id) REFERENCES message_state(id);
