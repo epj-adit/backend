@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.hsr.adit</groupId>
 	<artifactId>adit</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 
 	<name>adit</name>
 	<url>http://www.hsr.ch</url>
@@ -29,27 +29,27 @@
 			<artifactId>jbcrypt</artifactId>
 			<version>0.4</version>
 		</dependency>
-		
+
 		<!--Java Web Tokens -->
 		<dependency>
-		    <groupId>com.auth0</groupId>
-		    <artifactId>java-jwt</artifactId>
-		    <version>3.1.0</version>
-		</dependency>
-		
-		<!-- Decoder/Encoder for passwords -->
-		<dependency>
-   		 <groupId>commons-codec</groupId>
-		    <artifactId>commons-codec</artifactId>
-		    <version>1.9</version>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.1.0</version>
 		</dependency>
 
-		
+		<!-- Decoder/Encoder for passwords -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
+		</dependency>
+
+
 		<!-- Keystore Decoder -->
 		<dependency>
-		    <groupId>commons-io</groupId>
-		    <artifactId>commons-io</artifactId>
-		    <version>1.3.2</version>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.3.2</version>
 		</dependency>
 
 		<!-- JSON Serialization -->
@@ -122,6 +122,30 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+
+			<!-- JAR Assembly -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>ch.hsr.adit.application.app.App</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 			<!-- Checkstyle -->
