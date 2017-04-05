@@ -3,9 +3,9 @@ package ch.hsr.adit.domain.persistence;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
+import ch.hsr.adit.domain.exception.DatabaseError;
+import ch.hsr.adit.domain.exception.SystemException;
 import ch.hsr.adit.domain.model.User;
-import ch.hsr.adit.exception.DatabaseError;
-import ch.hsr.adit.exception.SystemException;
 
 
 public class UserDao extends GenericDao<User, Long> {

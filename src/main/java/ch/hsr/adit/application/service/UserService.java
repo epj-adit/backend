@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import ch.hsr.adit.domain.exception.SystemException;
+import ch.hsr.adit.domain.exception.UserError;
 import ch.hsr.adit.domain.model.Role;
 import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.domain.persistence.UserDao;
-import ch.hsr.adit.exception.SystemException;
-import ch.hsr.adit.exception.UserError;
 import spark.Request;
 
 

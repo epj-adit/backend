@@ -1,4 +1,4 @@
-package ch.hsr.adit.exception;
+package ch.hsr.adit.domain.exception;
 
 public enum DatabaseError implements ErrorCode {
   USER_CONSTRAINT_VIOLATED(1005);

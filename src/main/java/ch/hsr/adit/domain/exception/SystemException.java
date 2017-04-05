@@ -1,4 +1,4 @@
-package ch.hsr.adit.exception;
+package ch.hsr.adit.domain.exception;
 
 public class SystemException extends RuntimeException {
 

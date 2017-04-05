@@ -8,9 +8,9 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
+import ch.hsr.adit.domain.exception.DatabaseError;
+import ch.hsr.adit.domain.exception.SystemException;
 import ch.hsr.adit.domain.model.DbEntity;
-import ch.hsr.adit.exception.DatabaseError;
-import ch.hsr.adit.exception.SystemException;
 
 public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
 

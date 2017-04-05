@@ -1,4 +1,4 @@
-package ch.hsr.adit.exception;
+package ch.hsr.adit.domain.exception;
 
 public enum UserError implements ErrorCode {
   USER_NOT_FOUND(1001),
