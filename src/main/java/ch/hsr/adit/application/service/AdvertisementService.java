@@ -1,6 +1,5 @@
 package ch.hsr.adit.application.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -9,7 +8,10 @@ import ch.hsr.adit.domain.exception.SystemException;
 import ch.hsr.adit.domain.exception.UserError;
 import ch.hsr.adit.domain.model.Advertisement;
 import ch.hsr.adit.domain.model.Category;
+import ch.hsr.adit.domain.model.Tag;
+import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
+import ch.hsr.adit.util.DateUtil;
 import spark.Request;
 
 
@@ -111,14 +113,28 @@ public class AdvertisementService {
     }
 
     if (request.queryParams("updated") != null) {
-      // TODO parse updated date. Take it from client or set new date?
-      advertisement.setUpdated(new Date());
+      advertisement.setUpdated(DateUtil.parseDate(request.queryParams("updated")));
     }
 
     if (request.queryParams("categoryId") != null) {
       Category category = categoryService.get(Long.parseLong(request.queryParams("categoryId")));
       advertisement.setCategory(category);
     }
+    
+    if (request.queryParams("userId") != null) {
+      User user = userService.get(Long.parseLong(request.queryParams("userId")));
+      advertisement.setUser(user);
+    }
+    
+    if (request.queryParamsValues("tags") != null) {
+      String[] tagIds = request.queryParamsValues("tags");
+      for (String tagId : tagIds) {
+        Tag tag = tagService.get(Long.parseLong(tagId));
+        advertisement.getTags().add(tag);
+      }
+    }
+    
+    // TODO add advertisement state enum
 
     LOGGER.info("Received: " + advertisement.toString());
 

@@ -15,15 +15,19 @@ import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 
 import ch.hsr.adit.application.controller.AdvertisementController;
+import ch.hsr.adit.application.controller.MediaController;
+import ch.hsr.adit.application.controller.RestApi;
 import ch.hsr.adit.application.controller.UserController;
 import ch.hsr.adit.application.service.AdvertisementService;
 import ch.hsr.adit.application.service.CategoryService;
+import ch.hsr.adit.application.service.MediaService;
 import ch.hsr.adit.application.service.RoleService;
 import ch.hsr.adit.application.service.TagService;
 import ch.hsr.adit.application.service.UserService;
 import ch.hsr.adit.domain.exception.SystemException;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
 import ch.hsr.adit.domain.persistence.CategoryDao;
+import ch.hsr.adit.domain.persistence.MediaDao;
 import ch.hsr.adit.domain.persistence.RoleDao;
 import ch.hsr.adit.domain.persistence.TagDao;
 import ch.hsr.adit.domain.persistence.UserDao;
@@ -60,7 +64,7 @@ public class App {
     // Category
     CategoryDao categoryDao = new CategoryDao(sessionFactory);
     CategoryService categoryService = new CategoryService(categoryDao);
-
+    
     // Role
     RoleDao roleDao = new RoleDao(sessionFactory);
     RoleService roleService = new RoleService(roleDao);
@@ -74,9 +78,12 @@ public class App {
     AdvertisementDao advertisementDao = new AdvertisementDao(sessionFactory);
     AdvertisementService advertisementService =
         new AdvertisementService(advertisementDao, userService, tagService, categoryService);
-
-
     new AdvertisementController(advertisementService);
+    
+    // Media
+    MediaDao mediaDao = new MediaDao(sessionFactory);
+    MediaService mediaService = new MediaService(mediaDao, advertisementService);
+    new MediaController(mediaService);
 
     // wait for jetty
     awaitInitialization();

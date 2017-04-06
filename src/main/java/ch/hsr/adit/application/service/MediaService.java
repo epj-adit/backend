@@ -1,147 +1,133 @@
 package ch.hsr.adit.application.service;
 
-import java.util.Date;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletException;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import ch.hsr.adit.domain.exception.SystemException;
 import ch.hsr.adit.domain.exception.UserError;
-import ch.hsr.adit.domain.model.Role;
-import ch.hsr.adit.domain.model.User;
-import ch.hsr.adit.domain.persistence.UserDao;
+import ch.hsr.adit.domain.model.Advertisement;
+import ch.hsr.adit.domain.model.Media;
+import ch.hsr.adit.domain.persistence.MediaDao;
 import spark.Request;
 
 
 public class MediaService {
 
   private static final Logger LOGGER = Logger.getLogger(MediaService.class);
-  private final UserDao userDao;
-  private final RoleService roleService;
 
+  private final MediaDao mediaDao;
+  private final AdvertisementService advertisementService;
 
-  public MediaService(UserDao userDao, RoleService roleService) {
-    this.userDao = userDao;
-    this.roleService = roleService;
+  public MediaService(MediaDao mediaDao, AdvertisementService advertisementService) {
+    this.mediaDao = mediaDao;
+    this.advertisementService = advertisementService;
   }
 
-  public User createUser(User user) {
+  public Media createMedia(Media media) {
     try {
-      return (User) userDao.persist(user);
+      return (Media) mediaDao.persist(media);
     } catch (Exception e) {
       throw new SystemException(UserError.USER_NOT_INSERTED, e);
     }
   }
 
-  public User updateUser(User user) {
+  public Media updateMedia(Media media) {
     try {
-      return userDao.update(user);
+      return mediaDao.update(media);
     } catch (Exception e) {
       throw new SystemException(UserError.USER_NOT_UPDATED, e);
     }
   }
 
-  public boolean deleteUser(User userToDelete) {
+  public boolean deleteMedia(Media mediaToDelete) {
     try {
-      userDao.delete(userToDelete);
+      mediaDao.delete(mediaToDelete);
       return true;
     } catch (Exception e) {
       throw new SystemException(UserError.USER_NOT_DELETED, e);
     }
   }
 
-  public boolean deleteUser(long id) {
+  public boolean deleteMedia(long id) {
     try {
-      User user = get(id);
-      deleteUser(user);
+      Media media = get(id);
+      deleteMedia(media);
       return true;
     } catch (Exception e) {
       throw new SystemException(UserError.USER_NOT_DELETED, e);
     }
   }
 
-  public User get(User user) {
+  public Media get(Media media) {
     try {
-      return get(user.getId());
+      return get(media.getId());
     } catch (Exception e) {
       throw new SystemException(UserError.USER_NOT_FOUND, e);
     }
   }
 
-  public User get(Long id) {
-    User user = userDao.get(id);
-    if (user == null) {
+  public Media get(Long id) {
+    Media media = mediaDao.get(id);
+    if (media == null) {
       throw new SystemException(UserError.USER_NOT_FOUND);
     }
-    return user;
+    return media;
   }
 
-  public List<User> getAll() {
+  public List<Media> getAll() {
     try {
-      return userDao.getAll();
+      return mediaDao.getAll();
     } catch (Exception e) {
       throw new SystemException(UserError.USER_NOT_FOUND, e);
     }
   }
 
-  public User transformToUser(Request request) {
-    User user = null;
+  public Media transformToMedia(Request request) {
+    Media media = null;
     if (request.params(":id") != null) {
       Long id = Long.parseLong(request.params(":id"));
-      user = get(id);
+      media = get(id);
     } else {
-      user = new User();
+      media = new Media();
     }
 
-    if (request.queryParams("username") != null) {
-      user.setUsername(request.queryParams("username"));
+    if (request.queryParams("filename") != null) {
+      media.setFilename(request.queryParams("filename"));
     }
 
-    if (request.queryParams("email") != null) {
-      user.setEmail(request.queryParams("email"));
+    if (request.queryParams("descripton") != null) {
+      media.setDescription(request.queryParams("description"));
     }
 
-    if (request.queryParams("passwordHash") != null) {
-      user.setPasswordHash(request.queryParams("passwordHash"));
+    if (request.queryParams("advertisementId") != null) {
+      Advertisement advertisement =
+          advertisementService.get(Long.parseLong(request.queryParams("advertisementId")));
+      media.setAdvertisement(advertisement);
     }
 
-    if (request.queryParams("isPrivate") != null) {
-      user.setIsPrivate(Boolean.parseBoolean(request.queryParams("isPrivate")));
-    }
+    byte[] file = createFile(request);
+    media.setMedia(file);
 
-    if (request.queryParams("wantsNotification") != null) {
-      user.setWantsNotification(Boolean.parseBoolean(request.queryParams("wantsNotification")));
-    }
+    LOGGER.info("Received: " + media.toString());
 
-    if (request.queryParams("isActive") != null) {
-      user.setIsActive(Boolean.parseBoolean(request.queryParams("isActive")));
-    }
-
-    if (request.queryParams("jwtToken") != null) {
-      user.setJwtToken(request.queryParams("jwtToken"));
-    }
-
-    if (request.queryParams("updated") != null) {
-      // TODO parse updated date. Take it from client or set new date?
-      user.setUpdated(new Date());
-    }
-
-    if (request.queryParams("role") != null) {
-      Role role = roleService.getRole(Long.parseLong(request.queryParams("role")));
-      user.setRole(role);
-    }
-
-    // TODO add date util
-    // userLogs
-    // messagesForSenderUserId
-    // messagesForRecipientUserId
-    // subscriptions
-    // advertisements
-
-    LOGGER.info("Received: " + user.toString());
-
-    return user;
+    return media;
   }
 
+  private byte[] createFile(Request request) {
+    request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+    try (InputStream is = request.raw().getPart("uploaded_file").getInputStream()) {
+      return IOUtils.toByteArray(is);
+    } catch (IOException | ServletException e) {
+      LOGGER.error("Unable to create file");
+      return null;
+    }
+  }
 
 }

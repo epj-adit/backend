@@ -10,6 +10,7 @@ import ch.hsr.adit.domain.exception.UserError;
 import ch.hsr.adit.domain.model.Role;
 import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.domain.persistence.UserDao;
+import ch.hsr.adit.util.DateUtil;
 import spark.Request;
 
 
@@ -122,8 +123,7 @@ public class UserService {
     }
 
     if (request.queryParams("updated") != null) {
-      // TODO parse updated date. Take it from client or set new date?
-      user.setUpdated(new Date());
+      user.setUpdated(DateUtil.parseDate(request.queryParams("updated")));
     }
 
     if (request.queryParams("role") != null) {

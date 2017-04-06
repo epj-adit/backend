@@ -6,7 +6,6 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
-import ch.hsr.adit.application.app.RestApi;
 import ch.hsr.adit.application.service.UserService;
 import ch.hsr.adit.domain.model.User;
 

@@ -88,7 +88,16 @@ public class CategoryService {
     } else {
       category = new Category();
     }
-
+    
+    if (request.queryParams("name") != null) {
+      category.setName(request.queryParams("name"));
+    }
+    
+    if (request.queryParams("parentCategoryId") != null) {
+      Long parentId = Long.parseLong(request.queryParams("parentCategoryId"));
+      Category parentCategory = categoryDao.get(parentId);
+      category.setParentCategory(parentCategory);
+    }
 
     LOGGER.info("Received: " + category.toString());
 

@@ -1,4 +1,4 @@
-package ch.hsr.adit.application.app;
+package ch.hsr.adit.application.controller;
 
 import lombok.Data;
 
