@@ -3,7 +3,7 @@
 
 DOCKER_RUN=docker run -ti --rm --name "engineering-projekt-server-testing" \
 		   --link engineering-projekt-server-testing-postgres \
-		   --volume $(shell pwd)/.m2:/home/java/.m2 --volume "$(shell pwd):/home/java/project" \
+		   --volume "$(shell pwd)/.m2:/home/java/.m2:Z" --volume "$(shell pwd):/home/java/project:Z" \
 		   fabianhauser/engineering-projekt-server-testing
 
 VERSION=$(shell ./ci/version.bash)
@@ -29,7 +29,7 @@ install:
 	@echo "===================================================================="
 	@echo "Testing and building application and container"
 	@echo "===================================================================="
-	rm -r target/*
+	rm -r target 2>/dev/null || true; mkdir target
 	$(DOCKER_RUN) mvn install
 
 build-container-testing:
