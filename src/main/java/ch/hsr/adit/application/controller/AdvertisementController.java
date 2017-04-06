@@ -1,30 +1,50 @@
 package ch.hsr.adit.application.controller;
 
+import static ch.hsr.adit.util.JsonUtil.jsonTransformer;
+import static spark.Spark.delete;
+import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.put;
 
-import java.io.InputStream;
-
-import javax.servlet.MultipartConfigElement;
-
-import ch.hsr.adit.application.service.UserService;
+import ch.hsr.adit.application.app.RestApi;
+import ch.hsr.adit.application.service.AdvertisementService;
+import ch.hsr.adit.domain.model.Advertisement;
 
 public class AdvertisementController {
 
   /**
-   * API Controller for /user requests.
+   * API Controller for /advertisement requests.
    * 
-   * @param userService service class
+   * @param AdvertisementService class
    */
-  public AdvertisementController(UserService userService) {
+  public AdvertisementController(AdvertisementService advertisementService) {
 
-    // upload
-    post("/advertisement/uploadProductImage", (request, response) -> {
-      request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-      try (InputStream is = request.raw().getPart("uploaded_file").getInputStream()) {
-        // Use the input stream to create a file
-      }
-      return "File uploaded";
-    });
+    // create
+    post(RestApi.Advertisement.ADVERTISEMENT, (request, response) -> {
+      Advertisement advertisement = advertisementService.transformToAdvertisement(request);
+      return advertisementService.createAdvertisement(advertisement);
+    }, jsonTransformer());
 
+    // read
+    get(RestApi.Advertisement.ADVERTISEMENT_BY_ID, (request, response) -> {
+      Advertisement advertisement = advertisementService.transformToAdvertisement(request);
+      return advertisementService.get(advertisement);
+    }, jsonTransformer());
+
+    get(RestApi.Advertisement.ADVERTISEMENTS, (request, response) -> {
+      return advertisementService.getAll();
+    }, jsonTransformer());
+
+    // update
+    put(RestApi.Advertisement.ADVERTISEMENT_BY_ID, (request, response) -> {
+      Advertisement advertisement = advertisementService.transformToAdvertisement(request);
+      return advertisementService.updateAdvertisement(advertisement);
+    }, jsonTransformer());
+
+    // delete
+    delete(RestApi.Advertisement.ADVERTISEMENT_BY_ID, (request, response) -> {
+      Advertisement advertisement = advertisementService.transformToAdvertisement(request);
+      return advertisementService.deleteAdvertisement(advertisement);
+    }, jsonTransformer());
   }
 }

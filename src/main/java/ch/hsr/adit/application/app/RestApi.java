@@ -66,5 +66,6 @@ public class RestApi {
   public static class Media {
     public static final String MEDIA = "/media";
     public static final String MEDIA_BY_ID = "/medias/:id";
+    public static final String MEDIA_UPLOAD = "/media/upload";
   }
 }

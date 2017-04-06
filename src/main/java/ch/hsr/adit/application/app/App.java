@@ -14,11 +14,18 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 
+import ch.hsr.adit.application.controller.AdvertisementController;
 import ch.hsr.adit.application.controller.UserController;
+import ch.hsr.adit.application.service.AdvertisementService;
+import ch.hsr.adit.application.service.CategoryService;
 import ch.hsr.adit.application.service.RoleService;
+import ch.hsr.adit.application.service.TagService;
 import ch.hsr.adit.application.service.UserService;
 import ch.hsr.adit.domain.exception.SystemException;
+import ch.hsr.adit.domain.persistence.AdvertisementDao;
+import ch.hsr.adit.domain.persistence.CategoryDao;
 import ch.hsr.adit.domain.persistence.RoleDao;
+import ch.hsr.adit.domain.persistence.TagDao;
 import ch.hsr.adit.domain.persistence.UserDao;
 import ch.hsr.adit.util.HibernateUtil;
 import ch.hsr.adit.util.KeyStore;
@@ -29,7 +36,7 @@ public class App {
   private static final File KEY_FILE = new File("KeyStore.properties");
 
   public static void main(String[] args) {
-    
+
     // Authentication key store
     setupKeyStore();
 
@@ -37,7 +44,7 @@ public class App {
     AppFilter appFilter = new AppFilter();
     before(RestApi.App.WILDCARD, appFilter.handleAuthentication);
     after(RestApi.App.WILDCARD, appFilter.setEncoding);
-    
+
     // General handler for exceptions and errors
     AppHandler appHandler = new AppHandler();
     exception(SystemException.class, appHandler.exceptionHandler);
@@ -45,6 +52,14 @@ public class App {
     internalServerError(appHandler.internalServerError);
 
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+
+    // Tag
+    TagDao tagDao = new TagDao(sessionFactory);
+    TagService tagService = new TagService(tagDao);
+
+    // Category
+    CategoryDao categoryDao = new CategoryDao(sessionFactory);
+    CategoryService categoryService = new CategoryService(categoryDao);
 
     // Role
     RoleDao roleDao = new RoleDao(sessionFactory);
@@ -54,7 +69,15 @@ public class App {
     UserDao userDao = new UserDao(sessionFactory);
     UserService userService = new UserService(userDao, roleService);
     new UserController(userService);
-    
+
+    // User
+    AdvertisementDao advertisementDao = new AdvertisementDao(sessionFactory);
+    AdvertisementService advertisementService =
+        new AdvertisementService(advertisementDao, userService, tagService, categoryService);
+
+
+    new AdvertisementController(advertisementService);
+
     // wait for jetty
     awaitInitialization();
   }
