@@ -57,6 +57,21 @@ public class TokenUtilTest {
     TokenUtil tokenUtil = TokenUtil.getInstance();
     assertFalse(tokenUtil.verify(user.getJwtToken(), user.getEmail()));
   }
+  
+  @Test
+  public void verifyDifferentTokenTest() {
+    User user = new User();
+    user.setEmail("student@hsr.ch");
+    User user2 = new User();
+    user2.setEmail("professor@hsr.ch");
+    TokenUtil tokenUtil = TokenUtil.getInstance();
+    String token1 = tokenUtil.generateToken(user.getEmail());
+    user.setJwtToken(token1);
+    String token2 = tokenUtil.generateToken(user2.getEmail());
+    user2.setJwtToken(token2);
+    assertFalse(tokenUtil.verify(user.getJwtToken(), user2.getEmail()));
+    assertFalse(tokenUtil.verify(token2, user.getEmail()));
+  }
 
   @Test(expected = IllegalArgumentException.class)
   public void nullArgumentTest() {
