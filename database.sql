@@ -44,9 +44,9 @@ CREATE TABLE public.advertisement (
 	price INTEGER NOT NULL DEFAULT 0,
 	created TIMESTAMP NOT NULL DEFAULT NOW(),
 	updated TIMESTAMP,
+	advertisementstate INT NOT NULL,
 	user_id BIGINT NOT NULL,
-	category_id BIGINT NOT NULL,
-	advertisement INT NOT NULL
+	category_id BIGINT NOT NULL
 );
 
 CREATE TABLE public.tag (
@@ -93,11 +93,6 @@ CREATE TABLE public.message (
 	advertisement_id BIGINT
 );
 
-CREATE TABLE public.message_state (
-	id BIGSERIAL NOT NULL PRIMARY KEY,
-	name TEXT NOT NULL
-);
-
 -- USER FOREIGN KEYS
 ALTER TABLE public."user" ADD FOREIGN KEY(role_id) REFERENCES role(id);
 ALTER TABLE public.role_permission ADD FOREIGN KEY(role_id) REFERENCES role(id);
@@ -110,7 +105,6 @@ ALTER TABLE public."user" ADD CONSTRAINT email_unique UNIQUE (email);
 -- AVERTISEMENT FOREIGN KEYS
 ALTER TABLE public.advertisement ADD FOREIGN KEY(user_id) REFERENCES "user"(id);
 ALTER TABLE public.advertisement ADD FOREIGN KEY(category_id) REFERENCES category(id);
-ALTER TABLE public.advertisement ADD FOREIGN KEY(advertisement_state_id) REFERENCES advertisement_state(id);
 ALTER TABLE public.advertisement_tag ADD FOREIGN KEY(advertisement_id) REFERENCES advertisement(id);
 ALTER TABLE public.advertisement_tag ADD FOREIGN KEY(tag_id) REFERENCES tag(id);
 ALTER TABLE public.media ADD FOREIGN KEY(advertisement_id) REFERENCES advertisement(id);
@@ -122,4 +116,3 @@ ALTER TABLE public.subscription ADD FOREIGN KEY(user_id) REFERENCES "user"(id);
 ALTER TABLE public.message ADD FOREIGN KEY(sender_user_id) REFERENCES "user"(id);
 ALTER TABLE public.message ADD FOREIGN KEY(recipient_user_id) REFERENCES "user"(id);
 ALTER TABLE public.message ADD FOREIGN KEY(advertisement_id) REFERENCES advertisement(id);
-ALTER TABLE public.message ADD FOREIGN KEY(message_state_id) REFERENCES message_state(id);
