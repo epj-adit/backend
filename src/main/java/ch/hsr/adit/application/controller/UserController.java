@@ -6,6 +6,7 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
+import ch.hsr.adit.application.app.RestApi;
 import ch.hsr.adit.application.service.UserService;
 import ch.hsr.adit.domain.model.User;
 
@@ -19,29 +20,29 @@ public class UserController {
   public UserController(UserService userService) {
 
     // create
-    post("/user", (request, response) -> {
+    post(RestApi.User.USER, (request, response) -> {
       User user = userService.transformToUser(request);
       return userService.createUser(user);
     }, jsonTransformer());
 
     // read
-    get("/user/:id", (request, response) -> {
+    get(RestApi.User.USER_BY_ID, (request, response) -> {
       User user = userService.transformToUser(request);
       return userService.get(user);
     }, jsonTransformer());
 
-    get("/users", (request, response) -> {
+    get(RestApi.User.USERS, (request, response) -> {
       return userService.getAll();
     }, jsonTransformer());
 
     // update
-    put("user/:id", (request, response) -> {
+    put(RestApi.User.USER_BY_ID, (request, response) -> {
       User user = userService.transformToUser(request);
       return userService.updateUser(user);
     }, jsonTransformer());
 
     // delete
-    delete("user/:id", (request, response) -> {
+    delete(RestApi.User.USER_BY_ID, (request, response) -> {
       User user = userService.transformToUser(request);
       return userService.deleteUser(user);
     }, jsonTransformer());

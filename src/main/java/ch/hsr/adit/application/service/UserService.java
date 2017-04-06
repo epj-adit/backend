@@ -15,7 +15,7 @@ import spark.Request;
 
 public class UserService {
 
-  private static final Logger logger = Logger.getLogger(UserService.class);
+  private static final Logger LOGGER = Logger.getLogger(UserService.class);
   private final UserDao userDao;
   private final RoleService roleService;
 
@@ -138,7 +138,7 @@ public class UserService {
     // subscriptions
     // advertisements
 
-    logger.info("Received: " + user.toString());
+    LOGGER.info("Received: " + user.toString());
 
     return user;
   }

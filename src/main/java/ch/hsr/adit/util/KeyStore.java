@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 
 public class KeyStore {
 
-  private static final Logger logger = Logger.getLogger(KeyStore.class);
+  private static final Logger LOGGER = Logger.getLogger(KeyStore.class);
 
   private static volatile KeyStore instance;
 
@@ -66,7 +66,7 @@ public class KeyStore {
       prop.setProperty("secret", String.valueOf(hex));
       prop.store(out, null);
     } catch (IOException e) {
-      logger.error("Failed to store secretKey in file: " + file.getAbsolutePath());
+      LOGGER.error("Failed to store secretKey in file: " + file.getAbsolutePath());
     }
   }
 
@@ -80,7 +80,7 @@ public class KeyStore {
       String secretString = prop.getProperty("secret");
       encoded = decodeHex(secretString.toCharArray());
     } catch (DecoderException e) {
-      logger.error("Cannot load and decode given secret " + file.getAbsolutePath());
+      LOGGER.error("Cannot load and decode given secret " + file.getAbsolutePath());
     }
     return new SecretKeySpec(encoded, "AES");
   }

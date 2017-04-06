@@ -14,7 +14,7 @@ import spark.utils.IOUtils;
 
 public class TestUtil {
 
-  private static final Logger logger = Logger.getLogger(TestUtil.class);
+  private static final Logger LOGGER = Logger.getLogger(TestUtil.class);
   
   private static final String ENDPOINT = "http://localhost:4567";
 
@@ -42,7 +42,7 @@ public class TestUtil {
       String body = IOUtils.toString(connection.getInputStream());
       return new TestResponse(connection.getResponseCode(), body);
     } catch (IOException ex) {
-      logger.error(ex.getMessage());
+      LOGGER.error(ex.getMessage());
       return null;
     }
   }

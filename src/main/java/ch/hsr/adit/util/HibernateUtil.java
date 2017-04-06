@@ -8,7 +8,7 @@ import org.hibernate.cfg.Configuration;
 
 public final class HibernateUtil {
 
-  private static final Logger logger = Logger.getLogger(HibernateUtil.class);
+  private static final Logger LOGGER = Logger.getLogger(HibernateUtil.class);
 
   private static SessionFactory sessionFactory = null;
 
@@ -17,7 +17,7 @@ public final class HibernateUtil {
       Configuration hibernateConfiguration = loadConfiguration(new EnvironmentUtil());
       sessionFactory = hibernateConfiguration.buildSessionFactory();
     } catch (HibernateException ex) {
-      logger.error("SessionFactory creation failed. " + ex);
+      LOGGER.error("SessionFactory creation failed. " + ex);
     }
   }
   

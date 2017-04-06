@@ -16,7 +16,7 @@ public final class TokenUtil {
   // TODO write token to DB?
   // TODO: claims (rollen / rechte)
 
-  private static final Logger logger = Logger.getLogger(TokenUtil.class);
+  private static final Logger LOGGER = Logger.getLogger(TokenUtil.class);
 
   private static final String ISSUER = "adit";
 
@@ -36,7 +36,7 @@ public final class TokenUtil {
             TokenUtil.algorithm = Algorithm.HMAC256(secret.getEncoded());
             instance = new TokenUtil();
           } catch (IOException e) {
-            logger.error("Cannot load keystore: " + e.getMessage());
+            LOGGER.error("Cannot load keystore: " + e.getMessage());
           }
         }
       }

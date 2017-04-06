@@ -9,7 +9,7 @@ import ch.hsr.adit.domain.persistence.RoleDao;
 
 public class RoleService {
 
-  private static final Logger logger = Logger.getLogger(RoleService.class);
+  private static final Logger LOGGER = Logger.getLogger(RoleService.class);
   
   private final RoleDao roleDao;
 
@@ -21,7 +21,7 @@ public class RoleService {
     try {
       return roleDao.getByName(name);
     } catch (HibernateException e) {
-      logger.error("HibernateException occured while find role by name: " + e.getMessage());
+      LOGGER.error("HibernateException occured while find role by name: " + e.getMessage());
       return null;
     }
   }
@@ -30,7 +30,7 @@ public class RoleService {
     try {
       return roleDao.get(id);
     } catch (HibernateException e) {
-      logger.error("HibernateException occured while find role by name: " + e.getMessage());
+      LOGGER.error("HibernateException occured while find role by name: " + e.getMessage());
       return null;
     }
   }
