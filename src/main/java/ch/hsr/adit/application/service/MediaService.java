@@ -126,7 +126,7 @@ public class MediaService {
       return IOUtils.toByteArray(is);
     } catch (IOException | ServletException e) {
       LOGGER.error("Unable to create file");
-      return null;
+      return new byte[]{};
     }
   }
 

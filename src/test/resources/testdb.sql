@@ -13,19 +13,6 @@ INSERT INTO public.role (id, name) VALUES (3, 'user');
 INSERT INTO public.role_permission (permission_id, role_id) VALUES (1, 1);
 INSERT INTO public.role_permission (permission_id, role_id) VALUES (1, 2);
 
--- MESSAGE STATE
-INSERT INTO public.message_state (id, name) VALUES (1, 'read');
-INSERT INTO public.message_state (id, name) VALUES (2, 'unread');
-INSERT INTO public.message_state (id, name) VALUES (3, 'spam');
-INSERT INTO public.message_state (id, name) VALUES (4, 'deleted');
-
--- ADVERTISMENTS STATE
-INSERT INTO public.advertisement_state (id, name) VALUES (1, 'to_review');
-INSERT INTO public.advertisement_state (id, name) VALUES (2, 'declined');
-INSERT INTO public.advertisement_state (id, name) VALUES (3, 'active');
-INSERT INTO public.advertisement_state (id, name) VALUES (4, 'expired');
-INSERT INTO public.advertisement_state (id, name) VALUES (5, 'closed');
-
 
 -- **************************************************
 -- *				DATA							*
@@ -52,10 +39,10 @@ INSERT INTO public.tag (id, name) VALUES (1, 'Eduard Glatz');
 INSERT INTO public.tag (id, name) VALUES (2, 'Betriebssysteme 1');
 
 -- ADVERTISEMENTS
-INSERT INTO public.advertisement (id, title, description, price, created, updated, advertisement_state_id, category_id, user_id) VALUES (1, 'Betriebsysteme', 'Betriebsysteme Buch von Eduard Glatz mit Notizen ', 30000, NOW(), NULL, 3, 1, 3);
+INSERT INTO public.advertisement (id, title, description, price, created, updated, advertisementstate, category_id, user_id) VALUES (1, 'Betriebsysteme', 'Betriebsysteme Buch von Eduard Glatz mit Notizen ', 30000, NOW(), NULL, 3, 1, 3);
 
 INSERT INTO public.advertisement_tag (tag_id, advertisement_id) VALUES (1, 1);
 INSERT INTO public.advertisement_tag (tag_id, advertisement_id) VALUES (2, 1);
 
 -- MESSAGES
-INSERT INTO public.message (id, message, created, advertisement_id, message_state_id, recipient_user_id, sender_user_id) VALUES (1, 'Hallo Welt!', NOW(), null, 1, 1, 2);
+INSERT INTO public.message (id, message, created, advertisement_id, messagestate, recipient_user_id, sender_user_id) VALUES (1, 'Hallo Welt!', NOW(), null, 1, 1, 2);

@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import ch.hsr.adit.domain.exception.SystemException;
 import ch.hsr.adit.domain.exception.UserError;
 import ch.hsr.adit.domain.model.Advertisement;
+import ch.hsr.adit.domain.model.AdvertisementState;
 import ch.hsr.adit.domain.model.Category;
 import ch.hsr.adit.domain.model.Tag;
 import ch.hsr.adit.domain.model.User;
@@ -121,6 +122,11 @@ public class AdvertisementService {
       advertisement.setCategory(category);
     }
     
+    if (request.queryParams("advertisementState") != null) {
+      int ordinal = Integer.parseInt(request.queryParams("advertisementState"));
+      advertisement.setAdvertisementState(AdvertisementState.values()[ordinal]);
+    }
+    
     if (request.queryParams("userId") != null) {
       User user = userService.get(Long.parseLong(request.queryParams("userId")));
       advertisement.setUser(user);
@@ -134,8 +140,6 @@ public class AdvertisementService {
       }
     }
     
-    // TODO add advertisement state enum
-
     LOGGER.info("Received: " + advertisement.toString());
 
     return advertisement;

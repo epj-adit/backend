@@ -26,11 +26,9 @@
 
 		<!-- mapping classes -->
 		<mapping class="ch.hsr.adit.domain.model.Advertisement" />
-		<mapping class="ch.hsr.adit.domain.model.AdvertisementState" />
 		<mapping class="ch.hsr.adit.domain.model.Category" />
 		<mapping class="ch.hsr.adit.domain.model.Media" />
 		<mapping class="ch.hsr.adit.domain.model.Message" />
-		<mapping class="ch.hsr.adit.domain.model.MessageState" />
 		<mapping class="ch.hsr.adit.domain.model.Permission" />
 		<mapping class="ch.hsr.adit.domain.model.Role" />
 		<mapping class="ch.hsr.adit.domain.model.Subscription" />

@@ -46,12 +46,7 @@ CREATE TABLE public.advertisement (
 	updated TIMESTAMP,
 	user_id BIGINT NOT NULL,
 	category_id BIGINT NOT NULL,
-	advertisement_state_id BIGINT NOT NULL
-);
-
-CREATE TABLE public.advertisement_state (
-	id BIGSERIAL NOT NULL PRIMARY KEY,
-	name TEXT NOT NULL
+	advertisement INT NOT NULL
 );
 
 CREATE TABLE public.tag (
@@ -94,7 +89,7 @@ CREATE TABLE public.message (
 	created TIMESTAMP NOT NULL DEFAULT NOW(),
 	sender_user_id BIGINT,
 	recipient_user_id BIGINT NOT NULL,
-	message_state_id BIGINT,
+	messagestate INT,
 	advertisement_id BIGINT
 );
 

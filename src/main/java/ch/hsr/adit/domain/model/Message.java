@@ -4,9 +4,10 @@ package ch.hsr.adit.domain.model;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -31,6 +32,7 @@ public class Message implements DbEntity {
   private User userByRecipientUserId;
   private String message;
   private Date created;
+  
 
   @Id
   @Column(name = "id", unique = true, nullable = false)
@@ -52,8 +54,8 @@ public class Message implements DbEntity {
     this.advertisement = advertisement;
   }
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "message_state_id")
+  @Enumerated(EnumType.ORDINAL)
+  @Column(unique = true)
   public MessageState getMessageState() {
     return this.messageState;
   }
