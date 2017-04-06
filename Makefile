@@ -29,6 +29,7 @@ install:
 	@echo "===================================================================="
 	@echo "Testing and building application and container"
 	@echo "===================================================================="
+	rm -r target/*
 	$(DOCKER_RUN) mvn install
 
 build-container-testing:
@@ -44,7 +45,6 @@ postgres-start:
 	@echo "===================================================================="
 	docker run --detach\
 		--env POSTGRES_DB=adit --env POSTGRES_USER=adit --env POSTGRES_PASSWORD=adit \
-		--volume $(shell pwd)/database.sql:/docker-entrypoint-initdb.d/database.sql:ro \
 		--name engineering-projekt-server-testing-postgres postgres:9.6-alpine
 	@sleep 4
 
