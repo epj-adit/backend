@@ -1,10 +1,9 @@
 package ch.hsr.adit.application.controller;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -124,7 +123,7 @@ public class UserControllerIT {
     // assert
     Map<String, String>[] jsonList = response.jsonList();
     assertEquals(200, response.statusCode);
-    assertThat(jsonList.length, greaterThanOrEqualTo(3));
+    assertTrue(jsonList.length >= 3);
   }
 
   @Test
