@@ -10,7 +10,6 @@ import ch.hsr.adit.domain.exception.UserError;
 import ch.hsr.adit.domain.model.Role;
 import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.domain.persistence.UserDao;
-import ch.hsr.adit.util.DateUtil;
 import spark.Request;
 
 
@@ -90,9 +89,14 @@ public class UserService {
     if (request.params(":id") != null) {
       Long id = Long.parseLong(request.params(":id"));
       user = get(id);
+    } else if (request.queryParams("id") != null) {
+      Long id = Long.parseLong(request.queryParams("id"));
+      user = get(id);
     } else {
       user = new User();
     }
+    
+    user.setUpdated(new Date());
 
     if (request.queryParams("username") != null) {
       user.setUsername(request.queryParams("username"));
@@ -122,14 +126,12 @@ public class UserService {
       user.setJwtToken(request.queryParams("jwtToken"));
     }
 
-    if (request.queryParams("updated") != null) {
-      user.setUpdated(DateUtil.parseDate(request.queryParams("updated")));
-    }
-
     if (request.queryParams("role") != null) {
       Role role = roleService.getRole(Long.parseLong(request.queryParams("role")));
       user.setRole(role);
     }
+    
+    
 
     // TODO add date util
     // userLogs

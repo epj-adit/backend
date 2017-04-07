@@ -1,5 +1,6 @@
 package ch.hsr.adit.application.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -12,7 +13,6 @@ import ch.hsr.adit.domain.model.Category;
 import ch.hsr.adit.domain.model.Tag;
 import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
-import ch.hsr.adit.util.DateUtil;
 import spark.Request;
 
 
@@ -95,14 +95,18 @@ public class AdvertisementService {
   public Advertisement transformToAdvertisement(Request request) {
     Advertisement advertisement = null;
     
-    //TODO request.queryParams("id")
     if (request.params(":id") != null) {
       Long id = Long.parseLong(request.params(":id"));
+      advertisement = get(id);
+    } else if (request.queryParams("id") != null) {
+      Long id = Long.parseLong(request.queryParams("id"));
       advertisement = get(id);
     } else {
       advertisement = new Advertisement();
     }
 
+    advertisement.setUpdated(new Date());
+    
     if (request.queryParams("title") != null) {
       advertisement.setTitle(request.queryParams("title"));
     }
@@ -113,10 +117,6 @@ public class AdvertisementService {
 
     if (request.queryParams("price") != null) {
       advertisement.setPrice(Integer.parseInt(request.queryParams("price")));
-    }
-
-    if (request.queryParams("updated") != null) {
-      advertisement.setUpdated(DateUtil.parseDate(request.queryParams("updated")));
     }
 
     if (request.queryParams("categoryId") != null) {
