@@ -9,8 +9,10 @@ import java.util.Map;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import ch.hsr.adit.application.app.App;
+import ch.hsr.adit.domain.model.AdvertisementState;
 import ch.hsr.adit.test.TestResponse;
 import ch.hsr.adit.test.TestUtil;
 import spark.Spark;
@@ -25,6 +27,8 @@ public class AdvertisementControllerIT {
   private int price = 1000;
   private int userId = 1;
   private int categoryId = 1;
+  private int advertisementStateId = 1;
+
 
   @BeforeClass
   public static void setupClass() {
@@ -44,8 +48,10 @@ public class AdvertisementControllerIT {
     params.put("price", price);
     params.put("categoryId", categoryId);
     params.put("userId", userId);
+    params.put("advertisementState", advertisementStateId);
   }
 
+  @Test
   public void insertUserTest() {
     // act
     TestResponse response = TestUtil.request(HttpMethod.post, "/advertisement", params);
@@ -55,8 +61,9 @@ public class AdvertisementControllerIT {
     assertEquals(200, response.statusCode);
     assertNotNull(json.get("id"));
     assertEquals(title, json.get("title"));
+    assertEquals(AdvertisementState.ACTIVE.toString(), json.get("advertisementState"));
     assertEquals(description, json.get("description"));
-    assertEquals(price, json.get("price"));
+    assertEquals(price, ((Double) json.get("price")).intValue());
     assertNotNull(json.get("user"));
     assertNotNull(json.get("category"));
   }
