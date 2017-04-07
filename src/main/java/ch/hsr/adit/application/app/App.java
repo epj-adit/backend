@@ -6,6 +6,7 @@ import static spark.Spark.before;
 import static spark.Spark.exception;
 import static spark.Spark.internalServerError;
 import static spark.Spark.notFound;
+import static spark.Spark.options;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,6 +56,8 @@ public class App {
     notFound(appHandler.notFound);
     internalServerError(appHandler.internalServerError);
 
+    options(RestApi.App.WILDCARD, appHandler.handlerCors);
+
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
     // Tag
@@ -64,7 +67,7 @@ public class App {
     // Category
     CategoryDao categoryDao = new CategoryDao(sessionFactory);
     CategoryService categoryService = new CategoryService(categoryDao);
-    
+
     // Role
     RoleDao roleDao = new RoleDao(sessionFactory);
     RoleService roleService = new RoleService(roleDao);
@@ -79,7 +82,7 @@ public class App {
     AdvertisementService advertisementService =
         new AdvertisementService(advertisementDao, userService, tagService, categoryService);
     new AdvertisementController(advertisementService);
-    
+
     // Media
     MediaDao mediaDao = new MediaDao(sessionFactory);
     MediaService mediaService = new MediaService(mediaDao, advertisementService);

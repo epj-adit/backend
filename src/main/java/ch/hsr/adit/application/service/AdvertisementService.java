@@ -94,6 +94,8 @@ public class AdvertisementService {
 
   public Advertisement transformToAdvertisement(Request request) {
     Advertisement advertisement = null;
+    
+    //TODO request.queryParams("id")
     if (request.params(":id") != null) {
       Long id = Long.parseLong(request.params(":id"));
       advertisement = get(id);
