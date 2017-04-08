@@ -9,7 +9,7 @@ import spark.Request;
 import spark.Response;
 
 public class AppFilter {
-  
+
   public Filter handleAuthentication = (Request request, Response response) -> {
     if (!AuthenticationUtil.authenticated("test", "secure")) {
       halt(401, "You are not welcome here");
@@ -22,5 +22,5 @@ public class AppFilter {
     // TODO: send jwt on successfull auth
     // response.header("Authorization", "Bearer " + jwt");
   };
-  
+
 }

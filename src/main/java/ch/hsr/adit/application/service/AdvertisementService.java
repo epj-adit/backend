@@ -1,18 +1,18 @@
 package ch.hsr.adit.application.service;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.google.gson.JsonSyntaxException;
+
+import ch.hsr.adit.domain.exception.EntityError;
+import ch.hsr.adit.domain.exception.SystemError;
 import ch.hsr.adit.domain.exception.SystemException;
-import ch.hsr.adit.domain.exception.UserError;
 import ch.hsr.adit.domain.model.Advertisement;
-import ch.hsr.adit.domain.model.AdvertisementState;
-import ch.hsr.adit.domain.model.Category;
-import ch.hsr.adit.domain.model.Tag;
-import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
+import ch.hsr.adit.util.JsonUtil;
 import spark.Request;
 
 
@@ -20,24 +20,17 @@ public class AdvertisementService {
 
   private static final Logger LOGGER = Logger.getLogger(AdvertisementService.class);
   private final AdvertisementDao advertisementDao;
-  private final CategoryService categoryService;
-  private final TagService tagService;
-  private final UserService userService;
 
-  public AdvertisementService(AdvertisementDao advertisementDao, UserService userService,
-      TagService tagService, CategoryService categoryService) {
-    
+  public AdvertisementService(AdvertisementDao advertisementDao) {
+
     this.advertisementDao = advertisementDao;
-    this.userService = userService;
-    this.tagService = tagService;
-    this.categoryService = categoryService;
   }
 
   public Advertisement createAdvertisement(Advertisement advertisement) {
     try {
       return (Advertisement) advertisementDao.persist(advertisement);
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_INSERTED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_INSERTED, e);
     }
   }
 
@@ -45,7 +38,7 @@ public class AdvertisementService {
     try {
       return advertisementDao.update(advertisement);
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_UPDATED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_UPDATED, e);
     }
   }
 
@@ -54,7 +47,7 @@ public class AdvertisementService {
       advertisementDao.delete(advertisementToDelete);
       return true;
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_DELETED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
     }
   }
 
@@ -64,88 +57,58 @@ public class AdvertisementService {
       deleteAdvertisement(advertisement);
       return true;
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_DELETED, e);
-    }
-  }
-
-  public Advertisement get(Advertisement advertisement) {
-    try {
-      return get(advertisement.getId());
-    } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_FOUND, e);
+      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
     }
   }
 
   public Advertisement get(Long id) {
     Advertisement advertisement = advertisementDao.get(id);
     if (advertisement == null) {
-      throw new SystemException(UserError.USER_NOT_FOUND);
+      throw new SystemException(EntityError.ENTITY_NOT_FOUND);
     }
     return advertisement;
   }
 
   public List<Advertisement> getAll() {
-    try {
-      return advertisementDao.getAll();
-    } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_FOUND, e);
+    return advertisementDao.getAll();
+  }
+
+  public List<Advertisement> getAllFiltered(Request request) {
+    Long userId = null;
+    if (request.queryParams("userId") != null) {
+      userId = Long.parseLong(request.queryParams("userId"));
     }
+    
+    List<Long> tagIds = new ArrayList<>();
+    if (request.queryParamsValues("tagId") != null) {
+      String[] tags = request.queryParamsValues("tagId");
+      for (int i = 0; i < tags.length; i++) {
+        tagIds.add(Long.valueOf(tags[i]));
+      }
+    }
+
+    List<Long> categoryIds = new ArrayList<>();
+    if (request.queryParams("categoryId") != null) {
+      String[] categories = request.queryParamsValues("categoryId");
+      for (int i = 0; i < categories.length; i++) {
+        categoryIds.add(Long.valueOf(categories[i]));
+      }
+    }
+
+    String title = request.queryParams("title");
+    String description = request.queryParams("description");
+    return advertisementDao.get(title, description, userId, categoryIds, tagIds);
   }
 
   public Advertisement transformToAdvertisement(Request request) {
-    Advertisement advertisement = null;
-    
-    if (request.params(":id") != null) {
-      Long id = Long.parseLong(request.params(":id"));
-      advertisement = get(id);
-    } else if (request.queryParams("id") != null) {
-      Long id = Long.parseLong(request.queryParams("id"));
-      advertisement = get(id);
-    } else {
-      advertisement = new Advertisement();
+    try {
+      Advertisement advertisement = JsonUtil.fromJson(request.body(), Advertisement.class);
+      LOGGER.info("Received JSON data: " + advertisement.toString());
+      return advertisement;
+    } catch (JsonSyntaxException e) {
+      LOGGER.error("Cannot parse JSON: " + request.body());
+      throw new SystemException(SystemError.JSON_PARSE_ERROR);
     }
-
-    advertisement.setUpdated(new Date());
-    
-    if (request.queryParams("title") != null) {
-      advertisement.setTitle(request.queryParams("title"));
-    }
-
-    if (request.queryParams("description") != null) {
-      advertisement.setDescription(request.queryParams("description"));
-    }
-
-    if (request.queryParams("price") != null) {
-      advertisement.setPrice(Integer.parseInt(request.queryParams("price")));
-    }
-
-    if (request.queryParams("categoryId") != null) {
-      Category category = categoryService.get(Long.parseLong(request.queryParams("categoryId")));
-      advertisement.setCategory(category);
-    }
-    
-    if (request.queryParams("advertisementState") != null) {
-      int ordinal = Integer.parseInt(request.queryParams("advertisementState"));
-      advertisement.setAdvertisementState(AdvertisementState.values()[ordinal]);
-    }
-    
-    if (request.queryParams("userId") != null) {
-      User user = userService.get(Long.parseLong(request.queryParams("userId")));
-      advertisement.setUser(user);
-    }
-    
-    if (request.queryParamsValues("tags") != null) {
-      String[] tagIds = request.queryParamsValues("tags");
-      for (String tagId : tagIds) {
-        Tag tag = tagService.get(Long.parseLong(tagId));
-        advertisement.getTags().add(tag);
-      }
-    }
-    
-    LOGGER.info("Received: " + advertisement.toString());
-
-    return advertisement;
   }
-
 
 }

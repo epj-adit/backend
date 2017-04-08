@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import ch.hsr.adit.domain.exception.SystemException;
-import ch.hsr.adit.domain.exception.UserError;
+import ch.hsr.adit.domain.exception.EntityError;
 import ch.hsr.adit.domain.model.Role;
 import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.domain.persistence.UserDao;
@@ -29,7 +29,7 @@ public class UserService {
     try {
       return (User) userDao.persist(user);
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_INSERTED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_INSERTED, e);
     }
   }
 
@@ -37,7 +37,7 @@ public class UserService {
     try {
       return userDao.update(user);
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_UPDATED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_UPDATED, e);
     }
   }
 
@@ -46,7 +46,7 @@ public class UserService {
       userDao.delete(userToDelete);
       return true;
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_DELETED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
     }
   }
 
@@ -56,7 +56,7 @@ public class UserService {
       deleteUser(user);
       return true;
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_DELETED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
     }
   }
 
@@ -64,14 +64,14 @@ public class UserService {
     try {
       return get(user.getId());
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_FOUND, e);
+      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
     }
   }
 
   public User get(Long id) {
     User user = userDao.get(id);
     if (user == null) {
-      throw new SystemException(UserError.USER_NOT_FOUND);
+      throw new SystemException(EntityError.ENTITY_NOT_FOUND);
     }
     return user;
   }
@@ -80,7 +80,7 @@ public class UserService {
     try {
       return userDao.getAll();
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_FOUND, e);
+      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
     }
   }
 

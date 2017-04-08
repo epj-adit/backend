@@ -11,7 +11,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import ch.hsr.adit.domain.exception.SystemException;
-import ch.hsr.adit.domain.exception.UserError;
+import ch.hsr.adit.domain.exception.EntityError;
 import ch.hsr.adit.domain.model.Advertisement;
 import ch.hsr.adit.domain.model.Media;
 import ch.hsr.adit.domain.persistence.MediaDao;
@@ -34,7 +34,7 @@ public class MediaService {
     try {
       return (Media) mediaDao.persist(media);
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_INSERTED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_INSERTED, e);
     }
   }
 
@@ -42,7 +42,7 @@ public class MediaService {
     try {
       return mediaDao.update(media);
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_UPDATED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_UPDATED, e);
     }
   }
 
@@ -51,7 +51,7 @@ public class MediaService {
       mediaDao.delete(mediaToDelete);
       return true;
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_DELETED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
     }
   }
 
@@ -61,7 +61,7 @@ public class MediaService {
       deleteMedia(media);
       return true;
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_DELETED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
     }
   }
 
@@ -69,14 +69,14 @@ public class MediaService {
     try {
       return get(media.getId());
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_FOUND, e);
+      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
     }
   }
 
   public Media get(Long id) {
     Media media = mediaDao.get(id);
     if (media == null) {
-      throw new SystemException(UserError.USER_NOT_FOUND);
+      throw new SystemException(EntityError.ENTITY_NOT_FOUND);
     }
     return media;
   }
@@ -85,7 +85,7 @@ public class MediaService {
     try {
       return mediaDao.getAll();
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_FOUND, e);
+      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
     }
   }
 

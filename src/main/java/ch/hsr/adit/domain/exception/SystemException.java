@@ -1,5 +1,8 @@
 package ch.hsr.adit.domain.exception;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = false)
 public class SystemException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
@@ -30,12 +33,12 @@ public class SystemException extends RuntimeException {
     return this.exception;
   }
 
+  @Override
   public String getMessage() {
     if (exception != null) {
-      return exception.getMessage();
+      return errorCode + " :" + exception.getMessage();
     }
-    return "";
+    return String.valueOf(errorCode);
   }
 
 }
- 

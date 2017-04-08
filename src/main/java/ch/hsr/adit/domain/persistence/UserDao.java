@@ -25,7 +25,7 @@ public class UserDao extends GenericDao<User, Long> {
       return user;
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.USER_CONSTRAINT_VIOLATED, e);
+      throw new SystemException(DatabaseError.GENERIC_DATABASE, e);
     }
   }
 

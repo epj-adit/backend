@@ -1,6 +1,7 @@
 package ch.hsr.adit.util;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import spark.ResponseTransformer;
 
@@ -15,6 +16,11 @@ public class JsonUtil {
    */
   public static final String toJson(Object object) {
     return gson.toJson(object);
+  }
+
+
+  public static <T extends Object> T fromJson(String json, Class<T> classe) throws JsonSyntaxException {
+    return new Gson().fromJson(json, classe);
   }
 
   /**

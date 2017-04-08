@@ -56,7 +56,7 @@ public class Advertisement implements DbEntity {
   }
 
   @Enumerated(EnumType.ORDINAL)
-  @Column(unique = true, nullable = false)
+  @Column(nullable = false)
   public AdvertisementState getAdvertisementState() {
     return this.advertisementState;
   }

@@ -26,10 +26,14 @@ public class AdvertisementController {
 
     // read
     get(RestApi.Advertisement.ADVERTISEMENT_BY_ID, (request, response) -> {
-      Advertisement advertisement = advertisementService.transformToAdvertisement(request);
-      return advertisementService.get(advertisement);
+      long id = Long.parseLong(request.params(":id"));
+      return advertisementService.get(id);
     }, jsonTransformer());
 
+    get(RestApi.Advertisement.ADVERTISEMENTS_FILTERED, (request, response) -> {
+      return advertisementService.getAllFiltered(request);
+    }, jsonTransformer());
+    
     get(RestApi.Advertisement.ADVERTISEMENTS, (request, response) -> {
       return advertisementService.getAll();
     }, jsonTransformer());

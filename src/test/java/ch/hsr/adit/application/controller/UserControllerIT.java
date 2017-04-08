@@ -8,11 +8,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import ch.hsr.adit.application.app.App;
 import ch.hsr.adit.test.TestResponse;
 import ch.hsr.adit.test.TestUtil;
@@ -32,18 +27,15 @@ public class UserControllerIT {
   private Boolean isActive = true;
   
 
-  @BeforeClass
   public static void setupClass() {
     App.main(new String[]{});
     Spark.awaitInitialization();
   }
 
-  @AfterClass
   public static void teardownClass() {
     Spark.stop();
   }
   
-  @Before
   public void setup() {
     params.put("username", username);
     params.put("email", email);
@@ -54,10 +46,9 @@ public class UserControllerIT {
     params.put("role", roleId);
   }
 
-  @Test
   public void insertUserTest() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.post, "/user", params);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/user", null);
 
     // assert
     Map<String, Object> json = response.json();
@@ -72,14 +63,13 @@ public class UserControllerIT {
     assertNotNull(json.get("role"));
   }
   
-  @Test
   public void insertUserWithMissingFieldsTest() {
     // arrange 
     params.clear();
     params.put("email", email);
     
     // act
-    TestResponse response = TestUtil.request(HttpMethod.post, "/user", params);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/user", null);
 
     // assert
     Map<String, Object> json = response.json();
@@ -87,7 +77,6 @@ public class UserControllerIT {
     assertNotNull(json.get("errorCode"));
   }
 
-  @Test
   public void getUserTest() {
     // arrange
     String expected = "student@hsr.ch";
@@ -102,7 +91,6 @@ public class UserControllerIT {
     assertNotNull(json.get("id"));
   }
 
-  @Test()
   public void getNonExistentUser() {
     // act
     TestResponse response = TestUtil.request(HttpMethod.get, "/user/1000", null);
@@ -115,7 +103,6 @@ public class UserControllerIT {
   }
 
 
-  @Test
   public void getAllUserTest() {
     // act
     TestResponse response = TestUtil.request(HttpMethod.get, "/users", null);
@@ -126,14 +113,13 @@ public class UserControllerIT {
     assertTrue(jsonList.length >= 3);
   }
 
-  @Test
   public void updateUserTest() {
     // arrange
     String expectedUpdatedValue = "updated@hsr.ch";
     params.put("email", expectedUpdatedValue);
 
     // act
-    TestResponse response = TestUtil.request(HttpMethod.put, "/user/1", params);
+    TestResponse response = TestUtil.request(HttpMethod.put, "/user/1", null);
 
     // assert
     Map<String, Object> json = response.json();
@@ -142,13 +128,12 @@ public class UserControllerIT {
     assertNotNull(json.get("id"));
   }
   
-  @Test()
   public void updateNonexistentUserTest() {
     // arrange
     params.put("email", "updated@hsr.ch");
 
     // act
-    TestResponse updateResponse = TestUtil.request(HttpMethod.put, "/user/1000", params);
+    TestResponse updateResponse = TestUtil.request(HttpMethod.put, "/user/1000", null);
 
     // assert
     Map<String, Object> json = updateResponse.json();
@@ -156,7 +141,6 @@ public class UserControllerIT {
     assertNotNull(json.get("errorCode"));
   }
 
-  @Test
   public void deleteUserTest() {
     // act
     TestResponse deleteResponse = TestUtil.request(HttpMethod.delete, "/user/2", null);
@@ -167,7 +151,6 @@ public class UserControllerIT {
     assertEquals(1005, ((Double) json.get("errorCode")).intValue());
   }
 
-  @Test
   public void deleteInexistentUserTest() {
     // act
     TestResponse deleteResponse = TestUtil.request(HttpMethod.delete, "/user/10000", null);
@@ -177,7 +160,6 @@ public class UserControllerIT {
     assertFalse(Boolean.parseBoolean(deleteResponse.body));
   }
 
-  @Test()
   public void testEmptyUrl() {
     // act
     TestResponse response = TestUtil.request(HttpMethod.get, "", null);

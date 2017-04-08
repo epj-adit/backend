@@ -20,17 +20,13 @@ import ch.hsr.adit.application.controller.MediaController;
 import ch.hsr.adit.application.controller.RestApi;
 import ch.hsr.adit.application.controller.UserController;
 import ch.hsr.adit.application.service.AdvertisementService;
-import ch.hsr.adit.application.service.CategoryService;
 import ch.hsr.adit.application.service.MediaService;
 import ch.hsr.adit.application.service.RoleService;
-import ch.hsr.adit.application.service.TagService;
 import ch.hsr.adit.application.service.UserService;
 import ch.hsr.adit.domain.exception.SystemException;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
-import ch.hsr.adit.domain.persistence.CategoryDao;
 import ch.hsr.adit.domain.persistence.MediaDao;
 import ch.hsr.adit.domain.persistence.RoleDao;
-import ch.hsr.adit.domain.persistence.TagDao;
 import ch.hsr.adit.domain.persistence.UserDao;
 import ch.hsr.adit.util.HibernateUtil;
 import ch.hsr.adit.util.KeyStore;
@@ -60,14 +56,6 @@ public class App {
 
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
-    // Tag
-    TagDao tagDao = new TagDao(sessionFactory);
-    TagService tagService = new TagService(tagDao);
-
-    // Category
-    CategoryDao categoryDao = new CategoryDao(sessionFactory);
-    CategoryService categoryService = new CategoryService(categoryDao);
-
     // Role
     RoleDao roleDao = new RoleDao(sessionFactory);
     RoleService roleService = new RoleService(roleDao);
@@ -79,8 +67,7 @@ public class App {
 
     // User
     AdvertisementDao advertisementDao = new AdvertisementDao(sessionFactory);
-    AdvertisementService advertisementService =
-        new AdvertisementService(advertisementDao, userService, tagService, categoryService);
+    AdvertisementService advertisementService = new AdvertisementService(advertisementDao);
     new AdvertisementController(advertisementService);
 
     // Media

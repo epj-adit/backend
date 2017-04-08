@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import ch.hsr.adit.domain.exception.SystemException;
-import ch.hsr.adit.domain.exception.UserError;
+import ch.hsr.adit.domain.exception.EntityError;
 import ch.hsr.adit.domain.model.Category;
 import ch.hsr.adit.domain.persistence.CategoryDao;
 import spark.Request;
@@ -25,7 +25,7 @@ public class CategoryService {
     try {
       return (Category) categoryDao.persist(category);
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_INSERTED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_INSERTED, e);
     }
   }
 
@@ -33,7 +33,7 @@ public class CategoryService {
     try {
       return categoryDao.update(category);
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_UPDATED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_UPDATED, e);
     }
   }
 
@@ -42,7 +42,7 @@ public class CategoryService {
       categoryDao.delete(categoryToDelete);
       return true;
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_DELETED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
     }
   }
 
@@ -52,7 +52,7 @@ public class CategoryService {
       deleteCategory(category);
       return true;
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_DELETED, e);
+      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
     }
   }
 
@@ -60,14 +60,14 @@ public class CategoryService {
     try {
       return get(category.getId());
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_FOUND, e);
+      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
     }
   }
 
   public Category get(Long id) {
     Category category = categoryDao.get(id);
     if (category == null) {
-      throw new SystemException(UserError.USER_NOT_FOUND);
+      throw new SystemException(EntityError.ENTITY_NOT_FOUND);
     }
     return category;
   }
@@ -76,7 +76,7 @@ public class CategoryService {
     try {
       return categoryDao.getAll();
     } catch (Exception e) {
-      throw new SystemException(UserError.USER_NOT_FOUND, e);
+      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
     }
   }
 

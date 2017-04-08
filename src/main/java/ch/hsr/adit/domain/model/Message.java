@@ -58,7 +58,6 @@ public class Message implements DbEntity {
   }
 
   @Enumerated(EnumType.ORDINAL)
-  @Column(unique = true)
   public MessageState getMessageState() {
     return this.messageState;
   }

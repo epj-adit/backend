@@ -1,12 +1,11 @@
 package ch.hsr.adit.domain.exception;
 
-public enum DatabaseError implements ErrorCode {
-  GENERIC_DATABASE(1000),
-  CONSTRAINT_VIOLATED(1005);
+public enum SystemError implements ErrorCode {
+  JSON_PARSE_ERROR(5001);
 
   private final int errorCode;
   
-  private DatabaseError(final int errorCode) {
+  private SystemError(final int errorCode) {
     this.errorCode = errorCode;
   }
   

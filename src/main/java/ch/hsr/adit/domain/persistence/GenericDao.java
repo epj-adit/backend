@@ -29,7 +29,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
   protected Query<T> createQuery(String hql) {
     return sessionFactory.getCurrentSession().createQuery(hql);
   }
-
+  
   public T persist(T object) {
     try {
       sessionFactory.getCurrentSession().beginTransaction();
@@ -39,7 +39,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       return object;
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.USER_CONSTRAINT_VIOLATED, e);
+      throw new SystemException(DatabaseError.CONSTRAINT_VIOLATED, e);
     }
   }
 
@@ -51,7 +51,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       return object;
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.USER_CONSTRAINT_VIOLATED, e);
+      throw new SystemException(DatabaseError.GENERIC_DATABASE, e);
     }
   }
 
@@ -65,7 +65,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       return object;
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.USER_CONSTRAINT_VIOLATED, e);
+      throw new SystemException(DatabaseError.GENERIC_DATABASE, e);
     }
   }
 
@@ -78,7 +78,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       return objects;
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.USER_CONSTRAINT_VIOLATED, e);
+      throw new SystemException(DatabaseError.GENERIC_DATABASE, e);
     }
   }
 
@@ -90,7 +90,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       return object;
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.USER_CONSTRAINT_VIOLATED, e);
+      throw new SystemException(DatabaseError.CONSTRAINT_VIOLATED, e);
     }
   }
 
@@ -105,7 +105,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       sessionFactory.getCurrentSession().getTransaction().commit();
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.USER_CONSTRAINT_VIOLATED, e);
+      throw new SystemException(DatabaseError.CONSTRAINT_VIOLATED, e);
     }
   }
 
