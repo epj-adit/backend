@@ -40,6 +40,10 @@ INSERT INTO public.tag (id, name) VALUES (2, 'Betriebssysteme 1');
 
 -- ADVERTISEMENTS
 INSERT INTO public.advertisement (id, title, description, price, created, updated, advertisementstate, category_id, user_id) VALUES (1, 'Betriebsysteme', 'Betriebsysteme Buch von Eduard Glatz mit Notizen ', 30000, NOW(), NULL, 3, 1, 3);
+INSERT INTO public.advertisement (id, title, description, price, created, updated, advertisementstate, category_id, user_id) VALUES (2, 'GoF Patterns', 'Buch zu den bekannten Design Pattern der GoF', 20000, NOW(), NULL, 3, 1, 1);
+INSERT INTO public.advertisement (id, title, description, price, created, updated, advertisementstate, category_id, user_id) VALUES (3, 'WG Zimmer Jona', 'WG Zimmer inder Tägernaustrasse Jona', 30000, NOW(), NULL, 3, 3, 1);
+
+
 
 INSERT INTO public.advertisement_tag (tag_id, advertisement_id) VALUES (1, 1);
 INSERT INTO public.advertisement_tag (tag_id, advertisement_id) VALUES (2, 1);

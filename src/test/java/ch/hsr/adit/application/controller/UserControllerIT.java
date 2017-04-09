@@ -108,7 +108,7 @@ public class UserControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.get, "/users", null);
 
     // assert
-    Map<String, String>[] jsonList = response.jsonList();
+    Map<String, Object>[] jsonList = response.jsonList();
     assertEquals(200, response.statusCode);
     assertTrue(jsonList.length >= 3);
   }

@@ -88,6 +88,29 @@ public class AdvertisementControllerIT {
     assertEquals(title, json.get("title"));
     assertNotNull(json.get("id"));
   }
+  
+  @Test
+  public void getAllFiltered() {
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.get,
+        "/advertisements/?title=Be&description=B&userId=3&tagId=1&tagId=2&categoryId=1", null);
+
+    // assert
+    Map<String, Object>[] jsonList = response.jsonList();
+    assertEquals(200, response.statusCode);
+    assertTrue(jsonList.length >= 2);
+  }
+
+  @Test
+  public void getAll() {
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.get, "/advertisements", null);
+
+    // assert
+    Map<String, Object>[] jsonList = response.jsonList();
+    assertEquals(200, response.statusCode);
+    assertTrue(jsonList.length >= 3);
+  }
 
   @Test
   public void getNonExistentAdvertisement() {
@@ -127,16 +150,13 @@ public class AdvertisementControllerIT {
   }
 
   @Test
-  public void getAllFiltered() {
+  public void deleteAdvertisement() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.get,
-        "/advertisements/?title=Be&description=B&userId=3&tagId=1&tagId=2&categoryId=1", null);
+    TestResponse response = TestUtil.request(HttpMethod.delete, "/advertisement/3", null);
 
     // assert
-    Map<String, String>[] jsonList = response.jsonList();
     assertEquals(200, response.statusCode);
-    assertTrue(jsonList.length >= 2);
+    assertTrue(Boolean.parseBoolean(response.body));
   }
-
 
 }

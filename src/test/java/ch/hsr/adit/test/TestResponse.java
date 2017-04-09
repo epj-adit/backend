@@ -1,9 +1,9 @@
 package ch.hsr.adit.test;
 
-import com.google.gson.Gson;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.gson.Gson;
 
 
 public class TestResponse {
@@ -22,7 +22,7 @@ public class TestResponse {
   }
   
   @SuppressWarnings("unchecked")
-  public Map<String, String>[] jsonList() {
+  public Map<String, Object>[] jsonList() {
     return new Gson().fromJson(body, HashMap[].class);
   }
 }

@@ -46,8 +46,9 @@ public class AdvertisementController {
 
     // delete
     delete(RestApi.Advertisement.ADVERTISEMENT_BY_ID, (request, response) -> {
-      Advertisement advertisement = advertisementService.transformToAdvertisement(request);
-      return advertisementService.deleteAdvertisement(advertisement);
+      // TODO check for permisisons
+      long id = Long.parseLong(request.params(":id"));
+      return advertisementService.deleteAdvertisement(id);
     }, jsonTransformer());
   }
 }
