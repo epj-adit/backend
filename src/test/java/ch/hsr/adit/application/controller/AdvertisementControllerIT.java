@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,7 +17,6 @@ import ch.hsr.adit.domain.model.Category;
 import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.test.TestResponse;
 import ch.hsr.adit.test.TestUtil;
-import spark.Spark;
 import spark.route.HttpMethod;
 
 public class AdvertisementControllerIT {
@@ -34,12 +32,6 @@ public class AdvertisementControllerIT {
   @BeforeClass
   public static void setupClass() {
     App.main(new String[] {});
-    Spark.awaitInitialization();
-  }
-
-  @AfterClass
-  public static void teardownClass() {
-    Spark.stop();
   }
 
   @Before
@@ -88,7 +80,7 @@ public class AdvertisementControllerIT {
     assertEquals(title, json.get("title"));
     assertNotNull(json.get("id"));
   }
-  
+
   @Test
   public void getAllFiltered() {
     // act

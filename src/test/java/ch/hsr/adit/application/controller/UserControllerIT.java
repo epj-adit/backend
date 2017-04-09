@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,7 +15,6 @@ import ch.hsr.adit.domain.model.Role;
 import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.test.TestResponse;
 import ch.hsr.adit.test.TestUtil;
-import spark.Spark;
 import spark.route.HttpMethod;
 
 public class UserControllerIT {
@@ -31,12 +29,6 @@ public class UserControllerIT {
   @BeforeClass
   public static void setupClass() {
     App.main(new String[] {});
-    Spark.awaitInitialization();
-  }
-
-  @AfterClass
-  public static void teardownClass() {
-    Spark.stop();
   }
 
   @Before
@@ -140,7 +132,7 @@ public class UserControllerIT {
   @Test
   public void deleteUser() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.delete, "/user/3", null);
+    TestResponse response = TestUtil.request(HttpMethod.delete, "/user/0", null);
 
     // assert
     assertEquals(200, response.statusCode);
