@@ -19,7 +19,8 @@ public class JsonUtil {
   }
 
 
-  public static <T extends Object> T fromJson(String json, Class<T> classe) throws JsonSyntaxException {
+  public static <T extends Object> T fromJson(String json, Class<T> classe)
+      throws JsonSyntaxException {
     return new Gson().fromJson(json, classe);
   }
 
