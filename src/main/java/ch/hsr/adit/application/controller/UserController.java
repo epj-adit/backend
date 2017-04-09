@@ -26,8 +26,8 @@ public class UserController {
 
     // read
     get(RestApi.User.USER_BY_ID, (request, response) -> {
-      User user = userService.transformToUser(request);
-      return userService.get(user);
+      long id = Long.parseLong(request.params(":id"));
+      return userService.get(id);
     }, jsonTransformer());
 
     get(RestApi.User.USERS, (request, response) -> {
@@ -42,8 +42,9 @@ public class UserController {
 
     // delete
     delete(RestApi.User.USER_BY_ID, (request, response) -> {
-      User user = userService.transformToUser(request);
-      return userService.deleteUser(user);
+      // TODO check for permisisons
+      long id = Long.parseLong(request.params(":id"));
+      return userService.deleteUser(id);
     }, jsonTransformer());
   }
 }

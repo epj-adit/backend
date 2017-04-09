@@ -1,109 +1,105 @@
 package ch.hsr.adit.application.controller;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import ch.hsr.adit.application.app.App;
+import ch.hsr.adit.domain.model.Role;
+import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.test.TestResponse;
 import ch.hsr.adit.test.TestUtil;
 import spark.Spark;
 import spark.route.HttpMethod;
 
 public class UserControllerIT {
-  
-  private Map<String, Object> params = new HashMap<>();
 
-  private int roleId = 1;
+  private Role role;
   private String username = "junitUser";
-  private String email = "studen@hsr.ch";
-  private String password = "ultasecure1234";
+  private String passwordHash = "ultasecure1234";
   private Boolean isPrivate = false;
   private Boolean wantsNotification = true;
   private Boolean isActive = true;
-  
 
+  @BeforeClass
   public static void setupClass() {
-    App.main(new String[]{});
+    App.main(new String[] {});
     Spark.awaitInitialization();
   }
 
+  @AfterClass
   public static void teardownClass() {
     Spark.stop();
   }
-  
+
+  @Before
   public void setup() {
-    params.put("username", username);
-    params.put("email", email);
-    params.put("passwordHash", password);
-    params.put("isPrivate", isPrivate);
-    params.put("wantsNotification", wantsNotification);
-    params.put("isActive", isActive);
-    params.put("role", roleId);
+    this.role = new Role();
+    this.role.setId(1);
   }
 
-  public void insertUserTest() {
+  @Test
+  public void createUser() {
+    // arrange
+    User user = new User();
+    user.setUsername(username);
+    user.setEmail("new.student@hsr.ch");
+    user.setPasswordHash(passwordHash);
+    user.setIsPrivate(isPrivate);
+    user.setWantsNotification(wantsNotification);
+    user.setIsActive(isActive);
+    user.setRole(role);
+
     // act
-    TestResponse response = TestUtil.request(HttpMethod.post, "/user", null);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
 
     // assert
     Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
     assertNotNull(json.get("id"));
     assertEquals(username, json.get("username"));
-    assertEquals(email, json.get("email"));
-    assertEquals(password, json.get("passwordHash"));
-    assertEquals(isPrivate, (boolean) json.get("isPrivate"));
-    assertEquals(wantsNotification, (boolean) json.get("wantsNotification"));
-    assertEquals(isActive, (boolean) json.get("isActive"));
+    assertEquals("new.student@hsr.ch", json.get("email"));
+    assertEquals(passwordHash, json.get("passwordHash"));
+    assertEquals(isPrivate, (Boolean) json.get("isPrivate"));
+    assertEquals(wantsNotification, (Boolean) json.get("wantsNotification"));
+    assertEquals(isActive, (Boolean) json.get("isActive"));
     assertNotNull(json.get("role"));
   }
-  
-  public void insertUserWithMissingFieldsTest() {
-    // arrange 
-    params.clear();
-    params.put("email", email);
-    
-    // act
-    TestResponse response = TestUtil.request(HttpMethod.post, "/user", null);
 
-    // assert
-    Map<String, Object> json = response.json();
-    assertEquals(200, response.statusCode);
-    assertNotNull(json.get("errorCode"));
-  }
 
-  public void getUserTest() {
-    // arrange
-    String expected = "student@hsr.ch";
-
+  @Test
+  public void getUser() {
     // act
     TestResponse response = TestUtil.request(HttpMethod.get, "/user/3", null);
 
     // assert
     Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
-    assertEquals(expected, json.get("email"));
+    assertEquals("student@hsr.ch", json.get("email"));
     assertNotNull(json.get("id"));
   }
 
+  @Test
   public void getNonExistentUser() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/user/1000", null);
+    TestResponse response = TestUtil.request(HttpMethod.get, "/user/10000000", null);
 
     // assert
     Map<String, Object> json = response.json();
-
     assertEquals(200, response.statusCode);
     assertNotNull(json.get("errorCode"));
   }
 
 
-  public void getAllUserTest() {
+  @Test
+  public void getAllUser() {
     // act
     TestResponse response = TestUtil.request(HttpMethod.get, "/users", null);
 
@@ -113,58 +109,42 @@ public class UserControllerIT {
     assertTrue(jsonList.length >= 3);
   }
 
+
+  @Test
   public void updateUserTest() {
     // arrange
-    String expectedUpdatedValue = "updated@hsr.ch";
-    params.put("email", expectedUpdatedValue);
+    User user = new User();
+    user.setId(1);
+    user.setUsername(username);
+    user.setEmail("updatedStudent@hsr.ch");
+    user.setPasswordHash(passwordHash);
+    user.setIsPrivate(isPrivate);
+    user.setWantsNotification(wantsNotification);
+    user.setIsActive(isActive);
+    user.setRole(role);
+
+    String updatedValue = "Niguaran";
+
 
     // act
-    TestResponse response = TestUtil.request(HttpMethod.put, "/user/1", null);
+    user.setUsername(updatedValue);
+    TestResponse response = TestUtil.request(HttpMethod.put, "/user/1", user);
 
     // assert
     Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
-    assertEquals(expectedUpdatedValue, json.get("email"));
+    assertEquals(updatedValue, json.get("username"));
     assertNotNull(json.get("id"));
   }
-  
-  public void updateNonexistentUserTest() {
-    // arrange
-    params.put("email", "updated@hsr.ch");
 
+  @Test
+  public void deleteUser() {
     // act
-    TestResponse updateResponse = TestUtil.request(HttpMethod.put, "/user/1000", null);
+    TestResponse response = TestUtil.request(HttpMethod.delete, "/user/3", null);
 
     // assert
-    Map<String, Object> json = updateResponse.json();
-    assertEquals(200, updateResponse.statusCode);
-    assertNotNull(json.get("errorCode"));
+    assertEquals(200, response.statusCode);
+    assertTrue(Boolean.parseBoolean(response.body));
   }
 
-  public void deleteUserTest() {
-    // act
-    TestResponse deleteResponse = TestUtil.request(HttpMethod.delete, "/user/2", null);
-
-    // assert
-    Map<String, Object> json = deleteResponse.json();
-    assertEquals(200, deleteResponse.statusCode);
-    assertEquals(1005, ((Double) json.get("errorCode")).intValue());
-  }
-
-  public void deleteInexistentUserTest() {
-    // act
-    TestResponse deleteResponse = TestUtil.request(HttpMethod.delete, "/user/10000", null);
-
-    // assert
-    assertEquals(200, deleteResponse.statusCode);
-    assertFalse(Boolean.parseBoolean(deleteResponse.body));
-  }
-
-  public void testEmptyUrl() {
-    // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "", null);
-    
-    // assert
-    assertEquals(404, response.statusCode);
-  }
 }
