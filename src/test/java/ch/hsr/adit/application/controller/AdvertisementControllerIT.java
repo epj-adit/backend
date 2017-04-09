@@ -2,6 +2,7 @@ package ch.hsr.adit.application.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
@@ -129,12 +130,12 @@ public class AdvertisementControllerIT {
   public void getAllFiltered() {
     // act
     TestResponse response = TestUtil.request(HttpMethod.get,
-        "/advertisements/?title=Be&description=B&userId=1&tagId=1&tagId=2&categoryId=1", null);
+        "/advertisements/?title=Be&description=B&userId=3&tagId=1&tagId=2&categoryId=1", null);
 
     // assert
-    // Map<String, Object> json = response.json();
+    Map<String, String>[] jsonList = response.jsonList();
     assertEquals(200, response.statusCode);
-    // assertEquals("Betriebsysteme", json.get("title"));
+    assertTrue(jsonList.length >= 2);
   }
 
 

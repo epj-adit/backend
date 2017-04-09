@@ -1,7 +1,6 @@
 package ch.hsr.adit.domain.persistence;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -33,10 +32,10 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
     StringBuilder queryString =
         new StringBuilder("SELECT a FROM Advertisement as a JOIN a.tags as t WHERE ");
     if (title != null) {
-      queryString.append("and a.title LIKE lower(:title) ");
+      queryString.append("and lower(a.title) LIKE :title ");
     }
     if (description != null) {
-      queryString.append("and a.description LIKE lower(:description) ");
+      queryString.append("and lower(a.description) LIKE :description ");
     }
     if (userId != null) {
       queryString.append("and a.user.id = :userId ");
