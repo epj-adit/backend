@@ -30,7 +30,7 @@ import lombok.Data;
 public class Message implements DbEntity {
 
   private static final long serialVersionUID = 1L;
-  
+
   private long id;
   private Advertisement advertisement;
   private MessageState messageState;
@@ -38,12 +38,12 @@ public class Message implements DbEntity {
   private User userByRecipientUserId;
   private String message;
   private Date created;
-  
+
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="message_id_seq")
-  @SequenceGenerator(name="message_id_seq", sequenceName="message_id_seq",
-  initialValue=10, allocationSize=1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "message_id_seq")
+  @SequenceGenerator(name = "message_id_seq", sequenceName = "message_id_seq", initialValue = 10,
+      allocationSize = 1)
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
     return this.id;

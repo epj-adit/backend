@@ -170,7 +170,7 @@ public class AdvertisementControllerIT {
     assertEquals(200, response.statusCode);
     assertNotNull(json.get("id"));
     assertNotNull(json2.get("id"));
-    assertEquals((double)json.get("id") + 1, json2.get("id"));
+    assertEquals((Long)json.get("id") + 1, json2.get("id"));
 
   }
 
