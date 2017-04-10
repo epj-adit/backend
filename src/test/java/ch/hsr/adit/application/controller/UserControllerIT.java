@@ -26,11 +26,6 @@ public class UserControllerIT {
   private Boolean wantsNotification = true;
   private Boolean isActive = true;
 
-  @BeforeClass
-  public static void setupClass() {
-    App.main(new String[] {});
-  }
-
   @Before
   public void setup() {
     this.role = new Role();

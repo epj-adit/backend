@@ -7,10 +7,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ch.hsr.adit.application.app.App;
 import ch.hsr.adit.domain.model.Advertisement;
 import ch.hsr.adit.domain.model.AdvertisementState;
 import ch.hsr.adit.domain.model.Category;
@@ -28,11 +26,6 @@ public class AdvertisementControllerIT {
   private String description = "Ein Buch von Eduard Glatz für die Vorlesung Bsys1 und Bsys2";
   private int price = 1000;
   private AdvertisementState advertisementState = AdvertisementState.ACTIVE;
-
-  @BeforeClass
-  public static void setupClass() {
-    App.main(new String[] {});
-  }
 
   @Before
   public void setup() {
