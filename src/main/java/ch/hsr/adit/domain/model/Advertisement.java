@@ -11,11 +11,14 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -46,6 +49,9 @@ public class Advertisement implements DbEntity {
   private Set<Tag> tags = new HashSet<Tag>(0);
 
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "advert_id_seq")
+  @SequenceGenerator(name = "advert_id_seq", sequenceName = "advert_id_seq", initialValue = 10,
+      allocationSize = 1)
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
     return this.id;
@@ -138,8 +144,8 @@ public class Advertisement implements DbEntity {
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinTable(name = "advertisement_tag", schema = "public",
-      joinColumns = {@JoinColumn(name = "advertisement_id", nullable = false, updatable = false)},
-      inverseJoinColumns = {@JoinColumn(name = "tag_id", nullable = false, updatable = false)})
+      joinColumns = { @JoinColumn(name = "advertisement_id", nullable = false, updatable = false) },
+      inverseJoinColumns = { @JoinColumn(name = "tag_id", nullable = false, updatable = false) })
   public Set<Tag> getTags() {
     return this.tags;
   }
@@ -147,7 +153,7 @@ public class Advertisement implements DbEntity {
   public void setTags(Set<Tag> tags) {
     this.tags = tags;
   }
-  
+
 }
 
 

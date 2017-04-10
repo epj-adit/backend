@@ -5,9 +5,12 @@ package ch.hsr.adit.domain.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -19,7 +22,7 @@ import lombok.Data;
 @Entity
 @Table(name = "media", schema = "public")
 public class Media implements DbEntity {
-  
+
   private static final long serialVersionUID = 1L;
 
   private long id;
@@ -29,6 +32,9 @@ public class Media implements DbEntity {
   private byte[] media;
 
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "media_id_seq")
+  @SequenceGenerator(name = "media_id_seq", sequenceName = "media_id_seq", initialValue = 10,
+      allocationSize = 1)
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
     return this.id;

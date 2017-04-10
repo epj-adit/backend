@@ -9,9 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -38,6 +41,9 @@ public class Message implements DbEntity {
   
 
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="message_id_seq")
+  @SequenceGenerator(name="message_id_seq", sequenceName="message_id_seq",
+  initialValue=10, allocationSize=1)
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
     return this.id;

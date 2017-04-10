@@ -127,7 +127,7 @@ public class UserControllerIT {
   @Test
   public void deleteUser() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.delete, "/user/0", null);
+    TestResponse response = TestUtil.request(HttpMethod.delete, "/user/4", null);
 
     // assert
     assertEquals(200, response.statusCode);

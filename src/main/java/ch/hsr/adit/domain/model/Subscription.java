@@ -7,9 +7,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,6 +36,9 @@ public class Subscription implements DbEntity {
   private Date lastUpdated;
 
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subscription_id_seq")
+  @SequenceGenerator(name = "subscription_id_seq", sequenceName = "subscription_id_seq",
+      initialValue = 10, allocationSize = 1)
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
     return this.id;

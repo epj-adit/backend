@@ -7,9 +7,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -46,6 +49,9 @@ public class User implements DbEntity {
   public User() {}
 
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
+  @SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq",
+      initialValue = 10, allocationSize = 1)
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
     return this.id;

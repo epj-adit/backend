@@ -143,5 +143,35 @@ public class AdvertisementControllerIT {
     assertEquals(200, response.statusCode);
     assertTrue(Boolean.parseBoolean(response.body));
   }
+  
+  @Test
+  public void testIdAutoIncrement() {
+    Advertisement advertisement = new Advertisement();
+    advertisement.setTitle("123");
+    advertisement.setDescription(description);
+    advertisement.setPrice(price);
+    advertisement.setAdvertisementState(advertisementState);
+    advertisement.setUser(user);
+    advertisement.setCategory(category);
+    
+    Advertisement advertisement2 = new Advertisement();
+    advertisement2.setTitle("234");
+    advertisement2.setDescription(description);
+    advertisement2.setPrice(price);
+    advertisement2.setAdvertisementState(advertisementState);
+    advertisement2.setUser(user);
+    advertisement2.setCategory(category);
+    
+    TestResponse response = TestUtil.request(HttpMethod.post, "/advertisement", advertisement);
+    TestResponse response2 = TestUtil.request(HttpMethod.post, "/advertisement", advertisement2);
+    
+    Map<String, Object> json = response.json();
+    Map<String, Object> json2 = response2.json();
+    assertEquals(200, response.statusCode);
+    assertNotNull(json.get("id"));
+    assertNotNull(json2.get("id"));
+    assertEquals((double)json.get("id") + 1, json2.get("id"));
+
+  }
 
 }
