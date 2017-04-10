@@ -57,7 +57,7 @@ public class AdvertisementControllerIT {
     assertEquals(title, json.get("title"));
     assertEquals(advertisementState.toString(), json.get("advertisementState"));
     assertEquals(description, json.get("description"));
-    assertEquals(price, ((Double) json.get("price")).intValue());
+    assertEquals(price, ((Long) json.get("price")).intValue());
     assertNotNull(json.get("user"));
     assertNotNull(json.get("category"));
   }

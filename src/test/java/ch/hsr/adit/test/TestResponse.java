@@ -3,7 +3,7 @@ package ch.hsr.adit.test;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gson.Gson;
+import ch.hsr.adit.util.JsonUtil;
 
 
 public class TestResponse {
@@ -18,11 +18,11 @@ public class TestResponse {
 
   @SuppressWarnings("unchecked")
   public Map<String, Object> json() {
-    return new Gson().fromJson(body, HashMap.class);
+    return JsonUtil.fromJson(body, HashMap.class);
   }
   
   @SuppressWarnings("unchecked")
   public Map<String, Object>[] jsonList() {
-    return new Gson().fromJson(body, HashMap[].class);
+    return JsonUtil.fromJson(body, HashMap[].class);
   }
 }

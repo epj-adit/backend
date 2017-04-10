@@ -1,12 +1,22 @@
 package ch.hsr.adit.util;
 
+import java.util.HashMap;
+
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import spark.ResponseTransformer;
 
 public class JsonUtil {
-  private static Gson gson = new Gson();
+
+  private static Gson gson = setup();
+
+  private static Gson setup() {
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(HashMap.class, new GenericGsonDeserializer());
+    return builder.create();
+  }
 
   /**
    * Converts the given object to json using Gson.
@@ -21,7 +31,7 @@ public class JsonUtil {
 
   public static <T extends Object> T fromJson(String json, Class<T> classe)
       throws JsonSyntaxException {
-    return new Gson().fromJson(json, classe);
+    return gson.fromJson(json, classe);
   }
 
   /**
