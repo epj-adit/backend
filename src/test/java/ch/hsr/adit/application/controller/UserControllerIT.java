@@ -133,5 +133,40 @@ public class UserControllerIT {
     assertEquals(200, response.statusCode);
     assertTrue(Boolean.parseBoolean(response.body));
   }
+  
+  @Test
+  public void testIdAutoIncerement() {
+    User user = new User();
+    user.setUsername(username);
+    user.setEmail("newer.student@hsr.ch");
+    user.setPasswordHash(passwordHash);
+    user.setIsPrivate(isPrivate);
+    user.setWantsNotification(wantsNotification);
+    user.setIsActive(isActive);
+    user.setRole(role);
+    
+    User user2 = new User();
+    user2.setUsername(username);
+    user2.setEmail("newerer.student@hsr.ch");
+    user2.setPasswordHash(passwordHash);
+    user2.setIsPrivate(isPrivate);
+    user2.setWantsNotification(wantsNotification);
+    user2.setIsActive(isActive);
+    user2.setRole(role);
+    
+    TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
+    TestResponse response2 = TestUtil.request(HttpMethod.post, "/user", user2);
+    
+    Map<String, Object> json = response.json();
+    Map<String, Object> json2 = response2.json();
+    assertEquals(200, response.statusCode);
+    assertNotNull(json.get("id"));
+    assertNotNull(json2.get("id"));
+    assertEquals((double)json.get("id") + 1, json2.get("id"));
+
+
+    
+    
+  }
 
 }
