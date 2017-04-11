@@ -4,11 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 public enum AdvertisementState {
   @SerializedName("0")
-  DECLINED, 
+  TO_REVIEW, 
   @SerializedName("1")
-  ACTIVE, 
+  DECLINED, 
   @SerializedName("2")
-  EXPIRED, 
+  ACTIVE, 
   @SerializedName("3")
+  EXPIRED, 
+  @SerializedName("4")
   CLOSED;
 }
