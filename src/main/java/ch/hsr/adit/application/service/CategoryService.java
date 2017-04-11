@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.google.gson.JsonSyntaxException;
+
 import ch.hsr.adit.domain.model.Category;
 import ch.hsr.adit.domain.persistence.CategoryDao;
+import ch.hsr.adit.util.JsonUtil;
 import spark.Request;
 
 
@@ -51,28 +54,15 @@ public class CategoryService {
     return categoryDao.getAll();
   }
 
-  public Category transformToUser(Request request) {
-    Category category = null;
-    if (request.params(":id") != null) {
-      Long id = Long.parseLong(request.params(":id"));
-      category = get(id);
-    } else {
-      category = new Category();
+  public Category transformToCategory(Request request) {
+    try {
+      Category category = JsonUtil.fromJson(request.body(), Category.class);
+      LOGGER.info("Received JSON data: " + category.toString());
+      return category;
+    } catch (JsonSyntaxException e) {
+      LOGGER.error("Cannot parse JSON: " + request.body());
+      throw e;
     }
-
-    if (request.queryParams("name") != null) {
-      category.setName(request.queryParams("name"));
-    }
-
-    if (request.queryParams("parentCategoryId") != null) {
-      Long parentId = Long.parseLong(request.queryParams("parentCategoryId"));
-      Category parentCategory = categoryDao.get(parentId);
-      category.setParentCategory(parentCategory);
-    }
-
-    LOGGER.info("Received: " + category.toString());
-
-    return category;
   }
 
 

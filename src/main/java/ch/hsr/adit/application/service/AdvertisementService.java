@@ -19,7 +19,6 @@ public class AdvertisementService {
   private final AdvertisementDao advertisementDao;
 
   public AdvertisementService(AdvertisementDao advertisementDao) {
-
     this.advertisementDao = advertisementDao;
   }
 

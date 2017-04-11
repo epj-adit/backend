@@ -16,14 +16,20 @@ import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 
 import ch.hsr.adit.application.controller.AdvertisementController;
+import ch.hsr.adit.application.controller.CategoryController;
 import ch.hsr.adit.application.controller.MediaController;
 import ch.hsr.adit.application.controller.RestApi;
+import ch.hsr.adit.application.controller.TagController;
 import ch.hsr.adit.application.controller.UserController;
 import ch.hsr.adit.application.service.AdvertisementService;
+import ch.hsr.adit.application.service.CategoryService;
 import ch.hsr.adit.application.service.MediaService;
+import ch.hsr.adit.application.service.TagService;
 import ch.hsr.adit.application.service.UserService;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
+import ch.hsr.adit.domain.persistence.CategoryDao;
 import ch.hsr.adit.domain.persistence.MediaDao;
+import ch.hsr.adit.domain.persistence.TagDao;
 import ch.hsr.adit.domain.persistence.UserDao;
 import ch.hsr.adit.util.HibernateUtil;
 import ch.hsr.adit.util.KeyStore;
@@ -67,6 +73,16 @@ public class App {
     MediaDao mediaDao = new MediaDao(sessionFactory);
     MediaService mediaService = new MediaService(mediaDao, advertisementService);
     new MediaController(mediaService);
+    
+    // Tag
+    TagDao tagDao = new TagDao(sessionFactory);
+    TagService tagService = new TagService(tagDao);
+    new TagController(tagService);
+    
+    // Category
+    CategoryDao categoryDao = new CategoryDao(sessionFactory);
+    CategoryService categoryService = new CategoryService(categoryDao);
+    new CategoryController(categoryService);
 
     // wait for jetty
     awaitInitialization();

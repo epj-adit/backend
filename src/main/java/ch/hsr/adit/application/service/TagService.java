@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.google.gson.JsonSyntaxException;
+
 import ch.hsr.adit.domain.model.Tag;
 import ch.hsr.adit.domain.persistence.TagDao;
+import ch.hsr.adit.util.JsonUtil;
 import spark.Request;
 
 
@@ -52,22 +55,14 @@ public class TagService {
   }
 
   public Tag transformToTag(Request request) {
-    Tag tag = null;
-    if (request.params(":id") != null) {
-      Long id = Long.parseLong(request.params(":id"));
-      tag = get(id);
-    } else {
-      tag = new Tag();
+    try {
+      Tag tag = JsonUtil.fromJson(request.body(), Tag.class);
+      LOGGER.info("Received JSON data: " + tag.toString());
+      return tag;
+    } catch (JsonSyntaxException e) {
+      LOGGER.error("Cannot parse JSON: " + request.body());
+      throw e;
     }
-
-    if (request.queryParams("name") != null) {
-      tag.setName(request.queryParams("name"));
-    }
-
-    LOGGER.info("Received: " + tag.toString());
-
-    return tag;
   }
-
 
 }
