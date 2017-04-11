@@ -6,9 +6,6 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.JsonSyntaxException;
 
-import ch.hsr.adit.domain.exception.EntityError;
-import ch.hsr.adit.domain.exception.SystemError;
-import ch.hsr.adit.domain.exception.SystemException;
 import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.domain.persistence.UserDao;
 import ch.hsr.adit.util.JsonUtil;
@@ -26,64 +23,37 @@ public class UserService {
   }
 
   public User createUser(User user) {
-    try {
-      return (User) userDao.persist(user);
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_INSERTED, e);
-    }
+    return (User) userDao.persist(user);
   }
 
   public User updateUser(User user) {
-    try {
-      return userDao.update(user);
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_UPDATED, e);
-    }
+    return userDao.update(user);
   }
 
   public boolean deleteUser(User userToDelete) {
-    try {
-      userDao.delete(userToDelete);
-      return true;
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
-    }
+    userDao.delete(userToDelete);
+    return true;
   }
 
   public boolean deleteUser(long id) {
-    try {
-      User user = get(id);
-      deleteUser(user);
-      return true;
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
-    }
+    User user = get(id);
+    deleteUser(user);
+    return true;
   }
 
   public User get(User user) {
-    try {
-      return get(user.getId());
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
-    }
+    return get(user.getId());
   }
 
   public User get(Long id) {
     User user = userDao.get(id);
-    if (user == null) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND);
-    }
     return user;
   }
 
   public List<User> getAll() {
-    try {
-      return userDao.getAll();
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
-    }
+    return userDao.getAll();
   }
-  
+
   public User transformToUser(Request request) {
     try {
       User user = JsonUtil.fromJson(request.body(), User.class);
@@ -91,7 +61,7 @@ public class UserService {
       return user;
     } catch (JsonSyntaxException e) {
       LOGGER.error("Cannot parse JSON: " + request.body());
-      throw new SystemException(SystemError.JSON_PARSE_ERROR);
+      throw e;
     }
   }
 

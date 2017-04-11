@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import ch.hsr.adit.domain.exception.SystemException;
-import ch.hsr.adit.domain.exception.EntityError;
 import ch.hsr.adit.domain.model.Tag;
 import ch.hsr.adit.domain.persistence.TagDao;
 import spark.Request;
@@ -14,7 +12,7 @@ import spark.Request;
 public class TagService {
 
   private static final Logger LOGGER = Logger.getLogger(TagService.class);
-  
+
   private final TagDao tagDao;
 
   public TagService(TagDao tagDao) {
@@ -22,62 +20,35 @@ public class TagService {
   }
 
   public Tag createTag(Tag tag) {
-    try {
-      return (Tag) tagDao.persist(tag);
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_INSERTED, e);
-    }
+    return (Tag) tagDao.persist(tag);
   }
 
   public Tag updateTag(Tag tag) {
-    try {
-      return tagDao.update(tag);
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_UPDATED, e);
-    }
+    return tagDao.update(tag);
   }
 
   public boolean deleteTag(Tag tagToDelete) {
-    try {
-      tagDao.delete(tagToDelete);
-      return true;
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
-    }
+    tagDao.delete(tagToDelete);
+    return true;
   }
 
   public boolean deleteTag(long id) {
-    try {
-      Tag tag = get(id);
-      deleteTag(tag);
-      return true;
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
-    }
+    Tag tag = get(id);
+    deleteTag(tag);
+    return true;
   }
 
   public Tag get(Tag tag) {
-    try {
-      return get(tag.getId());
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
-    }
+    return get(tag.getId());
   }
 
   public Tag get(Long id) {
     Tag tag = tagDao.get(id);
-    if (tag == null) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND);
-    }
     return tag;
   }
 
   public List<Tag> getAll() {
-    try {
-      return tagDao.getAll();
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
-    }
+    return tagDao.getAll();
   }
 
   public Tag transformToTag(Request request) {

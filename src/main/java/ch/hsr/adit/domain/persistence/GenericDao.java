@@ -5,22 +5,26 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-import ch.hsr.adit.domain.exception.DatabaseError;
-import ch.hsr.adit.domain.exception.SystemException;
 import ch.hsr.adit.domain.model.DbEntity;
 
 public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
 
-  private Class<T> type;
+  private static final Logger LOGGER = Logger.getLogger(GenericDao.class);
+
+  private final Class<T> type;
+  private final String entityName;
   protected final SessionFactory sessionFactory;
 
   @SuppressWarnings("unchecked")
   public GenericDao(SessionFactory sessionFactory) {
     ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
     type = (Class<T>) parameterizedType.getActualTypeArguments()[0];
+    entityName = type.getSimpleName();
 
     this.sessionFactory = sessionFactory;
   }
@@ -29,68 +33,86 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
   protected Query<T> createQuery(String hql) {
     return sessionFactory.getCurrentSession().createQuery(hql);
   }
-  
+
   public T persist(T object) {
     try {
+      LOGGER.info("Try to persist" + entityName);
       sessionFactory.getCurrentSession().beginTransaction();
       Long id = (Long) sessionFactory.getCurrentSession().save(object);
       object.setId(id);
       sessionFactory.getCurrentSession().getTransaction().commit();
+      LOGGER.info(entityName + " sucessfully persisted");
       return object;
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.CONSTRAINT_VIOLATED, e);
+      LOGGER.error("Failed to persist " + entityName + ". Transaction rolled back.");
+      throw e;
     }
   }
 
   public T get(Serializable id) {
     try {
+      LOGGER.info("Try to fetch " + entityName + " with id " + id);
       sessionFactory.getCurrentSession().beginTransaction();
       T object = sessionFactory.getCurrentSession().get(type, id);
       sessionFactory.getCurrentSession().getTransaction().commit();
+      if (object == null) {
+        throw new HibernateException(entityName + " with id " + id + " not found");
+      }
       return object;
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.GENERIC_DATABASE, e);
+      LOGGER.error("Failed to fetch " + entityName + ". Transaction rolled back.");
+      throw e;
     }
   }
 
   public T getByName(String name) {
     try {
+      LOGGER.info("Try to fetch " + entityName + " with name " + name);
       sessionFactory.getCurrentSession().beginTransaction();
-      Query<T> query = createQuery("from " + type.getSimpleName() + "where r.name = :name");
+      Query<T> query = createQuery("from " + entityName + "where r.name = :name");
       query.setParameter("name", name);
       T object = query.getSingleResult();
       sessionFactory.getCurrentSession().getTransaction().commit();
+      if (object == null) {
+        throw new HibernateException(entityName + " with name " + name + " not found");
+      }
       return object;
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.GENERIC_DATABASE, e);
+      LOGGER.error("Failed to fetch " + entityName + ". Transaction rolled back.");
+      throw e;
     }
   }
 
   public List<T> getAll() {
     try {
+      LOGGER.info("Try to fetch all " + entityName + " objects");
       sessionFactory.getCurrentSession().beginTransaction();
-      Query<T> query = createQuery("from " + type.getSimpleName());
+      Query<T> query = createQuery("from " + entityName);
       List<T> objects = query.list();
       sessionFactory.getCurrentSession().getTransaction().commit();
       return objects;
     } catch (Exception e) {
+      LOGGER.error("Failed to fetch all " + entityName + " objects. Transaction rolled back.");
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.GENERIC_DATABASE, e);
+      throw e;
     }
   }
 
   public T update(T object) {
     try {
+      LOGGER.info("Try to update " + entityName);
       sessionFactory.getCurrentSession().beginTransaction();
       sessionFactory.getCurrentSession().update(object);
       sessionFactory.getCurrentSession().getTransaction().commit();
+      LOGGER.info(entityName + " sucessfully updated");
       return object;
     } catch (Exception e) {
+      LOGGER.error("Failed to update " + entityName + ". Transaction rolled back.");
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.CONSTRAINT_VIOLATED, e);
+      throw e;
     }
   }
 
@@ -100,12 +122,15 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
 
   public void delete(T object) {
     try {
+      LOGGER.info("Try to delete " + entityName);
       sessionFactory.getCurrentSession().beginTransaction();
       sessionFactory.getCurrentSession().delete(object);
       sessionFactory.getCurrentSession().getTransaction().commit();
+      LOGGER.info(entityName + " sucessfully deleted");
     } catch (Exception e) {
+      LOGGER.error("Failed to delete " + entityName + ". Transaction rolled back.");
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.CONSTRAINT_VIOLATED, e);
+      throw e;
     }
   }
 

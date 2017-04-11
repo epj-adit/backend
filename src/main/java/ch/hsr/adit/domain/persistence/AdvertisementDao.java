@@ -2,15 +2,16 @@ package ch.hsr.adit.domain.persistence;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-import ch.hsr.adit.domain.exception.DatabaseError;
-import ch.hsr.adit.domain.exception.SystemException;
 import ch.hsr.adit.domain.model.Advertisement;
 
 public class AdvertisementDao extends GenericDao<Advertisement, Long> {
 
+  private static final Logger LOGGER = Logger.getLogger(AdvertisementDao.class);
+  
   public AdvertisementDao(SessionFactory sessionFactory) {
     super(sessionFactory);
   }
@@ -28,6 +29,8 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
    */
   public List<Advertisement> get(String title, String description, Long userId,
       List<Long> categoryIds, List<Long> tagIds) {
+    
+    LOGGER.info("Try to fetch filtered advertisements");
 
     StringBuilder queryString =
         new StringBuilder("SELECT a FROM Advertisement as a JOIN a.tags as t WHERE ");
@@ -79,7 +82,8 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
       return result;
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
-      throw new SystemException(DatabaseError.GENERIC_DATABASE, e);
+      LOGGER.error("Failed to fetch filtered advertisement. Transaction rolled back.");
+      throw e;
     }
   }
 }

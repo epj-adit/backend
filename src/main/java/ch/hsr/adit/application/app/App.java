@@ -22,7 +22,6 @@ import ch.hsr.adit.application.controller.UserController;
 import ch.hsr.adit.application.service.AdvertisementService;
 import ch.hsr.adit.application.service.MediaService;
 import ch.hsr.adit.application.service.UserService;
-import ch.hsr.adit.domain.exception.SystemException;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
 import ch.hsr.adit.domain.persistence.MediaDao;
 import ch.hsr.adit.domain.persistence.UserDao;
@@ -46,7 +45,7 @@ public class App {
 
     // General handler for exceptions and errors
     AppHandler appHandler = new AppHandler();
-    exception(SystemException.class, appHandler.exceptionHandler);
+    exception(Exception.class, appHandler.exceptionHandler);
     notFound(appHandler.notFound);
     internalServerError(appHandler.internalServerError);
 

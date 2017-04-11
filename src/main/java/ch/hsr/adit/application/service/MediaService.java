@@ -10,8 +10,6 @@ import javax.servlet.ServletException;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import ch.hsr.adit.domain.exception.SystemException;
-import ch.hsr.adit.domain.exception.EntityError;
 import ch.hsr.adit.domain.model.Advertisement;
 import ch.hsr.adit.domain.model.Media;
 import ch.hsr.adit.domain.persistence.MediaDao;
@@ -31,62 +29,35 @@ public class MediaService {
   }
 
   public Media createMedia(Media media) {
-    try {
-      return (Media) mediaDao.persist(media);
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_INSERTED, e);
-    }
+    return (Media) mediaDao.persist(media);
   }
 
   public Media updateMedia(Media media) {
-    try {
-      return mediaDao.update(media);
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_UPDATED, e);
-    }
+    return mediaDao.update(media);
   }
 
   public boolean deleteMedia(Media mediaToDelete) {
-    try {
-      mediaDao.delete(mediaToDelete);
-      return true;
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
-    }
+    mediaDao.delete(mediaToDelete);
+    return true;
   }
 
   public boolean deleteMedia(long id) {
-    try {
-      Media media = get(id);
-      deleteMedia(media);
-      return true;
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
-    }
+    Media media = get(id);
+    deleteMedia(media);
+    return true;
   }
 
   public Media get(Media media) {
-    try {
-      return get(media.getId());
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
-    }
+    return get(media.getId());
   }
 
   public Media get(Long id) {
     Media media = mediaDao.get(id);
-    if (media == null) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND);
-    }
     return media;
   }
 
   public List<Media> getAll() {
-    try {
-      return mediaDao.getAll();
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
-    }
+    return mediaDao.getAll();
   }
 
   public Media transformToMedia(Request request) {
@@ -126,7 +97,7 @@ public class MediaService {
       return IOUtils.toByteArray(is);
     } catch (IOException | ServletException e) {
       LOGGER.error("Unable to create file");
-      return new byte[]{};
+      return new byte[] {};
     }
   }
 

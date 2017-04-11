@@ -7,9 +7,6 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.JsonSyntaxException;
 
-import ch.hsr.adit.domain.exception.EntityError;
-import ch.hsr.adit.domain.exception.SystemError;
-import ch.hsr.adit.domain.exception.SystemException;
 import ch.hsr.adit.domain.model.Advertisement;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
 import ch.hsr.adit.util.JsonUtil;
@@ -27,45 +24,26 @@ public class AdvertisementService {
   }
 
   public Advertisement createAdvertisement(Advertisement advertisement) {
-    try {
-      return (Advertisement) advertisementDao.persist(advertisement);
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_INSERTED, e);
-    }
+    return (Advertisement) advertisementDao.persist(advertisement);
   }
 
   public Advertisement updateAdvertisement(Advertisement advertisement) {
-    try {
-      return advertisementDao.update(advertisement);
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_UPDATED, e);
-    }
+    return advertisementDao.update(advertisement);
   }
 
   public boolean deleteAdvertisement(Advertisement advertisementToDelete) {
-    try {
-      advertisementDao.delete(advertisementToDelete);
-      return true;
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
-    }
+    advertisementDao.delete(advertisementToDelete);
+    return true;
   }
 
   public boolean deleteAdvertisement(long id) {
-    try {
-      Advertisement advertisement = get(id);
-      deleteAdvertisement(advertisement);
-      return true;
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
-    }
+    Advertisement advertisement = get(id);
+    deleteAdvertisement(advertisement);
+    return true;
   }
 
   public Advertisement get(Long id) {
     Advertisement advertisement = advertisementDao.get(id);
-    if (advertisement == null) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND);
-    }
     return advertisement;
   }
 
@@ -78,7 +56,7 @@ public class AdvertisementService {
     if (request.queryParams("userId") != null) {
       userId = Long.parseLong(request.queryParams("userId"));
     }
-    
+
     List<Long> tagIds = new ArrayList<>();
     if (request.queryParamsValues("tagId") != null) {
       String[] tags = request.queryParamsValues("tagId");
@@ -107,7 +85,7 @@ public class AdvertisementService {
       return advertisement;
     } catch (JsonSyntaxException e) {
       LOGGER.error("Cannot parse JSON: " + request.body());
-      throw new SystemException(SystemError.JSON_PARSE_ERROR);
+      throw e;
     }
   }
 

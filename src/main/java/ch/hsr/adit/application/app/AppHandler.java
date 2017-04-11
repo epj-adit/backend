@@ -4,6 +4,7 @@ import static ch.hsr.adit.util.JsonUtil.toJson;
 
 import org.apache.log4j.Logger;
 
+import ch.hsr.adit.util.ExceptionUtil;
 import spark.ExceptionHandler;
 import spark.Request;
 import spark.Response;
@@ -14,10 +15,28 @@ public class AppHandler {
   private static final Logger LOGGER = Logger.getLogger(AppHandler.class);
 
   public ExceptionHandler exceptionHandler = (Exception e, Request request, Response response) -> {
-    LOGGER.error("Adit Exception occured: " + e.getMessage());
-    response.status(200);
+    LOGGER.error("Exception occured with message: " + getExceptionMessageChain(e));
+
+    ExceptionUtil util = ExceptionUtil.getInstance();
+    int statusCode = util.getHttpErrorCode(e.getClass().getSimpleName());
+    response.status(statusCode);
+
+    LOGGER.error(e.getClass().getSimpleName() + " mapped to " + statusCode);
+
     response.body(toJson(e));
   };
+
+  private String getExceptionMessageChain(Throwable throwable) {
+    StringBuilder builder = new StringBuilder();
+    while (throwable != null) {
+      builder.append(throwable.getMessage());
+      throwable = throwable.getCause();
+      if (throwable != null) {
+        builder.append("\n");
+      }
+    }
+    return builder.toString();
+  }
 
   public Route notFound = (Request request, Response response) -> {
     LOGGER.error("404, page not found:: " + request.url());

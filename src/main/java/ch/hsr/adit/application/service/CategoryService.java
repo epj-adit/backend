@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import ch.hsr.adit.domain.exception.SystemException;
-import ch.hsr.adit.domain.exception.EntityError;
 import ch.hsr.adit.domain.model.Category;
 import ch.hsr.adit.domain.persistence.CategoryDao;
 import spark.Request;
@@ -22,62 +20,35 @@ public class CategoryService {
   }
 
   public Category createCategory(Category category) {
-    try {
-      return (Category) categoryDao.persist(category);
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_INSERTED, e);
-    }
+    return (Category) categoryDao.persist(category);
   }
 
   public Category updateCategory(Category category) {
-    try {
-      return categoryDao.update(category);
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_UPDATED, e);
-    }
+    return categoryDao.update(category);
   }
 
   public boolean deleteCategory(Category categoryToDelete) {
-    try {
-      categoryDao.delete(categoryToDelete);
-      return true;
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
-    }
+    categoryDao.delete(categoryToDelete);
+    return true;
   }
 
   public boolean deleteCategory(long id) {
-    try {
-      Category category = get(id);
-      deleteCategory(category);
-      return true;
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_DELETED, e);
-    }
+    Category category = get(id);
+    deleteCategory(category);
+    return true;
   }
 
   public Category get(Category category) {
-    try {
-      return get(category.getId());
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
-    }
+    return get(category.getId());
   }
 
   public Category get(Long id) {
     Category category = categoryDao.get(id);
-    if (category == null) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND);
-    }
     return category;
   }
 
   public List<Category> getAll() {
-    try {
-      return categoryDao.getAll();
-    } catch (Exception e) {
-      throw new SystemException(EntityError.ENTITY_NOT_FOUND, e);
-    }
+    return categoryDao.getAll();
   }
 
   public Category transformToUser(Request request) {
@@ -88,11 +59,11 @@ public class CategoryService {
     } else {
       category = new Category();
     }
-    
+
     if (request.queryParams("name") != null) {
       category.setName(request.queryParams("name"));
     }
-    
+
     if (request.queryParams("parentCategoryId") != null) {
       Long parentId = Long.parseLong(request.queryParams("parentCategoryId"));
       Category parentCategory = categoryDao.get(parentId);

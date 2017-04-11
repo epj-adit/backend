@@ -1,16 +1,15 @@
 package ch.hsr.adit.application.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ch.hsr.adit.application.app.App;
 import ch.hsr.adit.domain.model.Role;
 import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.test.TestResponse;
@@ -79,9 +78,7 @@ public class UserControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.get, "/user/10000000", null);
 
     // assert
-    Map<String, Object> json = response.json();
-    assertEquals(200, response.statusCode);
-    assertNotNull(json.get("errorCode"));
+    assertEquals(404, response.statusCode);
   }
 
 
@@ -133,7 +130,7 @@ public class UserControllerIT {
     assertEquals(200, response.statusCode);
     assertTrue(Boolean.parseBoolean(response.body));
   }
-  
+
   @Test
   public void testIdAutoIncerement() {
     User user = new User();
@@ -144,7 +141,7 @@ public class UserControllerIT {
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
     user.setRole(role);
-    
+
     User user2 = new User();
     user2.setUsername(username);
     user2.setEmail("newerer.student@hsr.ch");
@@ -153,16 +150,78 @@ public class UserControllerIT {
     user2.setWantsNotification(wantsNotification);
     user2.setIsActive(isActive);
     user2.setRole(role);
-    
+
     TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
     TestResponse response2 = TestUtil.request(HttpMethod.post, "/user", user2);
-    
+
     Map<String, Object> json = response.json();
     Map<String, Object> json2 = response2.json();
     assertEquals(200, response.statusCode);
     assertNotNull(json.get("id"));
     assertNotNull(json2.get("id"));
-    assertEquals((Long)json.get("id") + 1, json2.get("id"));
+    assertEquals((Long) json.get("id") + 1, json2.get("id"));
+  }
+
+  @Test
+  public void deleteReferencedUserTest() {
+    TestResponse response = TestUtil.request(HttpMethod.delete, "/user/1", null);
+
+    assertEquals(404, response.statusCode);
+    assertFalse(Boolean.parseBoolean(response.body));
+  }
+
+  @Test
+  public void failedUpdateUserTest() {
+    // arrange
+    User user = new User();
+    user.setId(1);
+    user.setUsername(username);
+    user.setEmail("updatedStudent@hsr.ch");
+    user.setPasswordHash(passwordHash);
+    user.setIsPrivate(isPrivate);
+    user.setWantsNotification(wantsNotification);
+    user.setIsActive(isActive);
+    user.setRole(role);
+
+    String updatedValue = "nvinzens@hsr.ch";
+
+
+    // act
+    user.setEmail(updatedValue);
+    TestResponse response = TestUtil.request(HttpMethod.put, "/user/1", user);
+
+    // assert
+    Map<String, Object> json = response.json();
+    assertEquals(404, response.statusCode);
+  }
+
+  @Test
+  public void insertUserTwiceTest() {
+    User user = new User();
+    user.setUsername(username);
+    user.setEmail("duplicate.student@hsr.ch");
+    user.setPasswordHash(passwordHash);
+    user.setIsPrivate(isPrivate);
+    user.setWantsNotification(wantsNotification);
+    user.setIsActive(isActive);
+    user.setRole(role);
+
+    User user2 = new User();
+    user2.setUsername(username);
+    user2.setEmail("duplicate.student@hsr.ch");
+    user2.setPasswordHash(passwordHash);
+    user2.setIsPrivate(isPrivate);
+    user2.setWantsNotification(wantsNotification);
+    user2.setIsActive(isActive);
+    user2.setRole(role);
+
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
+    TestResponse response2 = TestUtil.request(HttpMethod.post, "/user", user2);
+
+    // assert
+    assertEquals(200, response.statusCode);
+    assertEquals(404, response2.statusCode);
   }
 
 }

@@ -1,38 +1,23 @@
 package ch.hsr.adit.application.service;
 
-import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
-
 import ch.hsr.adit.domain.model.Role;
 import ch.hsr.adit.domain.persistence.RoleDao;
 
 
 public class RoleService {
 
-  private static final Logger LOGGER = Logger.getLogger(RoleService.class);
-  
   private final RoleDao roleDao;
 
   public RoleService(RoleDao roleDao) {
     this.roleDao = roleDao;
   }
-  
+
   public Role getRole(String name) {
-    try {
-      return roleDao.getByName(name);
-    } catch (HibernateException e) {
-      LOGGER.error("HibernateException occured while find role by name: " + e.getMessage());
-      return null;
-    }
+    return roleDao.getByName(name);
   }
-  
+
   public Role getRole(Long id) {
-    try {
-      return roleDao.get(id);
-    } catch (HibernateException e) {
-      LOGGER.error("HibernateException occured while find role by name: " + e.getMessage());
-      return null;
-    }
+    return roleDao.get(id);
   }
 
 

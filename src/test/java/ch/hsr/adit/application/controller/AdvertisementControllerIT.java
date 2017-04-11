@@ -103,10 +103,7 @@ public class AdvertisementControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.get, "/advertisement/10000000", null);
 
     // assert
-    Map<String, Object> json = response.json();
-
-    assertEquals(200, response.statusCode);
-    assertNotNull(json.get("errorCode"));
+    assertEquals(404, response.statusCode);
   }
 
   @Test
@@ -143,7 +140,7 @@ public class AdvertisementControllerIT {
     assertEquals(200, response.statusCode);
     assertTrue(Boolean.parseBoolean(response.body));
   }
-  
+
   @Test
   public void testIdAutoIncrement() {
     Advertisement advertisement = new Advertisement();
@@ -153,7 +150,7 @@ public class AdvertisementControllerIT {
     advertisement.setAdvertisementState(advertisementState);
     advertisement.setUser(user);
     advertisement.setCategory(category);
-    
+
     Advertisement advertisement2 = new Advertisement();
     advertisement2.setTitle("234");
     advertisement2.setDescription(description);
@@ -161,17 +158,47 @@ public class AdvertisementControllerIT {
     advertisement2.setAdvertisementState(advertisementState);
     advertisement2.setUser(user);
     advertisement2.setCategory(category);
-    
+
     TestResponse response = TestUtil.request(HttpMethod.post, "/advertisement", advertisement);
     TestResponse response2 = TestUtil.request(HttpMethod.post, "/advertisement", advertisement2);
-    
+
     Map<String, Object> json = response.json();
     Map<String, Object> json2 = response2.json();
     assertEquals(200, response.statusCode);
     assertNotNull(json.get("id"));
     assertNotNull(json2.get("id"));
-    assertEquals((Long)json.get("id") + 1, json2.get("id"));
+    assertEquals((Long) json.get("id") + 1, json2.get("id"));
 
+  }
+
+  @Test
+  public void testInsertWithNullUser() {
+    Advertisement advertisement = new Advertisement();
+    advertisement.setTitle(title);
+    advertisement.setDescription(description);
+    advertisement.setPrice(price);
+    advertisement.setAdvertisementState(advertisementState);
+    advertisement.setUser(null);
+    advertisement.setCategory(category);
+
+    TestResponse response = TestUtil.request(HttpMethod.post, "/advertisement", advertisement);
+
+    assertEquals(404, response.statusCode);
+  }
+
+  @Test
+  public void testInsertWithManualId() {
+    Advertisement advertisement = new Advertisement();
+    advertisement.setTitle("abcd");
+    advertisement.setDescription("abcd");
+    advertisement.setPrice(10000);
+    advertisement.setAdvertisementState(advertisementState);
+    advertisement.setUser(user);
+    advertisement.setCategory(category);
+    advertisement.setId(3);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/advertisement", advertisement);
+
+    assertEquals(200, response.statusCode);
   }
 
 }
