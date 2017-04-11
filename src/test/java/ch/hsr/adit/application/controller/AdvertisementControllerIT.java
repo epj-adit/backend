@@ -55,7 +55,8 @@ public class AdvertisementControllerIT {
     assertEquals(200, response.statusCode);
     assertNotNull(json.get("id"));
     assertEquals(title, json.get("title"));
-    assertEquals(advertisementState.toString(), json.get("advertisementState"));
+    assertEquals(advertisementState.ordinal(),
+        Integer.parseInt((String) json.get("advertisementState")));
     assertEquals(description, json.get("description"));
     assertEquals(price, ((Long) json.get("price")).intValue());
     assertNotNull(json.get("user"));
