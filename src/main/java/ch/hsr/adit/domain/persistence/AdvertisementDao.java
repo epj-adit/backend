@@ -33,7 +33,13 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
     LOGGER.info("Try to fetch filtered advertisements");
 
     StringBuilder queryString =
-        new StringBuilder("SELECT a FROM Advertisement as a JOIN a.tags as t WHERE ");
+        new StringBuilder("SELECT a FROM Advertisement as a WHERE ");
+    
+    // optional join
+    if (tagIds != null && !tagIds.isEmpty()) {
+      queryString.insert(queryString.indexOf("WHERE"), " JOIN a.tags as t ");
+    } 
+    
     if (title != null) {
       queryString.append("and lower(a.title) LIKE :title ");
     }
@@ -43,11 +49,11 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
     if (userId != null) {
       queryString.append("and a.user.id = :userId ");
     }
-    if (categoryIds != null) {
+    if (categoryIds != null && !categoryIds.isEmpty()) {
       queryString.append("and a.category.id IN (:categoryIds) ");
     }
 
-    if (tagIds != null) {
+    if (tagIds != null && !tagIds.isEmpty()) {
       queryString.append("and t.id IN (:tagIds) ");
     }
 
@@ -69,10 +75,10 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
       if (userId != null) {
         query.setParameter("userId", userId);
       }
-      if (categoryIds != null) {
+      if (categoryIds != null && !categoryIds.isEmpty()) {
         query.setParameter("categoryIds", categoryIds);
       }
-      if (tagIds != null) {
+      if (tagIds != null && !tagIds.isEmpty()) {
         query.setParameter("tagIds", tagIds);
       }
 

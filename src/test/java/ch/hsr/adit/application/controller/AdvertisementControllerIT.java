@@ -88,6 +88,18 @@ public class AdvertisementControllerIT {
   }
 
   @Test
+  public void getAllFiltered2() {
+    // act
+    TestResponse response =
+        TestUtil.request(HttpMethod.get, "/advertisements/?title=Be&description=B", null);
+
+    // assert
+    Map<String, Object>[] jsonList = response.jsonList();
+    assertEquals(200, response.statusCode);
+    assertTrue(jsonList.length >= 1);
+  }
+
+  @Test
   public void getAll() {
     // act
     TestResponse response = TestUtil.request(HttpMethod.get, "/advertisements", null);
@@ -110,19 +122,17 @@ public class AdvertisementControllerIT {
   @Test
   public void updateAdvertisement() {
     // arrange
+    String updatedValue = "GoF Patterns";
     Advertisement advertisement = new Advertisement();
     advertisement.setId(1);
-    advertisement.setTitle(title);
+    advertisement.setTitle(updatedValue);
     advertisement.setDescription(description);
     advertisement.setPrice(price);
     advertisement.setAdvertisementState(advertisementState);
     advertisement.setUser(user);
     advertisement.setCategory(category);
 
-    String updatedValue = "GoF Patterns";
-
     // act
-    advertisement.setTitle(updatedValue);
     TestResponse response = TestUtil.request(HttpMethod.put, "/advertisement/1", advertisement);
 
     // assert
