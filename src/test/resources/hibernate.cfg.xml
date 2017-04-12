@@ -11,7 +11,7 @@
 		<property name="hibernate.connection.username">adit</property>
 		<property name="hibernate.connection.password">+!r8Ywd\H~#;YR{</property>
 		<property name="hibernate.default_schema">public</property>
-		
+
 		<!-- JDBC connection pool (use the built-in) -->
 		<property name="hibernate.connection.pool_size">1</property>
 
@@ -20,12 +20,19 @@
 
 		<!-- echo all executed SQL to stdout -->
 		<property name="hibernate.show_sql">true</property>
-		
+
 		<property name="hibernate.current_session_context_class">thread</property>
 
 		<!-- drop and re-create the database schema on startup -->
 		<property name="hibernate.hbm2ddl.auto">create</property>
 		<property name="hibernate.hbm2ddl.import_files">testdb.sql</property>
+
+		<!-- c3po connection pool -->
+		<property name="hibernate.c3p0.min_size">5</property>
+		<property name="hibernate.c3p0.max_size">20</property>
+		<property name="hibernate.c3p0.timeout">300</property>
+		<property name="hibernate.c3p0.max_statements">50</property>
+		<property name="hibernate.c3p0.idle_test_period">3000</property>
 
 		<!-- mapping classes -->
 		<mapping class="ch.hsr.adit.domain.model.Advertisement" />
