@@ -12,7 +12,8 @@ import spark.Spark;
 @Suite.SuiteClasses ({ 
     AdvertisementControllerIT.class,
     UserControllerIT.class,
-    TagControllerIT.class
+    TagControllerIT.class,
+    CategoryControllerIT.class
 })
 public class IntegrationSuite {
 

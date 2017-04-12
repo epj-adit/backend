@@ -49,11 +49,17 @@ public class CategoryService {
     Category category = categoryDao.get(id);
     return category;
   }
+  
+  public List<Category> getAllFiltered(Request request) {
+    String name = request.queryParams("name");
+    return categoryDao.getFiltered(name);
+  }
+
 
   public List<Category> getAll() {
     return categoryDao.getAll();
   }
-
+  
   public Category transformToCategory(Request request) {
     try {
       Category category = JsonUtil.fromJson(request.body(), Category.class);

@@ -34,6 +34,10 @@ public class CategoryController {
       return categoryService.getAll();
     }, jsonTransformer());
 
+    get(RestApi.Category.CATEGORIES_FILTERED, (request, response) -> {
+      return categoryService.getAllFiltered(request);
+    }, jsonTransformer());
+    
     // update
     put(RestApi.Category.CATEGORY_BY_ID, (request, response) -> {
       Category category = categoryService.transformToCategory(request);
