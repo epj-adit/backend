@@ -37,8 +37,7 @@ public class AdvertisementService {
 
   public boolean deleteAdvertisement(long id) {
     Advertisement advertisement = get(id);
-    deleteAdvertisement(advertisement);
-    return true;
+    return deleteAdvertisement(advertisement);
   }
 
   public Advertisement get(Long id) {
@@ -76,7 +75,7 @@ public class AdvertisementService {
     String description = request.queryParams("description");
     return advertisementDao.get(title, description, userId, categoryIds, tagIds);
   }
-
+  
   public Advertisement transformToAdvertisement(Request request) {
     try {
       Advertisement advertisement = JsonUtil.fromJson(request.body(), Advertisement.class);

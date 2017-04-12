@@ -38,6 +38,7 @@ public class RestApi {
     public static final String CATEGORY = "/category";
     public static final String CATEGORY_BY_ID = "/category/:id";
     public static final String CATEGORIES = "/categories";
+    public static final String CATEGORIES_FILTERED = "/categories/";
   }
   
   public static class Subscription {
@@ -49,6 +50,8 @@ public class RestApi {
   public static class Tag {
     public static final String TAG = "/tag";
     public static final String TAG_BY_ID = "/tag/:id";
+    public static final String TAGS = "/tags";
+    public static final String TAGS_FILTERED = "/tags/";
   }
   
   public static class Media {

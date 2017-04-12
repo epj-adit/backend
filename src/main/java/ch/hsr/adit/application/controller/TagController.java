@@ -4,7 +4,8 @@ import static ch.hsr.adit.util.JsonUtil.jsonTransformer;
 import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
-import static spark.Spark.put;
+
+import java.util.List;
 
 import ch.hsr.adit.application.service.TagService;
 import ch.hsr.adit.domain.model.Tag;
@@ -19,9 +20,9 @@ public class TagController {
   public TagController(TagService tagService) {
 
     // create
-    post(RestApi.Tag.TAG, (request, response) -> {
-      Tag tag = tagService.transformToTag(request);
-      return tagService.createTag(tag);
+    post(RestApi.Tag.TAGS, (request, response) -> {
+      List<Tag> tags = tagService.transformToTags(request);
+      return tagService.createTags(tags);
     }, jsonTransformer());
 
     // read
@@ -29,11 +30,9 @@ public class TagController {
       long id = Long.parseLong(request.params(":id"));
       return tagService.get(id);
     }, jsonTransformer());
-
-    // update
-    put(RestApi.Tag.TAG_BY_ID, (request, response) -> {
-      Tag tag = tagService.transformToTag(request);
-      return tagService.updateTag(tag);
+    
+    get(RestApi.Tag.TAGS_FILTERED, (request, response) -> {
+      return tagService.getAllFiltered(request);
     }, jsonTransformer());
 
     // delete

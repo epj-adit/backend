@@ -76,7 +76,7 @@ public class App {
     
     // Tag
     TagDao tagDao = new TagDao(sessionFactory);
-    TagService tagService = new TagService(tagDao);
+    TagService tagService = new TagService(tagDao, advertisementDao);
     new TagController(tagService);
     
     // Category

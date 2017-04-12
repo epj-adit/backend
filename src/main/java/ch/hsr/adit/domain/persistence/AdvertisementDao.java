@@ -86,4 +86,23 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
       throw e;
     }
   }
+  
+  public List<Advertisement> getByTag(String tagName) {
+    try {
+      LOGGER.info("Try to fetch advertisements by tag");
+      
+      sessionFactory.getCurrentSession().beginTransaction();
+      final String queryString = "SELECT a FROM Advertisement as a JOIN a.tags as t WHERE t.name = :name";
+      Query<Advertisement> query = createQuery(queryString);
+      query.setParameter("name", tagName);
+      List<Advertisement> result = query.getResultList();
+      
+      sessionFactory.getCurrentSession().getTransaction().commit();
+      return result;
+    } catch (Exception e) {
+      sessionFactory.getCurrentSession().getTransaction().rollback();
+      LOGGER.error("Failed to fetch advertisement by tag. Transaction rolled back.");
+      throw e;
+    }
+  }
 }

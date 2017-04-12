@@ -11,7 +11,8 @@ import spark.Spark;
 @RunWith(Suite.class)
 @Suite.SuiteClasses ({ 
     AdvertisementControllerIT.class,
-    UserControllerIT.class
+    UserControllerIT.class,
+    TagControllerIT.class
 })
 public class IntegrationSuite {
 

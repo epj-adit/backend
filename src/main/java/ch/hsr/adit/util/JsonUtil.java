@@ -1,5 +1,6 @@
 package ch.hsr.adit.util;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
@@ -29,11 +30,11 @@ public class JsonUtil {
   }
 
 
-  public static <T extends Object> T fromJson(String json, Class<T> classe)
+  public static <T extends Object> T fromJson(String json, Type type)
       throws JsonSyntaxException {
-    return gson.fromJson(json, classe);
+    return gson.fromJson(json, type);
   }
-
+  
   /**
    * Returns a JSON response transformer as function reference.
    * 

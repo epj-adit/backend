@@ -44,7 +44,7 @@ public class UserService {
   public User get(User user) {
     return get(user.getId());
   }
-
+  
   public User get(Long id) {
     User user = userDao.get(id);
     return user;

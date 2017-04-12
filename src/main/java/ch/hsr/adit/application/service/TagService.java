@@ -1,12 +1,16 @@
 package ch.hsr.adit.application.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
+import ch.hsr.adit.domain.model.Advertisement;
 import ch.hsr.adit.domain.model.Tag;
+import ch.hsr.adit.domain.persistence.AdvertisementDao;
 import ch.hsr.adit.domain.persistence.TagDao;
 import ch.hsr.adit.util.JsonUtil;
 import spark.Request;
@@ -17,28 +21,35 @@ public class TagService {
   private static final Logger LOGGER = Logger.getLogger(TagService.class);
 
   private final TagDao tagDao;
+  private final AdvertisementDao advertisementDao;
 
-  public TagService(TagDao tagDao) {
+  public TagService(TagDao tagDao, AdvertisementDao advertisementDao) {
     this.tagDao = tagDao;
+    this.advertisementDao = advertisementDao;
   }
 
-  public Tag createTag(Tag tag) {
-    return (Tag) tagDao.persist(tag);
-  }
-
-  public Tag updateTag(Tag tag) {
-    return tagDao.update(tag);
+  public List<Tag> createTags(List<Tag> tags) {
+    List<Tag> persisted = new ArrayList<>();
+    for (Tag tag : tags) {
+      persisted.add(tagDao.persist(tag));
+    }
+    return persisted;
   }
 
   public boolean deleteTag(Tag tagToDelete) {
-    tagDao.delete(tagToDelete);
+    if (tagToDelete != null) {
+      List<Advertisement> relatedAdvertisements = advertisementDao.getByTag(tagToDelete.getName());
+      if (relatedAdvertisements == null || relatedAdvertisements.isEmpty()) {
+        tagDao.delete(tagToDelete);
+      }
+      // TODO should we return false, if do not delete anything?
+    }
     return true;
   }
 
   public boolean deleteTag(long id) {
     Tag tag = get(id);
-    deleteTag(tag);
-    return true;
+    return deleteTag(tag);
   }
 
   public Tag get(Tag tag) {
@@ -49,14 +60,15 @@ public class TagService {
     Tag tag = tagDao.get(id);
     return tag;
   }
-
-  public List<Tag> getAll() {
-    return tagDao.getAll();
+  
+  public List<Tag> getAllFiltered(Request request) {
+    String name = request.queryParams("name");
+    return tagDao.getFiltered(name);
   }
 
-  public Tag transformToTag(Request request) {
+  public List<Tag> transformToTags(Request request) {
     try {
-      Tag tag = JsonUtil.fromJson(request.body(), Tag.class);
+      List<Tag> tag = JsonUtil.fromJson(request.body(), new TypeToken<List<Tag>>(){}.getType());
       LOGGER.info("Received JSON data: " + tag.toString());
       return tag;
     } catch (JsonSyntaxException e) {

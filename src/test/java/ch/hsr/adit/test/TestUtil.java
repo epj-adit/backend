@@ -6,7 +6,6 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
-import ch.hsr.adit.domain.model.DbEntity;
 import ch.hsr.adit.util.JsonUtil;
 import spark.route.HttpMethod;
 import spark.utils.IOUtils;
@@ -17,7 +16,7 @@ public class TestUtil {
 
   private static final String ENDPOINT = "http://localhost:4567";
 
-  public static TestResponse request(HttpMethod method, String path, DbEntity entity) {
+  public static TestResponse request(HttpMethod method, String path, Object entity) {
     try {
       // setup connection
       URL url = new URL(ENDPOINT + path);
