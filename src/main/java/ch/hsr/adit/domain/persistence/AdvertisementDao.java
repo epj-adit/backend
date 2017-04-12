@@ -33,7 +33,7 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
     LOGGER.info("Try to fetch filtered advertisements");
 
     StringBuilder queryString =
-        new StringBuilder("SELECT a FROM Advertisement as a WHERE ");
+        new StringBuilder("SELECT DISTINCT a FROM Advertisement as a WHERE ");
     
     // optional join
     if (tagIds != null && !tagIds.isEmpty()) {
@@ -98,7 +98,7 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
       LOGGER.info("Try to fetch advertisements by tag");
       
       sessionFactory.getCurrentSession().beginTransaction();
-      final String queryString = "SELECT a FROM Advertisement as a JOIN a.tags as t WHERE t.name = :name";
+      final String queryString = "SELECT DISTINCT a FROM Advertisement as a JOIN a.tags as t WHERE t.name = :name";
       Query<Advertisement> query = createQuery(queryString);
       query.setParameter("name", tagName);
       List<Advertisement> result = query.getResultList();

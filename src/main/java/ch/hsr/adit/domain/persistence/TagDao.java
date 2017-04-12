@@ -22,7 +22,7 @@ public class TagDao extends GenericDao<Tag, Long> {
       LOGGER.info("Try to fetch filtered tags");
       sessionFactory.getCurrentSession().beginTransaction();
       
-      String queryString = "SELECT t FROM Tag as t WHERE lower(t.name) LIKE :name";
+      String queryString = "SELECT DISTINCT t FROM Tag as t WHERE lower(t.name) LIKE :name";
       Query<Tag> query = createQuery(queryString);
       query.setParameter("name", "%" + name.toLowerCase() + "%");
       List<Tag> result = query.getResultList();

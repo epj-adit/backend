@@ -71,7 +71,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
     try {
       LOGGER.info("Try to fetch " + entityName + " with name " + name);
       sessionFactory.getCurrentSession().beginTransaction();
-      Query<T> query = createQuery("from " + entityName + "where r.name = :name");
+      Query<T> query = createQuery("FROM " + entityName + "WHERE r.name = :name");
       query.setParameter("name", name);
       T object = query.getSingleResult();
       sessionFactory.getCurrentSession().getTransaction().commit();
@@ -90,7 +90,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
     try {
       LOGGER.info("Try to fetch all " + entityName + " objects");
       sessionFactory.getCurrentSession().beginTransaction();
-      Query<T> query = createQuery("from " + entityName);
+      Query<T> query = createQuery("FROM " + entityName);
       List<T> objects = query.list();
       sessionFactory.getCurrentSession().getTransaction().commit();
       return objects;

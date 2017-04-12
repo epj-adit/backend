@@ -20,7 +20,7 @@ public class UserDao extends GenericDao<User, Long> {
     try {
       LOGGER.info("Try to fetch user with email " + email);
       sessionFactory.getCurrentSession().beginTransaction();
-      Query<User> userQuery = createQuery("from User u where u.email = :email");
+      Query<User> userQuery = createQuery("SELECT DISTINCT u FROM User u WHERE u.email = :email");
       userQuery.setParameter("email", email);
       User user = userQuery.getSingleResult();
       if (user == null) {

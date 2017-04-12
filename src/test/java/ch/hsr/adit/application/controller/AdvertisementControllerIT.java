@@ -84,11 +84,11 @@ public class AdvertisementControllerIT {
     // assert
     Map<String, Object>[] jsonList = response.jsonList();
     assertEquals(200, response.statusCode);
-    assertTrue(jsonList.length >= 2);
+    assertTrue(jsonList.length >= 1);
   }
 
   @Test
-  public void getAllFiltered2() {
+  public void getAllFilteredTitleDescription() {
     // act
     TestResponse response =
         TestUtil.request(HttpMethod.get, "/advertisements/?title=Be&description=B", null);
