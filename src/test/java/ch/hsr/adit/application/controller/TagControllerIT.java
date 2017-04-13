@@ -93,12 +93,16 @@ public class TagControllerIT {
   }
 
   @Test
-  public void getEmptyTagArray() {
-    TestResponse response = TestUtil.request(HttpMethod.get, "/tags/?name=abcdefghijk", null);
-    
-    Map<String, Object>[] json = response.jsonList();
-    assertEquals(200, response.statusCode);
-    assertTrue(json.length == 0);
+  public void createNullTag() {
+    Tag tag = new Tag();
+    tag.setName(null);
+
+    List<Tag> tags = new ArrayList<>();
+    tags.add(tag);
+    System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+    TestResponse response = TestUtil.request(HttpMethod.post, "/tags", tags);
+
+    assertEquals(409, response.statusCode);
   }
-  
+
 }

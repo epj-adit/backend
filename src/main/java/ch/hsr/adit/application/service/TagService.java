@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.PropertyValueException;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -37,6 +38,9 @@ public class TagService {
           dbTag = tagDao.persist(tag);
         }
         persisted.add(dbTag);
+      }
+      else {
+        throw new PropertyValueException("Tagname cannot be null or empty!", "Tag", "Name");
       }
     }
     return persisted;
