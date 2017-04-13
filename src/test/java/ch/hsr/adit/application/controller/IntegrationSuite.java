@@ -21,7 +21,7 @@ public class IntegrationSuite {
   public static void setupSuite() {
     App.main(new String[] {});
   }
-  
+
   @AfterClass
   public static void tearDownSuite() {
     Spark.stop();

@@ -1,4 +1,4 @@
-package ch.hsr.adit.application.controller;
+  package ch.hsr.adit.application.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -165,13 +165,13 @@ public class UserControllerIT {
   @Test
   public void deleteReferencedUserTest() {
     TestResponse response = TestUtil.request(HttpMethod.delete, "/user/1", null);
-
-    assertEquals(404, response.statusCode);
+    
+    assertEquals(409, response.statusCode);
     assertFalse(Boolean.parseBoolean(response.body));
   }
 
   @Test
-  public void failedUpdateUserTest() {
+  public void duplicateEmailUpdateTest() {
     // arrange
     User user = new User();
     user.setId(1);
@@ -191,8 +191,37 @@ public class UserControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.put, "/user/1", user);
 
     // assert
-    Map<String, Object> json = response.json();
+    assertEquals(409, response.statusCode);
+  }
+  
+  @Test
+  public void insertUserWithPut() {
+    // Both Http PUT and POST can be used for creating. 
+    User user = new User();
+    user.setId(10000000);
+    user.setUsername(username);
+    user.setEmail("somethingNew@hsr.ch");
+    user.setPasswordHash(passwordHash);
+    user.setIsPrivate(isPrivate);
+    user.setWantsNotification(wantsNotification);
+    user.setIsActive(isActive);
+    user.setRole(role);
+
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.put, "/user/10000000", user);
+
+    // assert
+    assertEquals(200, response.statusCode);
+  }
+  
+  @Test
+  public void deleteNonexistentUserTest() {
+    
+    TestResponse response = TestUtil.request(HttpMethod.delete, "/user/1000000", null);
+
+    // assert
     assertEquals(404, response.statusCode);
+    assertFalse(Boolean.parseBoolean(response.body));
   }
 
   @Test
@@ -221,7 +250,23 @@ public class UserControllerIT {
 
     // assert
     assertEquals(200, response.statusCode);
-    assertEquals(404, response2.statusCode);
+    assertEquals(409, response2.statusCode);
+  }
+  
+  @Test
+  public void insertUserWithNullField() {
+    User user = new User();
+    user.setUsername(username);
+    user.setEmail("nullUser.student@hsr.ch");
+    user.setPasswordHash(null);
+    user.setIsPrivate(isPrivate);
+    user.setWantsNotification(wantsNotification);
+    user.setIsActive(isActive);
+    user.setRole(role);
+    
+    TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
+    
+    assertEquals(409, response.statusCode);
   }
 
 }

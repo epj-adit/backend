@@ -31,7 +31,7 @@ public class TestUtil {
         connection.getOutputStream().write(json.getBytes());
       }
 
-      if (connection.getResponseCode() == 404) {
+      if (connection.getResponseCode() >= 400) {
         return new TestResponse(connection.getResponseCode(), null);
       }
 

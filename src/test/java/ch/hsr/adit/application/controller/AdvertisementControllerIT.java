@@ -194,7 +194,7 @@ public class AdvertisementControllerIT {
 
     TestResponse response = TestUtil.request(HttpMethod.post, "/advertisement", advertisement);
 
-    assertEquals(404, response.statusCode);
+    assertEquals(409, response.statusCode);
   }
 
   @Test
@@ -208,6 +208,22 @@ public class AdvertisementControllerIT {
     advertisement.setCategory(category);
     advertisement.setId(3);
     TestResponse response = TestUtil.request(HttpMethod.post, "/advertisement", advertisement);
+
+    assertEquals(200, response.statusCode);
+  }
+
+  @Test
+  public void updateNonexistentAdvertisement() {
+    Advertisement advertisement = new Advertisement();
+    advertisement.setTitle("abcd");
+    advertisement.setDescription("abcd");
+    advertisement.setPrice(10000);
+    advertisement.setAdvertisementState(advertisementState);
+    advertisement.setUser(user);
+    advertisement.setCategory(category);
+
+    TestResponse response =
+        TestUtil.request(HttpMethod.put, "/advertisement/10000", advertisement);
 
     assertEquals(200, response.statusCode);
   }

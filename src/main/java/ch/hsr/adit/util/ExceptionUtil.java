@@ -7,6 +7,9 @@ import javax.persistence.PersistenceException;
 
 import org.hibernate.HibernateException;
 import org.hibernate.PropertyValueException;
+import org.postgresql.util.PSQLException;
+
+import ch.hsr.adit.domain.model.ForbiddenException;
 
 public class ExceptionUtil {
 
@@ -31,9 +34,10 @@ public class ExceptionUtil {
   }
 
   private static void setupMappings(ExceptionUtil exceptionUtil) {
-    exceptionUtil.exceptionMapping.put(PropertyValueException.class.getSimpleName(), 404);
-    exceptionUtil.exceptionMapping.put(PersistenceException.class.getSimpleName(), 404);
+    exceptionUtil.exceptionMapping.put(PropertyValueException.class.getSimpleName(), 409);
+    exceptionUtil.exceptionMapping.put(PersistenceException.class.getSimpleName(), 409);
     exceptionUtil.exceptionMapping.put(HibernateException.class.getSimpleName(), 404);
+    exceptionUtil.exceptionMapping.put(ForbiddenException.class.getSimpleName(), 403);
   }
 
   public Integer getHttpErrorCode(String exceptionType) {
@@ -44,17 +48,5 @@ public class ExceptionUtil {
       return statusCode;
     }
   }
-
-  // public void test() {
-  // if (e instanceof PropertyValueException) {
-  // throw new SystemException(DatabaseError.CONSTRAINT_VIOLATED_NULL_FIELD);
-  // } else if (e instanceof PersistenceException) {
-  // Throwable cause = e.getCause().getCause();
-  // if (cause.getMessage().contains("unique constraint")) {
-  // throw new SystemException(DatabaseError.CONSTRAINT_VIOLATED_INSERTING_CONFLICT, e);
-  // } else {
-  // throw new SystemException(DatabaseError.CONSTRAINT_VIOLATED, e);
-  // }
-  // }
-
+  
 }
