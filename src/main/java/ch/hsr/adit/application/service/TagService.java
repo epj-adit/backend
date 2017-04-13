@@ -31,7 +31,13 @@ public class TagService {
   public List<Tag> createTags(List<Tag> tags) {
     List<Tag> persisted = new ArrayList<>();
     for (Tag tag : tags) {
-      persisted.add(tagDao.persist(tag));
+      if (tag.getName() != null && !tag.getName().isEmpty()) {
+        Tag dbTag = tagDao.getByName(tag.getName());
+        if (dbTag == null) {
+          dbTag = tagDao.persist(tag);
+        }
+        persisted.add(dbTag);
+      }
     }
     return persisted;
   }
@@ -60,7 +66,7 @@ public class TagService {
     Tag tag = tagDao.get(id);
     return tag;
   }
-  
+
   public List<Tag> getAllFiltered(Request request) {
     String name = request.queryParams("name");
     return tagDao.getFiltered(name);
@@ -68,7 +74,7 @@ public class TagService {
 
   public List<Tag> transformToTags(Request request) {
     try {
-      List<Tag> tag = JsonUtil.fromJson(request.body(), new TypeToken<List<Tag>>(){}.getType());
+      List<Tag> tag = JsonUtil.fromJson(request.body(), new TypeToken<List<Tag>>() {}.getType());
       LOGGER.info("Received JSON data: " + tag.toString());
       return tag;
     } catch (JsonSyntaxException e) {

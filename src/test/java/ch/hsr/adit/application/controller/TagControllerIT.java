@@ -38,6 +38,28 @@ public class TagControllerIT {
     assertEquals(200, response.statusCode);
     assertEquals(2, json.length);
   }
+  
+  @Test
+  public void createDuplicateTags() {
+    // arrange
+    String name = "GoF";
+    Tag tag = new Tag();
+    tag.setName(name);
+    Tag tag2 = new Tag();
+    tag2.setName(name);
+    
+    List<Tag> tags = new ArrayList<>();
+    tags.add(tag);
+    tags.add(tag2);
+
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.post, "/tags", tags);
+
+    // assert
+    Map<String, Object>[] json = response.jsonList();
+    assertEquals(200, response.statusCode);
+    assertEquals(2, json.length);
+  }
 
   @Test
   public void getTag() {

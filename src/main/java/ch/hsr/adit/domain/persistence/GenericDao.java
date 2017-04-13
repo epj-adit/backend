@@ -5,6 +5,8 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -49,7 +51,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       throw e;
     }
   }
-
+  
   public T get(Serializable id) {
     try {
       LOGGER.info("Try to fetch " + entityName + " with id " + id);
@@ -71,14 +73,16 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
     try {
       LOGGER.info("Try to fetch " + entityName + " with name " + name);
       sessionFactory.getCurrentSession().beginTransaction();
-      Query<T> query = createQuery("FROM " + entityName + "WHERE r.name = :name");
+      Query<T> query = createQuery("SELECT e FROM " + entityName + " as e WHERE e.name = :name");
       query.setParameter("name", name);
-      T object = query.getSingleResult();
-      sessionFactory.getCurrentSession().getTransaction().commit();
-      if (object == null) {
-        throw new HibernateException(entityName + " with name " + name + " not found");
+      try {
+        T object = query.getSingleResult();
+        sessionFactory.getCurrentSession().getTransaction().commit();
+        return object;
+      } catch (NoResultException e) {
+        sessionFactory.getCurrentSession().getTransaction().rollback();
+        return null;
       }
-      return object;
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
       LOGGER.error("Failed to fetch " + entityName + ". Transaction rolled back.");
