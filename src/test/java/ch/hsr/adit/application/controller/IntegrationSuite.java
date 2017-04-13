@@ -9,12 +9,8 @@ import ch.hsr.adit.application.app.App;
 import spark.Spark;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses ({ 
-    AdvertisementControllerIT.class,
-    UserControllerIT.class,
-    TagControllerIT.class,
-    CategoryControllerIT.class
-})
+@Suite.SuiteClasses({ AdvertisementControllerIT.class, UserControllerIT.class,
+    TagControllerIT.class, CategoryControllerIT.class })
 public class IntegrationSuite {
 
   @BeforeClass

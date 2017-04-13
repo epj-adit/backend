@@ -22,10 +22,10 @@ public class TagControllerIT {
     // arrange
     Tag tag = new Tag();
     tag.setName("GoF");
-    
+
     Tag tag2 = new Tag();
     tag2.setName("Informatik");
-    
+
     List<Tag> tags = new ArrayList<>();
     tags.add(tag);
     tags.add(tag2);
@@ -38,7 +38,7 @@ public class TagControllerIT {
     assertEquals(200, response.statusCode);
     assertEquals(2, json.length);
   }
-  
+
   @Test
   public void createDuplicateTags() {
     // arrange
@@ -47,7 +47,7 @@ public class TagControllerIT {
     tag.setName(name);
     Tag tag2 = new Tag();
     tag2.setName(name);
-    
+
     List<Tag> tags = new ArrayList<>();
     tags.add(tag);
     tags.add(tag2);
@@ -92,4 +92,13 @@ public class TagControllerIT {
     assertTrue(Boolean.parseBoolean(response.body));
   }
 
+  @Test
+  public void getEmptyTagArray() {
+    TestResponse response = TestUtil.request(HttpMethod.get, "/tags/?name=abcdefghijk", null);
+    
+    Map<String, Object>[] json = response.jsonList();
+    assertEquals(200, response.statusCode);
+    assertTrue(json.length == 0);
+  }
+  
 }
