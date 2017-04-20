@@ -10,7 +10,9 @@ import spark.Spark;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ AdvertisementControllerIT.class, UserControllerIT.class,
-    TagControllerIT.class, CategoryControllerIT.class })
+    TagControllerIT.class, CategoryControllerIT.class, MessageControllerIT.class,
+    PermissionControllerIT.class })
+
 public class IntegrationSuite {
 
   @BeforeClass

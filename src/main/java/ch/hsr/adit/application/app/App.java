@@ -18,6 +18,7 @@ import org.hibernate.SessionFactory;
 import ch.hsr.adit.application.controller.AdvertisementController;
 import ch.hsr.adit.application.controller.CategoryController;
 import ch.hsr.adit.application.controller.MediaController;
+import ch.hsr.adit.application.controller.MessageController;
 import ch.hsr.adit.application.controller.PermissionController;
 import ch.hsr.adit.application.controller.RestApi;
 import ch.hsr.adit.application.controller.TagController;
@@ -25,12 +26,14 @@ import ch.hsr.adit.application.controller.UserController;
 import ch.hsr.adit.application.service.AdvertisementService;
 import ch.hsr.adit.application.service.CategoryService;
 import ch.hsr.adit.application.service.MediaService;
+import ch.hsr.adit.application.service.MessageService;
 import ch.hsr.adit.application.service.PermissionService;
 import ch.hsr.adit.application.service.TagService;
 import ch.hsr.adit.application.service.UserService;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
 import ch.hsr.adit.domain.persistence.CategoryDao;
 import ch.hsr.adit.domain.persistence.MediaDao;
+import ch.hsr.adit.domain.persistence.MessageDao;
 import ch.hsr.adit.domain.persistence.PermissionDao;
 import ch.hsr.adit.domain.persistence.TagDao;
 import ch.hsr.adit.domain.persistence.UserDao;
@@ -91,6 +94,11 @@ public class App {
     PermissionDao permissionDao = new PermissionDao(sessionFactory);
     PermissionService permissionService = new PermissionService(permissionDao);
     new PermissionController(permissionService);
+
+    // Message
+    MessageDao messageDao = new MessageDao(sessionFactory);
+    MessageService messageService = new MessageService(messageDao);
+    new MessageController(messageService);
 
     // wait for jetty
     awaitInitialization();

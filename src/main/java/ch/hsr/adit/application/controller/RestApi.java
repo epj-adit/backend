@@ -25,6 +25,7 @@ public class RestApi {
     public static final String MESSAGE = "/message";
     public static final String MESSAGE_BY_ID = "/message/:id";
     public static final String MESSAGES = "/messages";
+    public static final String MESSAGES_FILTERED = "/messages/";
   }
   
   public static class Advertisement {
