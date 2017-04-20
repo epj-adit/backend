@@ -46,6 +46,7 @@ public class RestApi {
     public static final String SUBSCRIPTION = "/subscription";
     public static final String SUBSCRIPTION_BY_ID = "/subscription/:id";
     public static final String SUBSCRIPTIONS = "/subscriptions";
+    public static final String SUBSCRIPTIONS_FILTERED = "/subscriptions/";
   }
   
   public static class Tag {

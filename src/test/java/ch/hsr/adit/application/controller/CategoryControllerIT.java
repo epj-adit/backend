@@ -70,7 +70,7 @@ public class CategoryControllerIT {
   @Test
   public void deleteCategory() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.delete, "/category/2", null);
+    TestResponse response = TestUtil.request(HttpMethod.delete, "/category/3", null);
 
     // assert
     assertEquals(200, response.statusCode);
@@ -110,16 +110,16 @@ public class CategoryControllerIT {
 
   @Test
   public void updateCategoryWithNullName() {
-    TestResponse response = TestUtil.request(HttpMethod.get, "/category/3", null);
+    TestResponse response = TestUtil.request(HttpMethod.get, "/category/2", null);
 
     Category category =
         JsonUtil.fromJson(response.body, new TypeToken<Category>() {}.getType());
     category.setName(null);
-    TestResponse response2 = TestUtil.request(HttpMethod.put, "/category/3", category);
+    TestResponse response2 = TestUtil.request(HttpMethod.put, "/category/2", category);
 
     Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
-    assertEquals("WG Zimmer", json.get("name"));
+    assertEquals("Jobs", json.get("name"));
     assertEquals(409, response2.statusCode);
   }
   

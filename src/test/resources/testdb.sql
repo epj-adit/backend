@@ -36,6 +36,8 @@ INSERT INTO public.category (id, name, parent_category_id) VALUES (3, 'WG Zimmer
 
 -- SUBSCRIPTION
 INSERT INTO public.subscription (id, interval, last_updated, category_id, user_id)  VALUES (1, 2592000000, NOW(), 1, 1);
+INSERT INTO public.subscription (id, interval, last_updated, category_id, user_id)  VALUES (2, 8000000, NOW(), 1, 2);
+INSERT INTO public.subscription (id, interval, last_updated, category_id, user_id)  VALUES (3, 8000000, NOW(), 2, 3);
 
 -- TAGS
 INSERT INTO public.tag (id, name) VALUES (1, 'Eduard Glatz');
