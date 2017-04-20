@@ -59,4 +59,11 @@ public class RestApi {
     public static final String MEDIA_BY_ID = "/medias/:id";
     public static final String MEDIA_UPLOAD = "/media/upload";
   }
+  
+  public static class Permission {
+    public static final String PERMISSION = "/permission";
+    public static final String PERMISSION_BY_ID = "/permission/:id";
+    public static final String PERMISSIONS = "/permissions";
+    
+  }
 }

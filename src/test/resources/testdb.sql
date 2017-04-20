@@ -4,6 +4,8 @@
 
 -- PERMISSIONS
 INSERT INTO public.permission (id, name) VALUES (1, 'create_review');
+INSERT INTO public.permission (id, name) VALUES (2, 'to_delete');
+INSERT INTO public.permission (id, name) VALUES (3, 'to_update');
 
 -- ROLES
 INSERT INTO public.role (id, name) VALUES (1, 'admin');
