@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import com.google.gson.JsonSyntaxException;
 
 import ch.hsr.adit.domain.model.Advertisement;
+import ch.hsr.adit.domain.model.AdvertisementState;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
 import ch.hsr.adit.util.JsonUtil;
 import spark.Request;
@@ -55,6 +56,15 @@ public class AdvertisementService {
       userId = Long.parseLong(request.queryParams("userId"));
     }
 
+    List<AdvertisementState> states = new ArrayList<>();
+    if (request.queryParamsValues("advertisementState") != null) {
+      String[] tags = request.queryParamsValues("advertisementState");
+      for (int i = 0; i < tags.length; i++) {
+        Integer ordinal = Integer.parseInt(tags[i]);
+        states.add(AdvertisementState.values()[ordinal]);
+      }
+    }
+
     List<Long> tagIds = new ArrayList<>();
     if (request.queryParamsValues("tagId") != null) {
       String[] tags = request.queryParamsValues("tagId");
@@ -71,11 +81,12 @@ public class AdvertisementService {
       }
     }
 
+
     String title = request.queryParams("title");
     String description = request.queryParams("description");
-    return advertisementDao.get(title, description, userId, categoryIds, tagIds);
+    return advertisementDao.get(title, description, userId, states, categoryIds, tagIds);
   }
-  
+
   public Advertisement transformToAdvertisement(Request request) {
     try {
       Advertisement advertisement = JsonUtil.fromJson(request.body(), Advertisement.class);

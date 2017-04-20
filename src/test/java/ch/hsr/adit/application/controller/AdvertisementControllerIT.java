@@ -98,6 +98,18 @@ public class AdvertisementControllerIT {
     assertEquals(200, response.statusCode);
     assertTrue(jsonList.length >= 1);
   }
+  
+  @Test
+  public void getAllFilteredByState() {
+    // act: get all active and to_review
+    TestResponse response =
+        TestUtil.request(HttpMethod.get, "/advertisements/?advertisementState=2&advertisementState=0", null);
+
+    // assert
+    Map<String, Object>[] jsonList = response.jsonList();
+    assertEquals(200, response.statusCode);
+    assertTrue(jsonList.length >= 4);
+  }
 
   @Test
   public void getAll() {
