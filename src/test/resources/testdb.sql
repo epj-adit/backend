@@ -11,6 +11,7 @@ INSERT INTO public.permission (id, name) VALUES (3, 'to_update');
 INSERT INTO public.role (id, name) VALUES (1, 'admin');
 INSERT INTO public.role (id, name) VALUES (2, 'supervisor');
 INSERT INTO public.role (id, name) VALUES (3, 'user');
+INSERT INTO public.role (id, name) VALUES (4, 'to_delete');
 
 INSERT INTO public.role_permission (permission_id, role_id) VALUES (1, 1);
 INSERT INTO public.role_permission (permission_id, role_id) VALUES (1, 2);

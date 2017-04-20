@@ -19,6 +19,7 @@ public class RestApi {
   
   public static class Role {
     public static final String ROLE = "/role";
+    public static final String ROLE_BY_ID = "/role/:id";
   }
   
   public static class Message {

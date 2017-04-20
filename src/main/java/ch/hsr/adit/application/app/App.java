@@ -21,6 +21,7 @@ import ch.hsr.adit.application.controller.MediaController;
 import ch.hsr.adit.application.controller.MessageController;
 import ch.hsr.adit.application.controller.PermissionController;
 import ch.hsr.adit.application.controller.RestApi;
+import ch.hsr.adit.application.controller.RoleController;
 import ch.hsr.adit.application.controller.SubscriptionController;
 import ch.hsr.adit.application.controller.TagController;
 import ch.hsr.adit.application.controller.UserController;
@@ -29,6 +30,7 @@ import ch.hsr.adit.application.service.CategoryService;
 import ch.hsr.adit.application.service.MediaService;
 import ch.hsr.adit.application.service.MessageService;
 import ch.hsr.adit.application.service.PermissionService;
+import ch.hsr.adit.application.service.RoleService;
 import ch.hsr.adit.application.service.SubscriptionService;
 import ch.hsr.adit.application.service.TagService;
 import ch.hsr.adit.application.service.UserService;
@@ -37,6 +39,7 @@ import ch.hsr.adit.domain.persistence.CategoryDao;
 import ch.hsr.adit.domain.persistence.MediaDao;
 import ch.hsr.adit.domain.persistence.MessageDao;
 import ch.hsr.adit.domain.persistence.PermissionDao;
+import ch.hsr.adit.domain.persistence.RoleDao;
 import ch.hsr.adit.domain.persistence.SubscriptionDao;
 import ch.hsr.adit.domain.persistence.TagDao;
 import ch.hsr.adit.domain.persistence.UserDao;
@@ -107,6 +110,11 @@ public class App {
     SubscriptionDao subscriptionDao = new SubscriptionDao(sessionFactory);
     SubscriptionService subscriptionService = new SubscriptionService(subscriptionDao);
     new SubscriptionController(subscriptionService);
+
+    // Role
+    RoleDao roleDao = new RoleDao(sessionFactory);
+    RoleService roleService = new RoleService(roleDao);
+    new RoleController(roleService);
 
     // wait for jetty
     awaitInitialization();
