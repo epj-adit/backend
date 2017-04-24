@@ -16,12 +16,10 @@ public class TestResponse {
     this.body = body;
   }
 
-  @SuppressWarnings("unchecked")
   public Map<String, Object> json() {
     return JsonUtil.fromJson(body, HashMap.class);
   }
   
-  @SuppressWarnings("unchecked")
   public Map<String, Object>[] jsonList() {
     return JsonUtil.fromJson(body, HashMap[].class);
   }

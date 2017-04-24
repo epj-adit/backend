@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 
 import ch.hsr.adit.application.controller.AdvertisementController;
+import ch.hsr.adit.application.controller.AuthenticationController;
 import ch.hsr.adit.application.controller.CategoryController;
 import ch.hsr.adit.application.controller.MediaController;
 import ch.hsr.adit.application.controller.MessageController;
@@ -26,6 +27,7 @@ import ch.hsr.adit.application.controller.SubscriptionController;
 import ch.hsr.adit.application.controller.TagController;
 import ch.hsr.adit.application.controller.UserController;
 import ch.hsr.adit.application.service.AdvertisementService;
+import ch.hsr.adit.application.service.AuthenticationService;
 import ch.hsr.adit.application.service.CategoryService;
 import ch.hsr.adit.application.service.MediaService;
 import ch.hsr.adit.application.service.MessageService;
@@ -53,6 +55,12 @@ public class App {
 
   public static void main(String[] args) {
 
+    /***
+     *
+     * APP FILTER
+     * 
+     */
+
     // Authentication key store
     setupKeyStore();
 
@@ -67,10 +75,18 @@ public class App {
     notFound(appHandler.notFound);
     internalServerError(appHandler.internalServerError);
 
+    // CORS
     options(RestApi.App.WILDCARD, appHandler.handlerCors);
 
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
+    /***
+     *
+     * DEPENDENCY INJECTION
+     * 
+     */
+
+    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    
     // Message
     MessageDao messageDao = new MessageDao(sessionFactory);
     MessageService messageService = new MessageService(messageDao);
@@ -80,6 +96,10 @@ public class App {
     UserDao userDao = new UserDao(sessionFactory);
     UserService userService = new UserService(userDao, messageDao);
     new UserController(userService);
+    
+    // Authenticate
+    AuthenticationService authenticationService = new AuthenticationService(userDao);
+    new AuthenticationController(authenticationService);
 
     // User
     AdvertisementDao advertisementDao = new AdvertisementDao(sessionFactory);

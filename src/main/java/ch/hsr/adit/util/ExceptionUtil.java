@@ -8,14 +8,14 @@ import javax.persistence.PersistenceException;
 import org.hibernate.HibernateException;
 import org.hibernate.PropertyValueException;
 
-import ch.hsr.adit.domain.model.ForbiddenException;
+import spark.HaltException;
 
 public class ExceptionUtil {
 
   private static volatile ExceptionUtil instance;
   private static final int DEFAULT_STATUS_CODE = 200;
+  private static final int UNAUTHORIZED = 401;
   private static final int CONFLICT = 409;
-  private static final int FORBIDDEN = 403;
   private static final int NOT_FOUND = 404;
 
 
@@ -40,7 +40,7 @@ public class ExceptionUtil {
     exceptionUtil.exceptionMapping.put(PropertyValueException.class.getSimpleName(), CONFLICT);
     exceptionUtil.exceptionMapping.put(PersistenceException.class.getSimpleName(), CONFLICT);
     exceptionUtil.exceptionMapping.put(IllegalArgumentException.class.getSimpleName(), CONFLICT);
-    exceptionUtil.exceptionMapping.put(ForbiddenException.class.getSimpleName(), FORBIDDEN);
+    exceptionUtil.exceptionMapping.put(HaltException.class.getSimpleName(), UNAUTHORIZED);
     exceptionUtil.exceptionMapping.put(HibernateException.class.getSimpleName(), NOT_FOUND);
   }
 

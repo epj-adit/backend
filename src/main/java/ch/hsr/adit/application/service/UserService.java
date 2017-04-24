@@ -1,11 +1,14 @@
 package ch.hsr.adit.application.service;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import org.mindrot.jbcrypt.BCrypt;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -29,11 +32,65 @@ public class UserService {
   }
 
   public User createUser(User user) {
+    if (user.getPasswordPlaintext() != null && !user.getPasswordPlaintext().isEmpty()) {
+      // hash password with OpenBSD's Blowfish password hashing code
+      String hashed = BCrypt.hashpw(user.getPasswordPlaintext(), BCrypt.gensalt());
+      user.setPasswordHash(hashed);
+    } else {
+      user.setPasswordHash(null);
+    }
+
     return (User) userDao.persist(user);
   }
 
+  /**
+   * Updates the user in database
+   * 
+   * Updates all fields including the updateDate except JwtToken, because the token only is set by
+   * TokenUtil
+   * 
+   * @param user with new values
+   * @return updated user
+   */
   public User updateUser(User user) {
-    return userDao.update(user);
+    try {
+      User dbUser = userDao.get(user.getId());
+      if (!user.getEmail().equals(dbUser.getEmail())) {
+        dbUser.setEmail(user.getEmail());
+      }
+      
+      String hashed = BCrypt.hashpw(user.getPasswordPlaintext(), BCrypt.gensalt());
+      if (! hashed.equals(dbUser.getPasswordHash())) {
+        dbUser.setPasswordHash(hashed);
+      }
+
+      if (!user.getRole().equals(dbUser.getRole())) {
+        dbUser.setRole(user.getRole());
+      }
+
+      if (!user.getUsername().equals(dbUser.getUsername())) {
+        dbUser.setUsername(user.getUsername());
+      }
+
+      if (user.isIsActive() != dbUser.isIsActive()) {
+        dbUser.setIsActive(user.isIsActive());
+      }
+
+      if (user.isIsPrivate() != dbUser.isIsPrivate()) {
+        dbUser.setIsPrivate(user.isIsPrivate());
+      }
+
+      if (user.isWantsNotification() != dbUser.isWantsNotification()) {
+        dbUser.setWantsNotification(user.isWantsNotification());
+      }
+
+      dbUser.setUpdated(new Date());
+      return userDao.update(dbUser);
+
+    } catch (HibernateException e) {
+      LOGGER.warn("User with id " + user.getId() + " not found. Nothing updated");
+      return user;
+    }
   }
 
   public boolean deleteUser(User userToDelete) {
@@ -46,6 +103,10 @@ public class UserService {
     deleteUser(user);
     return true;
   }
+  
+  public User getByEmail(String email) {
+    return userDao.getUserByEmail(email);
+  }
 
   public User get(User user) {
     return get(user.getId());
@@ -54,16 +115,6 @@ public class UserService {
   public User get(Long id) {
     User user = userDao.get(id);
     return user;
-  }
-
-  public User getByEmail(Request request) {
-    String email = request.queryParams("email");
-    if (email != null && !email.isEmpty()) {
-      return userDao.getUserByEmail(email);
-    } else {
-      LOGGER.error("Failed to fetch user by email. No email given.");
-      throw new IllegalArgumentException("Failed to fetch user by email. No email given.");
-    }
   }
 
   public List<User> getAll() {
@@ -77,8 +128,7 @@ public class UserService {
     }
 
     // TODO replace with other filter: need feedback!
-    String email = request.queryParams("email");
-    return userDao.get(email);
+    return null;
   }
 
   private List<User> getByConversation(Long conversationUserId) {

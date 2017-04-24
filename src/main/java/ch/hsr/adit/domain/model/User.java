@@ -30,7 +30,10 @@ public class User implements DbEntity {
 
   @Transient
   private String jwtToken;
-
+  
+  @Transient
+  private String passwordPlaintext;
+  
   private long id;
   private Role role;
   private String username;

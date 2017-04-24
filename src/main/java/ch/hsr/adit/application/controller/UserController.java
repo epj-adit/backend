@@ -34,10 +34,6 @@ public class UserController {
       return userService.getAll();
     }, jsonTransformer());
 
-    get(RestApi.User.USER_FILTERED, (request, response) -> {
-      return userService.getByEmail(request);
-    }, jsonTransformer());
-
     get(RestApi.User.USERS_FILTERED, (request, response) -> {
       return userService.getAllFiltered(request);
     }, jsonTransformer());

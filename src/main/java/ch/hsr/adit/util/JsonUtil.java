@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import spark.ResponseTransformer;
@@ -30,11 +31,18 @@ public class JsonUtil {
   }
 
 
-  public static <T extends Object> T fromJson(String json, Type type)
-      throws JsonSyntaxException {
+  /**
+   * Converts a Json String to a object
+   * 
+   * @param json string
+   * @param type of the object
+   * @return parsed object
+   * @throws JsonSyntaxException Gson exception
+   */
+  public static <T extends Object> T fromJson(String json, Type type) throws JsonSyntaxException {
     return gson.fromJson(json, type);
   }
-  
+
   /**
    * Returns a JSON response transformer as function reference.
    * 
@@ -42,5 +50,16 @@ public class JsonUtil {
    */
   public static final ResponseTransformer jsonTransformer() {
     return JsonUtil::toJson;
+  }
+
+
+  /**
+   * Returns a generic JsonObject
+   * 
+   * @param json string
+   * @return GSON JsonObject
+   */
+  public static final JsonObject simpleObject(String json) {
+    return fromJson(json, JsonObject.class);
   }
 }

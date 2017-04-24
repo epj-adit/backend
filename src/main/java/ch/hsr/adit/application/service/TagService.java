@@ -38,8 +38,7 @@ public class TagService {
           dbTag = tagDao.persist(tag);
         }
         persisted.add(dbTag);
-      }
-      else {
+      } else {
         throw new PropertyValueException("Tagname cannot be null or empty!", "Tag", "Name");
       }
     }

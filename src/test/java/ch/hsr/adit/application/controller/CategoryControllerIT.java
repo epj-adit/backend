@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -12,7 +11,6 @@ import org.junit.Test;
 import com.google.gson.reflect.TypeToken;
 
 import ch.hsr.adit.domain.model.Category;
-import ch.hsr.adit.domain.model.Tag;
 import ch.hsr.adit.test.TestResponse;
 import ch.hsr.adit.test.TestUtil;
 import ch.hsr.adit.util.JsonUtil;

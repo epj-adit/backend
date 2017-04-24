@@ -36,7 +36,7 @@ public class PermissionController {
     
     // update
     put(RestApi.Permission.PERMISSION_BY_ID, (request, response) -> {
-      Permission permission= permissionService.transformToPermission(request);
+      Permission permission = permissionService.transformToPermission(request);
       return permissionService.updatePermission(permission);
     }, jsonTransformer());
 

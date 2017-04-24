@@ -88,6 +88,17 @@ public class AdvertisementControllerIT {
   }
 
   @Test
+  public void getAllFilteredByTag() {
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.get, "/advertisements/?tagId=1", null);
+
+    // assert
+    Map<String, Object>[] jsonList = response.jsonList();
+    assertEquals(200, response.statusCode);
+    assertTrue(jsonList.length == 1);
+  }
+
+  @Test
   public void getAllFilteredTitleDescription() {
     // act
     TestResponse response =
@@ -98,12 +109,12 @@ public class AdvertisementControllerIT {
     assertEquals(200, response.statusCode);
     assertTrue(jsonList.length >= 1);
   }
-  
+
   @Test
   public void getAllFilteredByState() {
     // act: get all active and to_review
-    TestResponse response =
-        TestUtil.request(HttpMethod.get, "/advertisements/?advertisementState=2&advertisementState=0", null);
+    TestResponse response = TestUtil.request(HttpMethod.get,
+        "/advertisements/?advertisementState=2&advertisementState=0", null);
 
     // assert
     Map<String, Object>[] jsonList = response.jsonList();
@@ -234,10 +245,10 @@ public class AdvertisementControllerIT {
     advertisement.setUser(user);
     advertisement.setCategory(category);
 
-    TestResponse response =
-        TestUtil.request(HttpMethod.put, "/advertisement/10000", advertisement);
+    TestResponse response = TestUtil.request(HttpMethod.put, "/advertisement/10000", advertisement);
 
     assertEquals(200, response.statusCode);
   }
+
 
 }

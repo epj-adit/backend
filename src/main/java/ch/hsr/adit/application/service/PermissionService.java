@@ -46,7 +46,7 @@ public class PermissionService {
   }
 
   public Permission get(Long id) {
-    Permission permission= permissionDao.get(id);
+    Permission permission = permissionDao.get(id);
     return permission;
   }
   

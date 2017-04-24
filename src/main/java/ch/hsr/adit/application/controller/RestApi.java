@@ -4,6 +4,7 @@ public class RestApi {
   
   public static class App {
     public static final String WILDCARD = "*";
+    public static final String AUTHENTICATE = "/authenticate";
   }
 
   public static class User {

@@ -6,12 +6,8 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
-import java.util.List;
-
 import ch.hsr.adit.application.service.RoleService;
-import ch.hsr.adit.domain.model.Category;
 import ch.hsr.adit.domain.model.Role;
-import ch.hsr.adit.domain.model.Tag;
 
 public class RoleController {
 
@@ -33,13 +29,13 @@ public class RoleController {
       long id = Long.parseLong(request.params(":id"));
       return roleService.get(id);
     }, jsonTransformer());
-    
- // update
+
+    // update
     put(RestApi.Role.ROLE_BY_ID, (request, response) -> {
       Role role = roleService.transformToRole(request);
       return roleService.updateRole(role);
     }, jsonTransformer());
-    
+
     // delete
     delete(RestApi.Role.ROLE_BY_ID, (request, response) -> {
       // TODO check for permisisons

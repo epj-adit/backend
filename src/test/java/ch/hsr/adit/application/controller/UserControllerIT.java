@@ -3,7 +3,6 @@ package ch.hsr.adit.application.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
@@ -21,7 +20,7 @@ public class UserControllerIT {
 
   private Role role;
   private String username = "junitUser";
-  private String passwordHash = "ultasecure1234";
+  private String password = "ultasecure1234";
   private Boolean isPrivate = false;
   private Boolean wantsNotification = true;
   private Boolean isActive = true;
@@ -38,7 +37,7 @@ public class UserControllerIT {
     User user = new User();
     user.setUsername(username);
     user.setEmail("new.student@hsr.ch");
-    user.setPasswordHash(passwordHash);
+    user.setPasswordPlaintext(password);
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
@@ -53,7 +52,7 @@ public class UserControllerIT {
     assertNotNull(json.get("id"));
     assertEquals(username, json.get("username"));
     assertEquals("new.student@hsr.ch", json.get("email"));
-    assertEquals(passwordHash, json.get("passwordHash"));
+    assertNotNull(json.get("passwordHash"));
     assertEquals(isPrivate, (Boolean) json.get("isPrivate"));
     assertEquals(wantsNotification, (Boolean) json.get("wantsNotification"));
     assertEquals(isActive, (Boolean) json.get("isActive"));
@@ -95,17 +94,6 @@ public class UserControllerIT {
   }
 
   @Test
-  public void getUserByEmail() {
-    // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/user/?email=student@hsr.ch", null);
-
-    // assert
-    Map<String, Object> json = response.json();
-    assertEquals(200, response.statusCode);
-    assertEquals("student@hsr.ch", json.get("email"));
-  }
-
-  @Test
   public void getUserByConversation() {
     // act
     TestResponse response = TestUtil.request(HttpMethod.get, "/users/?conversationUserId=1", null);
@@ -117,24 +105,13 @@ public class UserControllerIT {
   }
 
   @Test
-  public void getUserByInvalidEmail() {
-    // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/user/?email=", null);
-
-    // assert
-    Map<String, Object> json = response.json();
-    assertEquals(409, response.statusCode);
-    assertNull(json);
-  }
-
-  @Test
   public void updateUserTest() {
     // arrange
     User user = new User();
     user.setId(1);
     user.setUsername(username);
     user.setEmail("updatedStudent@hsr.ch");
-    user.setPasswordHash(passwordHash);
+    user.setPasswordPlaintext(password);
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
@@ -169,7 +146,7 @@ public class UserControllerIT {
     User user = new User();
     user.setUsername(username);
     user.setEmail("newer.student@hsr.ch");
-    user.setPasswordHash(passwordHash);
+    user.setPasswordPlaintext(password);
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
@@ -178,7 +155,7 @@ public class UserControllerIT {
     User user2 = new User();
     user2.setUsername(username);
     user2.setEmail("newerer.student@hsr.ch");
-    user2.setPasswordHash(passwordHash);
+    user2.setPasswordPlaintext(password);
     user2.setIsPrivate(isPrivate);
     user2.setWantsNotification(wantsNotification);
     user2.setIsActive(isActive);
@@ -210,7 +187,7 @@ public class UserControllerIT {
     user.setId(1);
     user.setUsername(username);
     user.setEmail("updatedStudent@hsr.ch");
-    user.setPasswordHash(passwordHash);
+    user.setPasswordPlaintext(password);
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
@@ -234,7 +211,7 @@ public class UserControllerIT {
     user.setId(10000000);
     user.setUsername(username);
     user.setEmail("somethingNew@hsr.ch");
-    user.setPasswordHash(passwordHash);
+    user.setPasswordPlaintext(password);
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
@@ -262,7 +239,7 @@ public class UserControllerIT {
     User user = new User();
     user.setUsername(username);
     user.setEmail("duplicate.student@hsr.ch");
-    user.setPasswordHash(passwordHash);
+    user.setPasswordPlaintext(password);
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
@@ -271,7 +248,7 @@ public class UserControllerIT {
     User user2 = new User();
     user2.setUsername(username);
     user2.setEmail("duplicate.student@hsr.ch");
-    user2.setPasswordHash(passwordHash);
+    user2.setPasswordPlaintext(password);
     user2.setIsPrivate(isPrivate);
     user2.setWantsNotification(wantsNotification);
     user2.setIsActive(isActive);
@@ -291,7 +268,7 @@ public class UserControllerIT {
     User user = new User();
     user.setUsername(username);
     user.setEmail("nullUser.student@hsr.ch");
-    user.setPasswordHash(null);
+    user.setPasswordPlaintext(null);
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
