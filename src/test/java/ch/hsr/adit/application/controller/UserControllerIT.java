@@ -1,8 +1,9 @@
-  package ch.hsr.adit.application.controller;
+package ch.hsr.adit.application.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
@@ -93,6 +94,38 @@ public class UserControllerIT {
     assertTrue(jsonList.length >= 3);
   }
 
+  @Test
+  public void getUserByEmail() {
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.get, "/user/?email=student@hsr.ch", null);
+
+    // assert
+    Map<String, Object> json = response.json();
+    assertEquals(200, response.statusCode);
+    assertEquals("student@hsr.ch", json.get("email"));
+  }
+
+  @Test
+  public void getUserByConversation() {
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.get, "/users/?conversationUserId=1", null);
+
+    // assert
+    Map<String, Object>[] jsonList = response.jsonList();
+    assertEquals(200, response.statusCode);
+    assertEquals(2, jsonList.length);
+  }
+
+  @Test
+  public void getUserByInvalidEmail() {
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.get, "/user/?email=", null);
+
+    // assert
+    Map<String, Object> json = response.json();
+    assertEquals(409, response.statusCode);
+    assertNull(json);
+  }
 
   @Test
   public void updateUserTest() {
@@ -165,7 +198,7 @@ public class UserControllerIT {
   @Test
   public void deleteReferencedUserTest() {
     TestResponse response = TestUtil.request(HttpMethod.delete, "/user/1", null);
-    
+
     assertEquals(409, response.statusCode);
     assertFalse(Boolean.parseBoolean(response.body));
   }
@@ -193,10 +226,10 @@ public class UserControllerIT {
     // assert
     assertEquals(409, response.statusCode);
   }
-  
+
   @Test
   public void insertUserWithPut() {
-    // Both Http PUT and POST can be used for creating. 
+    // Both Http PUT and POST can be used for creating.
     User user = new User();
     user.setId(10000000);
     user.setUsername(username);
@@ -213,10 +246,10 @@ public class UserControllerIT {
     // assert
     assertEquals(200, response.statusCode);
   }
-  
+
   @Test
   public void deleteNonexistentUserTest() {
-    
+
     TestResponse response = TestUtil.request(HttpMethod.delete, "/user/1000000", null);
 
     // assert
@@ -252,7 +285,7 @@ public class UserControllerIT {
     assertEquals(200, response.statusCode);
     assertEquals(409, response2.statusCode);
   }
-  
+
   @Test
   public void insertUserWithNullField() {
     User user = new User();
@@ -263,9 +296,9 @@ public class UserControllerIT {
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
     user.setRole(role);
-    
+
     TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
-    
+
     assertEquals(409, response.statusCode);
   }
 

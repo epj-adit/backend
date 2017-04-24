@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import ch.hsr.adit.domain.model.User;
+import ch.hsr.adit.domain.persistence.MessageDao;
 import ch.hsr.adit.domain.persistence.UserDao;
 import spark.Request;
 
@@ -20,6 +21,9 @@ public class UserServiceTest {
 
   @Mock
   private UserDao userDao;
+
+  @Mock
+  private MessageDao messageDao;
 
   @Mock
   private Request request;
@@ -32,7 +36,7 @@ public class UserServiceTest {
 
     when(userDao.persist(any(User.class))).thenReturn(newUser);
 
-    UserService userService = new UserService(userDao);
+    UserService userService = new UserService(userDao, messageDao);
     User transientUser = new User();
     transientUser = userService.createUser(transientUser);
     assertEquals(1L, transientUser.getId());
@@ -44,7 +48,7 @@ public class UserServiceTest {
     persistentUSer.setId(1L);
     when(userDao.get(1L)).thenReturn(persistentUSer);
 
-    UserService userService = new UserService(userDao);
+    UserService userService = new UserService(userDao, messageDao);
     boolean response = userService.deleteUser(1L);
 
     verify(userDao).delete(any(User.class));;

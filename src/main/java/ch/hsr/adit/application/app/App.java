@@ -71,9 +71,14 @@ public class App {
 
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
+    // Message
+    MessageDao messageDao = new MessageDao(sessionFactory);
+    MessageService messageService = new MessageService(messageDao);
+    new MessageController(messageService);
+
     // User
     UserDao userDao = new UserDao(sessionFactory);
-    UserService userService = new UserService(userDao);
+    UserService userService = new UserService(userDao, messageDao);
     new UserController(userService);
 
     // User
@@ -100,11 +105,6 @@ public class App {
     PermissionDao permissionDao = new PermissionDao(sessionFactory);
     PermissionService permissionService = new PermissionService(permissionDao);
     new PermissionController(permissionService);
-
-    // Message
-    MessageDao messageDao = new MessageDao(sessionFactory);
-    MessageService messageService = new MessageService(messageDao);
-    new MessageController(messageService);
 
     // Subscription
     SubscriptionDao subscriptionDao = new SubscriptionDao(sessionFactory);

@@ -7,14 +7,17 @@ import javax.persistence.PersistenceException;
 
 import org.hibernate.HibernateException;
 import org.hibernate.PropertyValueException;
-import org.postgresql.util.PSQLException;
 
 import ch.hsr.adit.domain.model.ForbiddenException;
 
 public class ExceptionUtil {
 
   private static volatile ExceptionUtil instance;
-  private static final Integer DEFAULT_STATUS_CODE = 200;
+  private static final int DEFAULT_STATUS_CODE = 200;
+  private static final int CONFLICT = 409;
+  private static final int FORBIDDEN = 403;
+  private static final int NOT_FOUND = 404;
+
 
   private final Map<String, Integer> exceptionMapping = new HashMap<>();
 
@@ -34,10 +37,11 @@ public class ExceptionUtil {
   }
 
   private static void setupMappings(ExceptionUtil exceptionUtil) {
-    exceptionUtil.exceptionMapping.put(PropertyValueException.class.getSimpleName(), 409);
-    exceptionUtil.exceptionMapping.put(PersistenceException.class.getSimpleName(), 409);
-    exceptionUtil.exceptionMapping.put(HibernateException.class.getSimpleName(), 404);
-    exceptionUtil.exceptionMapping.put(ForbiddenException.class.getSimpleName(), 403);
+    exceptionUtil.exceptionMapping.put(PropertyValueException.class.getSimpleName(), CONFLICT);
+    exceptionUtil.exceptionMapping.put(PersistenceException.class.getSimpleName(), CONFLICT);
+    exceptionUtil.exceptionMapping.put(IllegalArgumentException.class.getSimpleName(), CONFLICT);
+    exceptionUtil.exceptionMapping.put(ForbiddenException.class.getSimpleName(), FORBIDDEN);
+    exceptionUtil.exceptionMapping.put(HibernateException.class.getSimpleName(), NOT_FOUND);
   }
 
   public Integer getHttpErrorCode(String exceptionType) {

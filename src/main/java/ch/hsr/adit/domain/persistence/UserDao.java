@@ -1,5 +1,7 @@
 package ch.hsr.adit.domain.persistence;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -9,7 +11,7 @@ import ch.hsr.adit.domain.model.User;
 
 
 public class UserDao extends GenericDao<User, Long> {
-  
+
   private static final Logger LOGGER = Logger.getLogger(UserDao.class);
 
   public UserDao(SessionFactory sessionFactory) {
@@ -34,5 +36,4 @@ public class UserDao extends GenericDao<User, Long> {
       throw e;
     }
   }
-
 }

@@ -21,14 +21,14 @@ public class MessageDao extends GenericDao<Message, Long> {
     try {
       LOGGER.info("Try to fetch filtered messages");
 
-      StringBuilder queryString = new StringBuilder("SELECT DISTINCT m FROM Message as m "
-          + "WHERE m.userBySenderUserId.id IN (:userIds) "
-          + "OR m.userByRecipientUserId.id IN (:userIds)");
+      StringBuilder queryString = new StringBuilder(
+          "SELECT DISTINCT m FROM Message as m " + "WHERE m.userBySenderUserId.id IN (:userIds) "
+              + "OR m.userByRecipientUserId.id IN (:userIds)");
 
       sessionFactory.getCurrentSession().beginTransaction();
 
       Query<Message> query = createQuery(queryString.toString());
-      
+
       if (userIds != null && !userIds.isEmpty()) {
         query.setParameter("userIds", userIds);
       }
@@ -43,7 +43,7 @@ public class MessageDao extends GenericDao<Message, Long> {
       throw e;
     }
   }
-  
+
   public List<Message> getByConversation(Long userId) {
     try {
       LOGGER.info("Try to fetch messages by conversations ");
