@@ -99,7 +99,6 @@ public class TagControllerIT {
 
     List<Tag> tags = new ArrayList<>();
     tags.add(tag);
-    System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     TestResponse response = TestUtil.request(HttpMethod.post, "/tags", tags);
 
     assertEquals(409, response.statusCode);
