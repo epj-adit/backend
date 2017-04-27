@@ -3,6 +3,7 @@ package ch.hsr.adit.application.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
@@ -52,7 +53,8 @@ public class UserControllerIT {
     assertNotNull(json.get("id"));
     assertEquals(username, json.get("username"));
     assertEquals("new.student@hsr.ch", json.get("email"));
-    assertNotNull(json.get("passwordHash"));
+    assertNull(json.get("passwordHash"));
+    assertNull(json.get("passwortPlaintext"));
     assertEquals(isPrivate, (Boolean) json.get("isPrivate"));
     assertEquals(wantsNotification, (Boolean) json.get("wantsNotification"));
     assertEquals(isActive, (Boolean) json.get("isActive"));
@@ -69,6 +71,8 @@ public class UserControllerIT {
     Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
     assertEquals("student@hsr.ch", json.get("email"));
+    assertNull(json.get("passwordHash"));
+    assertNull(json.get("passwortPlaintext"));
     assertNotNull(json.get("id"));
   }
 
@@ -119,7 +123,6 @@ public class UserControllerIT {
 
     String updatedValue = "Niguaran";
 
-
     // act
     user.setUsername(updatedValue);
     TestResponse response = TestUtil.request(HttpMethod.put, "/user/1", user);
@@ -128,6 +131,8 @@ public class UserControllerIT {
     Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
     assertEquals(updatedValue, json.get("username"));
+    assertNull(json.get("passwordHash"));
+    assertNull(json.get("passwortPlaintext"));
     assertNotNull(json.get("id"));
   }
 

@@ -6,7 +6,8 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
-import ch.hsr.adit.util.JsonUtil;
+import com.google.gson.Gson;
+
 import spark.route.HttpMethod;
 import spark.utils.IOUtils;
 
@@ -26,7 +27,7 @@ public class TestUtil {
 
       // post data
       if (entity != null) {
-        String json = JsonUtil.toJson(entity);
+        String json = new Gson().toJson(entity);
         connection.setRequestProperty("Content-Type", "application/json");
         connection.getOutputStream().write(json.getBytes());
       }

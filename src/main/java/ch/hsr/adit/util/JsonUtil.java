@@ -8,6 +8,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
+import ch.hsr.adit.domain.model.User;
+import ch.hsr.adit.domain.model.serializer.GenericGsonDeserializer;
+import ch.hsr.adit.domain.model.serializer.UserSerializer;
 import spark.ResponseTransformer;
 
 public class JsonUtil {
@@ -16,6 +19,7 @@ public class JsonUtil {
 
   private static Gson setup() {
     GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(User.class, new UserSerializer());
     builder.registerTypeAdapter(HashMap.class, new GenericGsonDeserializer());
     return builder.create();
   }

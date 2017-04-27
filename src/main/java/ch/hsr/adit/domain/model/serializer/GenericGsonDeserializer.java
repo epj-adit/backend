@@ -1,4 +1,4 @@
-package ch.hsr.adit.util;
+package ch.hsr.adit.domain.model.serializer;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
