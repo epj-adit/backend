@@ -1,58 +1,86 @@
 package ch.hsr.adit.util;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.crypto.SecretKey;
+
+import org.apache.log4j.Logger;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-
-import ch.hsr.adit.model.User;
-import lombok.Data;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.Key;
-import java.util.Date;
-
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 
 
-@Data
 public final class TokenUtil {
 
-  // write token to DB?
+  // TODO write token to DB?
   // TODO: claims (rollen / rechte)
-  private Algorithm algorithm;
-  private JWTVerifier verifier;
-  private DecodedJWT jwt;
-  public String token; //enthält das jwt base 64 codiert
-  private SecretKey secret;
-  /**
-   * Constructor to create a TokenUtil that contains the Users token
-   * @param user
-   */
-  public TokenUtil(User user) {
-    try {
-      secret = KeyStore.loadKey();
-      algorithm = Algorithm.HMAC256(secret.getEncoded());
-      token = JWT.create().withIssuer("adit").withSubject(user.getEmail()).sign(algorithm);
-    } catch (IllegalArgumentException | UnsupportedEncodingException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+
+  private static final Logger LOGGER = Logger.getLogger(TokenUtil.class);
+
+  private static final String ISSUER = "adit";
+
+  private static volatile TokenUtil instance;
+
+  private static Algorithm algorithm;
+
+  private TokenUtil() {}
+
+  public static TokenUtil getInstance() {
+    if (instance == null) {
+      synchronized (KeyStore.class) {
+        if (instance == null) {
+          try {
+            KeyStore keystore = KeyStore.getInstance();
+            SecretKey secret = keystore.loadKey();
+            TokenUtil.algorithm = Algorithm.HMAC256(secret.getEncoded());
+            instance = new TokenUtil();
+          } catch (IOException e) {
+            LOGGER.error("Cannot load keystore: " + e.getMessage());
+          }
+        }
+      }
     }
-    user.setToken(token);
-    verifier = JWT.require(algorithm).withIssuer("adit").withSubject(user.getEmail()).build();
+    return instance;
   }
 
-  /*
-   * verifies the given token throws JWTVerificationException if token has an invalid signature
-   * 
-   * @param token to identify the user
-   */
-  public void verify(User user) {
-    jwt = verifier.verify(user.getToken());
+  public String generateToken(String subject) {
+    return JWT.create().withIssuer(ISSUER).withSubject(subject).sign(algorithm);
   }
+
+  public Map<JwtClaim, Object> getClaims(String token) {
+    try {
+      JWT jwt = JWT.decode(token);
+
+      Map<JwtClaim, Object> claims = new HashMap<>();
+      claims.put(JwtClaim.SUBJECT, jwt.getSubject());
+
+      return claims;
+    } catch (JWTDecodeException e) {
+      LOGGER.error("JWT token decoding failed: " + e.getMessage());
+      throw e;
+    }
+  }
+
+  public boolean verify(String token) {
+    if (token == null || token.isEmpty()) {
+      throw new IllegalArgumentException("Token must be provided");
+    }
+    
+    String subject = (String) getClaims(token).get(JwtClaim.SUBJECT);
+    
+    JWTVerifier verifier = JWT.require(algorithm).withIssuer(ISSUER).withSubject(subject).build();
+
+    try {
+      verifier.verify(token);
+      return true;
+    } catch (JWTVerificationException e) {
+      return false;
+    }
+  }
+
 }

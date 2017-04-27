@@ -1,9 +1,9 @@
 package ch.hsr.adit.test;
 
-import com.google.gson.Gson;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import ch.hsr.adit.util.JsonUtil;
 
 
 public class TestResponse {
@@ -16,13 +16,11 @@ public class TestResponse {
     this.body = body;
   }
 
-  @SuppressWarnings("unchecked")
-  public Map<String, String> json() {
-    return new Gson().fromJson(body, HashMap.class);
+  public Map<String, Object> json() {
+    return JsonUtil.fromJson(body, HashMap.class);
   }
   
-  @SuppressWarnings("unchecked")
-  public Map<String, String>[] jsonList() {
-    return new Gson().fromJson(body, HashMap[].class);
+  public Map<String, Object>[] jsonList() {
+    return JsonUtil.fromJson(body, HashMap[].class);
   }
 }

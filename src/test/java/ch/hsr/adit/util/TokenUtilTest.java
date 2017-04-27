@@ -1,45 +1,56 @@
 package ch.hsr.adit.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import ch.hsr.adit.model.User;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import org.junit.Before;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.security.NoSuchAlgorithmException;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import ch.hsr.adit.domain.model.User;
+
 @RunWith(MockitoJUnitRunner.class)
 public class TokenUtilTest {
-  User user;
-  TokenUtil token;
 
-  @Before
-  public void setUp() {
-    user = new User();
-    user.setEmail("student@hsr.ch");
+  private static KeyStore keyStore;
+
+  @BeforeClass
+  public static void setUpClass() throws FileNotFoundException, NoSuchAlgorithmException {
+    File file = new File("KeyStore.properties");
+    keyStore = KeyStore.getInstance();
+    keyStore.generateKey(file);
   }
 
   @Test
-  public void createTokenTest() {
+  public void createAndVerifyTokenTest() {
     User user = new User();
     user.setEmail("student@hsr.ch");
-    token = new TokenUtil(user);
-    assertEquals(user.getToken(), token.getToken());
+
+    TokenUtil tokenUtil = TokenUtil.getInstance();
+    String token = tokenUtil.generateToken(user.getEmail());
+    assertNotNull(token);
   }
 
   @Test
   public void verifyTokenTest() {
-    token = new TokenUtil(user);
-    token.verify(user);
+    String generatedToken = TokenUtil.getInstance().generateToken("student@hsr.ch");
+    assertTrue(TokenUtil.getInstance().verify(generatedToken));
   }
 
-  @Test(expected = JWTVerificationException.class)
-  public void verifyWrongTokenTest() {
-    token = new TokenUtil(user);
-    User user2 = new User();
-    user2.setEmail("professor@hsr.ch");
-    TokenUtil token2 = new TokenUtil(user2);
-    token2.verify(user);
+  @Test(expected = IllegalArgumentException.class)
+  public void nullArgumentTest() {
+    TokenUtil tokenUtil = TokenUtil.getInstance();
+    tokenUtil.verify(null);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void emptyArgumentTest() {
+    TokenUtil tokenUtil = TokenUtil.getInstance();
+    tokenUtil.verify("");
   }
 }

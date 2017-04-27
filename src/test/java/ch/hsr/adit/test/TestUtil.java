@@ -1,24 +1,23 @@
 package ch.hsr.adit.test;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
+
+import com.google.gson.Gson;
 
 import spark.route.HttpMethod;
 import spark.utils.IOUtils;
 
 public class TestUtil {
 
-  private static final Logger logger = Logger.getLogger(TestUtil.class);
-  
+  private static final Logger LOGGER = Logger.getLogger(TestUtil.class);
+
   private static final String ENDPOINT = "http://localhost:4567";
 
-  public static TestResponse request(HttpMethod method, String path, Map<String, Object> params) {
+  public static TestResponse request(HttpMethod method, String path, Object entity) {
     try {
       // setup connection
       URL url = new URL(ENDPOINT + path);
@@ -27,14 +26,13 @@ public class TestUtil {
       connection.setDoOutput(true);
 
       // post data
-      if (params != null ) {
-        byte[] data = getParamData(params);
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        connection.setRequestProperty("Content-Length", String.valueOf(data.length));
-        connection.getOutputStream().write(data);
+      if (entity != null) {
+        String json = new Gson().toJson(entity);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.getOutputStream().write(json.getBytes());
       }
-      
-      if (connection.getResponseCode() == 404) {
+
+      if (connection.getResponseCode() >= 400) {
         return new TestResponse(connection.getResponseCode(), null);
       }
 
@@ -42,24 +40,9 @@ public class TestUtil {
       String body = IOUtils.toString(connection.getInputStream());
       return new TestResponse(connection.getResponseCode(), body);
     } catch (IOException ex) {
-      logger.error(ex.getMessage());
+      LOGGER.error(ex.getMessage());
       return null;
     }
-  }
-
-  private static byte[] getParamData(Map<String, Object> params)
-      throws UnsupportedEncodingException {
-   
-    StringBuilder postData = new StringBuilder();
-    for (Map.Entry<String, Object> param : params.entrySet()) {
-      if (postData.length() != 0) {
-        postData.append('&');
-      }
-      postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-      postData.append('=');
-      postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-    }
-    return postData.toString().getBytes("UTF-8");
   }
 
 }
