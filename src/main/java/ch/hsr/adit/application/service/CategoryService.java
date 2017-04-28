@@ -52,7 +52,11 @@ public class CategoryService {
   
   public List<Category> getAllFiltered(Request request) {
     String name = request.queryParams("name");
-    return categoryDao.getFiltered(name);
+    if (name != null && !name.isEmpty()) {
+      return categoryDao.getFiltered(name);
+    } else {
+      return categoryDao.getAll();
+    }
   }
 
 

@@ -237,20 +237,4 @@ public class AdvertisementControllerIT {
     assertEquals(200, response.statusCode);
   }
 
-  @Test
-  public void updateNonexistentAdvertisement() {
-    Advertisement advertisement = new Advertisement();
-    advertisement.setTitle("abcd");
-    advertisement.setDescription("abcd");
-    advertisement.setPrice(10000);
-    advertisement.setAdvertisementState(advertisementState);
-    advertisement.setUser(user);
-    advertisement.setCategory(category);
-
-    TestResponse response = TestUtil.request(HttpMethod.put, "/advertisement/10000", advertisement);
-
-    assertEquals(200, response.statusCode);
-  }
-
-
 }

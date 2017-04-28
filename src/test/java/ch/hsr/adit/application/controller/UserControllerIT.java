@@ -204,22 +204,15 @@ public class UserControllerIT {
 
   @Test
   public void insertUserWithPut() {
-    // Both Http PUT and POST can be used for creating.
+    // arrange
     User user = new User();
-    user.setId(10000000);
-    user.setUsername(username);
-    user.setEmail("somethingNew@hsr.ch");
-    user.setPasswordPlaintext(password);
-    user.setIsPrivate(isPrivate);
-    user.setWantsNotification(wantsNotification);
-    user.setIsActive(isActive);
-    user.setRole(role);
+    user.setEmail("update@hsr.ch");
 
     // act
     TestResponse response = TestUtil.request(HttpMethod.put, "/user/10000000", user);
 
     // assert
-    assertEquals(200, response.statusCode);
+    assertEquals(404, response.statusCode);
   }
 
   @Test

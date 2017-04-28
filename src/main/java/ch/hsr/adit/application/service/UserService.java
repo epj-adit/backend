@@ -89,7 +89,7 @@ public class UserService {
 
     } catch (HibernateException e) {
       LOGGER.warn("User with id " + user.getId() + " not found. Nothing updated");
-      return user;
+      throw e;
     }
   }
 

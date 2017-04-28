@@ -55,6 +55,18 @@ public class CategoryControllerIT {
     assertNotNull(json[0].get("id"));
     assertEquals("Bücher", json[0].get("name"));
   }
+  
+  @Test
+  public void getAllCategory() {
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.get, "/categories/", null);
+
+    // assert
+    Map<String, Object>[] json = response.jsonList();
+    assertEquals(200, response.statusCode);
+    assertTrue(json.length >= 3);
+  }
+
 
   @Test
   public void getNonExistentCategory() {
