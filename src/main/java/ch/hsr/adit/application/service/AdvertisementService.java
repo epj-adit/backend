@@ -31,14 +31,11 @@ public class AdvertisementService {
     return advertisementDao.update(advertisement);
   }
 
-  public boolean deleteAdvertisement(Advertisement advertisementToDelete) {
-    advertisementDao.delete(advertisementToDelete);
-    return true;
-  }
-
-  public boolean deleteAdvertisement(long id) {
+  public Advertisement deleteAdvertisement(long id) {
     Advertisement advertisement = get(id);
-    return deleteAdvertisement(advertisement);
+    advertisement.setAdvertisementState(AdvertisementState.CLOSED);
+    advertisementDao.update(advertisement);
+    return advertisement;
   }
 
   public Advertisement get(Long id) {
@@ -84,7 +81,15 @@ public class AdvertisementService {
 
     String title = request.queryParams("title");
     String description = request.queryParams("description");
-    return advertisementDao.get(title, description, userId, states, categoryIds, tagIds);
+
+
+    if (title == null && description == null && userId == null && states.isEmpty()
+        && tagIds.isEmpty() && categoryIds.isEmpty()) {
+
+      return advertisementDao.getAll();
+    } else {
+      return advertisementDao.get(title, description, userId, states, categoryIds, tagIds);
+    }
   }
 
   public Advertisement transformToAdvertisement(Request request) {

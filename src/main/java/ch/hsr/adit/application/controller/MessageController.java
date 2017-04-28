@@ -28,10 +28,6 @@ public class MessageController {
       return messageService.get(id);
     }, jsonTransformer());
 
-    get(RestApi.Message.MESSAGES, (request, response) -> {
-      return messageService.getAll();
-    }, jsonTransformer());
-    
     get(RestApi.Message.MESSAGES_FILTERED, (request, response) -> {
       return messageService.getAllFiltered(request);
     }, jsonTransformer());

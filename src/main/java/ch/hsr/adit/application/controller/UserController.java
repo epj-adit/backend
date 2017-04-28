@@ -30,10 +30,6 @@ public class UserController {
       return userService.get(id);
     }, jsonTransformer());
 
-    get(RestApi.User.USERS, (request, response) -> {
-      return userService.getAll();
-    }, jsonTransformer());
-
     get(RestApi.User.USERS_FILTERED, (request, response) -> {
       return userService.getAllFiltered(request);
     }, jsonTransformer());
@@ -41,12 +37,13 @@ public class UserController {
     // update
     put(RestApi.User.USER_BY_ID, (request, response) -> {
       User user = userService.transformToUser(request);
+      long id = Long.parseLong(request.params(":id"));
+      user.setId(id);
       return userService.updateUser(user);
     }, jsonTransformer());
 
     // delete
     delete(RestApi.User.USER_BY_ID, (request, response) -> {
-      // TODO check for permisisons
       long id = Long.parseLong(request.params(":id"));
       return userService.deleteUser(id);
     }, jsonTransformer());

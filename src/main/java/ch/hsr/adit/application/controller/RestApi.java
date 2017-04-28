@@ -9,7 +9,6 @@ public class RestApi {
 
   public static class User {
     public static final String USER = "/user";
-    public static final String USERS = "/users";
     public static final String USERS_FILTERED = "/users/";
     public static final String USER_FILTERED = "/user/";
     public static final String USER_BY_ID = "/user/:id";
@@ -17,7 +16,7 @@ public class RestApi {
   
   public static class UserLog {
     public static final String USER_LOG = "/userLog";
-    public static final String USER_LOGS = "/userLogs";
+    public static final String USER_LOGS_FILTERED = "/userLogs/";
   }
   
   public static class Role {
@@ -28,28 +27,24 @@ public class RestApi {
   public static class Message {
     public static final String MESSAGE = "/message";
     public static final String MESSAGE_BY_ID = "/message/:id";
-    public static final String MESSAGES = "/messages";
     public static final String MESSAGES_FILTERED = "/messages/";
   }
   
   public static class Advertisement {
     public static final String ADVERTISEMENT = "/advertisement";
     public static final String ADVERTISEMENT_BY_ID = "/advertisement/:id";
-    public static final String ADVERTISEMENTS = "/advertisements";
     public static final String ADVERTISEMENTS_FILTERED = "/advertisements/";
   }
   
   public static class Category {
     public static final String CATEGORY = "/category";
     public static final String CATEGORY_BY_ID = "/category/:id";
-    public static final String CATEGORIES = "/categories";
     public static final String CATEGORIES_FILTERED = "/categories/";
   }
   
   public static class Subscription {
     public static final String SUBSCRIPTION = "/subscription";
     public static final String SUBSCRIPTION_BY_ID = "/subscription/:id";
-    public static final String SUBSCRIPTIONS = "/subscriptions";
     public static final String SUBSCRIPTIONS_FILTERED = "/subscriptions/";
   }
   
@@ -69,7 +64,7 @@ public class RestApi {
   public static class Permission {
     public static final String PERMISSION = "/permission";
     public static final String PERMISSION_BY_ID = "/permission/:id";
-    public static final String PERMISSIONS = "/permissions";
+    public static final String PERMISSIONS_FILTERED = "/permissions/";
     
   }
 }

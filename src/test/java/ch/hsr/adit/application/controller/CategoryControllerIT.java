@@ -68,7 +68,7 @@ public class CategoryControllerIT {
   @Test
   public void deleteCategory() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.delete, "/category/3", null);
+    TestResponse response = TestUtil.request(HttpMethod.delete, "/category/4", null);
 
     // assert
     assertEquals(200, response.statusCode);

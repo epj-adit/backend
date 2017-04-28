@@ -65,7 +65,9 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
 
     // remove first "AND"
     int index = queryString.indexOf("and");
-    queryString.replace(index, index + 3, "");
+    if (index != -1) {
+      queryString.replace(index, index + 3, "");
+    }
 
     try {
       sessionFactory.getCurrentSession().beginTransaction();

@@ -125,7 +125,7 @@ public class AdvertisementControllerIT {
   @Test
   public void getAll() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/advertisements", null);
+    TestResponse response = TestUtil.request(HttpMethod.get, "/advertisements/", null);
 
     // assert
     Map<String, Object>[] jsonList = response.jsonList();
@@ -171,8 +171,10 @@ public class AdvertisementControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.delete, "/advertisement/3", null);
 
     // assert
+    Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
-    assertTrue(Boolean.parseBoolean(response.body));
+    assertEquals(AdvertisementState.CLOSED.ordinal(),
+        Integer.parseInt((String) json.get("advertisementState")));
   }
 
   @Test

@@ -80,7 +80,7 @@ public class SubscriptionControllerIT {
   @Test
   public void getAll() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/subscriptions", null);
+    TestResponse response = TestUtil.request(HttpMethod.get, "/subscriptions/", null);
 
     // assert
     Map<String, Object>[] jsonList = response.jsonList();
@@ -110,7 +110,7 @@ public class SubscriptionControllerIT {
     subscription.setCategory(category);
 
     // act
-    TestResponse response = TestUtil.request(HttpMethod.put, "/subscription/2", subscription);
+    TestResponse response = TestUtil.request(HttpMethod.put, "/subscription/1", subscription);
 
     // assert
     Map<String, Object> json = response.json();

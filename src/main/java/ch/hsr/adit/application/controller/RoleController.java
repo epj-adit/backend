@@ -33,6 +33,8 @@ public class RoleController {
     // update
     put(RestApi.Role.ROLE_BY_ID, (request, response) -> {
       Role role = roleService.transformToRole(request);
+      long id = Long.parseLong(request.params(":id"));
+      role.setId(id);
       return roleService.updateRole(role);
     }, jsonTransformer());
 

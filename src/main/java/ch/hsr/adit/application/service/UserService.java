@@ -58,9 +58,9 @@ public class UserService {
       if (!user.getEmail().equals(dbUser.getEmail())) {
         dbUser.setEmail(user.getEmail());
       }
-      
+
       String hashed = BCrypt.hashpw(user.getPasswordPlaintext(), BCrypt.gensalt());
-      if (! hashed.equals(dbUser.getPasswordHash())) {
+      if (!hashed.equals(dbUser.getPasswordHash())) {
         dbUser.setPasswordHash(hashed);
       }
 
@@ -93,17 +93,13 @@ public class UserService {
     }
   }
 
-  public boolean deleteUser(User userToDelete) {
-    userDao.delete(userToDelete);
-    return true;
+  public User deleteUser(long id) {
+    User user = get(id);
+    user.setIsActive(false);
+    userDao.update(user);
+    return user;
   }
 
-  public boolean deleteUser(long id) {
-    User user = get(id);
-    deleteUser(user);
-    return true;
-  }
-  
   public User getByEmail(String email) {
     return userDao.getUserByEmail(email);
   }
@@ -127,8 +123,7 @@ public class UserService {
       return getByConversation(conversationUserId);
     }
 
-    // TODO replace with other filter: need feedback!
-    return null;
+    return userDao.getAll();
   }
 
   private List<User> getByConversation(Long conversationUserId) {

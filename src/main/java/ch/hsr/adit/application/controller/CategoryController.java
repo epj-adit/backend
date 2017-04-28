@@ -30,10 +30,6 @@ public class CategoryController {
       return categoryService.get(id);
     }, jsonTransformer());
 
-    get(RestApi.Category.CATEGORIES, (request, response) -> {
-      return categoryService.getAll();
-    }, jsonTransformer());
-
     get(RestApi.Category.CATEGORIES_FILTERED, (request, response) -> {
       return categoryService.getAllFiltered(request);
     }, jsonTransformer());
@@ -41,6 +37,8 @@ public class CategoryController {
     // update
     put(RestApi.Category.CATEGORY_BY_ID, (request, response) -> {
       Category category = categoryService.transformToCategory(request);
+      long id = Long.parseLong(request.params(":id"));
+      category.setId(id);
       return categoryService.updateCategory(category);
     }, jsonTransformer());
 

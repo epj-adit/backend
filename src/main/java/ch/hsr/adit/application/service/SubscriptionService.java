@@ -49,12 +49,12 @@ public class SubscriptionService {
   }
 
   public List<Subscription> getAllFiltered(Request request) {
-    Long categoryId = null;
     if (request.queryParams("categoryId") != null) {
-      categoryId = Long.parseLong(request.queryParams("categoryId"));
+      Long categoryId = Long.parseLong(request.queryParams("categoryId"));
+      return subscriptionDao.getFiltered(categoryId);
+    } else {
+      return subscriptionDao.getAll();
     }
-
-    return subscriptionDao.getFiltered(categoryId);
   }
 
   public Subscription transformToSubscription(Request request) {

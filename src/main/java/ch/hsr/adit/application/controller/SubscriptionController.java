@@ -34,13 +34,11 @@ public class SubscriptionController {
       return subscriptionService.getAllFiltered(request);
     }, jsonTransformer());
 
-    get(RestApi.Subscription.SUBSCRIPTIONS, (request, response) -> {
-      return subscriptionService.getAll();
-    }, jsonTransformer());
-
     // update
     put(RestApi.Subscription.SUBSCRIPTION_BY_ID, (request, response) -> {
       Subscription subscription = subscriptionService.transformToSubscription(request);
+      long id = Long.parseLong(request.params(":id"));
+      subscription.setId(id);
       return subscriptionService.updateSubscription(subscription);
     }, jsonTransformer());
 

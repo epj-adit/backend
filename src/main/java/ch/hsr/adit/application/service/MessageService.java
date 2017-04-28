@@ -45,7 +45,7 @@ public class MessageService {
       }
       return messageDao.getFiltered(userIds);
     } else {
-      return null;
+      return messageDao.getAll();
     }
   }
 

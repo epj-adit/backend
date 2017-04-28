@@ -83,7 +83,7 @@ public class MessageControllerIT {
   @Test
   public void getAll() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/messages", null);
+    TestResponse response = TestUtil.request(HttpMethod.get, "/messages/", null);
 
     // assert
     Map<String, Object>[] jsonList = response.jsonList();

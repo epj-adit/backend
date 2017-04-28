@@ -89,7 +89,7 @@ public class UserControllerIT {
   @Test
   public void getAllUser() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/users", null);
+    TestResponse response = TestUtil.request(HttpMethod.get, "/users/", null);
 
     // assert
     Map<String, Object>[] jsonList = response.jsonList();
@@ -142,8 +142,9 @@ public class UserControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.delete, "/user/4", null);
 
     // assert
+    Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
-    assertTrue(Boolean.parseBoolean(response.body));
+    assertFalse((Boolean) json.get("isActive"));
   }
 
   @Test
@@ -175,14 +176,6 @@ public class UserControllerIT {
     assertNotNull(json.get("id"));
     assertNotNull(json2.get("id"));
     assertEquals((Long) json.get("id") + 1, json2.get("id"));
-  }
-
-  @Test
-  public void deleteReferencedUserTest() {
-    TestResponse response = TestUtil.request(HttpMethod.delete, "/user/1", null);
-
-    assertEquals(409, response.statusCode);
-    assertFalse(Boolean.parseBoolean(response.body));
   }
 
   @Test

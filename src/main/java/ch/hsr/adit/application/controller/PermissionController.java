@@ -30,13 +30,15 @@ public class PermissionController {
       return permissionService.get(id);
     }, jsonTransformer());
 
-    get(RestApi.Permission.PERMISSIONS, (request, response) -> {
+    get(RestApi.Permission.PERMISSIONS_FILTERED, (request, response) -> {
       return permissionService.getAll();
     }, jsonTransformer());
     
     // update
     put(RestApi.Permission.PERMISSION_BY_ID, (request, response) -> {
       Permission permission = permissionService.transformToPermission(request);
+      long id = Long.parseLong(request.params(":id"));
+      permission.setId(id);
       return permissionService.updatePermission(permission);
     }, jsonTransformer());
 

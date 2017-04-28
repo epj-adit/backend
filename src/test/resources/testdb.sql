@@ -34,6 +34,7 @@ INSERT INTO public.user_log (id, ip, action, created, user_id) VALUES (1, '152.9
 INSERT INTO public.category (id, name, parent_category_id) VALUES (1, 'Bücher', null);
 INSERT INTO public.category (id, name, parent_category_id) VALUES (2, 'Jobs', null);
 INSERT INTO public.category (id, name, parent_category_id) VALUES (3, 'WG Zimmer', null);
+INSERT INTO public.category (id, name, parent_category_id) VALUES (4, 'Delete', null);
 
 -- SUBSCRIPTION
 INSERT INTO public.subscription (id, interval, last_updated, category_id, user_id)  VALUES (1, 2592000000, NOW(), 1, 1);
