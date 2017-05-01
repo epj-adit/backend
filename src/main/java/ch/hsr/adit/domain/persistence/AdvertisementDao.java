@@ -42,19 +42,25 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
     }
 
     if (title != null) {
+      if (description != null) {
+        queryString.append(" (");
+      }
       queryString.append("and lower(a.title) LIKE :title ");
     }
     if (description != null) {
-      queryString.append("and lower(a.description) LIKE :description ");
+      queryString.append("or lower(a.description) LIKE :description ");
+      if (title != null) {
+        queryString.append(") ");
+      }
     }
     if (userId != null) {
       queryString.append("and a.user.id = :userId ");
     }
-    
+
     if (advertisementStates != null && !advertisementStates.isEmpty()) {
       queryString.append("and a.advertisementState IN (:advertisementStates) ");
     }
-    
+
     if (categoryIds != null && !categoryIds.isEmpty()) {
       queryString.append("and a.category.id IN (:categoryIds) ");
     }
@@ -65,10 +71,13 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
 
     // remove first "AND"
     int index = queryString.indexOf("and");
+    if (index == -1) {
+      index = queryString.indexOf("or");
+    } 
     if (index != -1) {
       queryString.replace(index, index + 3, "");
     }
-
+    
     try {
       sessionFactory.getCurrentSession().beginTransaction();
 
@@ -83,15 +92,15 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
       if (userId != null) {
         query.setParameter("userId", userId);
       }
-      
+
       if (advertisementStates != null && !advertisementStates.isEmpty()) {
         query.setParameter("advertisementStates", advertisementStates);
       }
-      
+
       if (categoryIds != null && !categoryIds.isEmpty()) {
         query.setParameter("categoryIds", categoryIds);
       }
-      
+
       if (tagIds != null && !tagIds.isEmpty()) {
         query.setParameter("tagIds", tagIds);
       }
