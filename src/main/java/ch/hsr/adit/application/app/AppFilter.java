@@ -29,4 +29,8 @@ public class AppFilter {
     response.header("Content-Encoding", "gzip");
   };
 
+  public Filter setCorsOrigin = (Request request, Response response) -> {
+    response.header("Access-Control-Allow-Origin", "*");
+  };
+
 }
