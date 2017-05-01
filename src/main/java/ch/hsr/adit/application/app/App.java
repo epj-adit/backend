@@ -21,7 +21,6 @@ import ch.hsr.adit.application.controller.CategoryController;
 import ch.hsr.adit.application.controller.MediaController;
 import ch.hsr.adit.application.controller.MessageController;
 import ch.hsr.adit.application.controller.PermissionController;
-import ch.hsr.adit.application.controller.RestApi;
 import ch.hsr.adit.application.controller.RoleController;
 import ch.hsr.adit.application.controller.SubscriptionController;
 import ch.hsr.adit.application.controller.TagController;

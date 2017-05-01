@@ -11,7 +11,8 @@ import spark.Spark;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ AdvertisementControllerIT.class, UserControllerIT.class,
     TagControllerIT.class, CategoryControllerIT.class, MessageControllerIT.class,
-    PermissionControllerIT.class, SubscriptionControllerIT.class, RoleControllerIT.class })
+    PermissionControllerIT.class, SubscriptionControllerIT.class, RoleControllerIT.class,
+    AuthenticationControllerIT.class })
 public class IntegrationSuite {
 
   @BeforeClass

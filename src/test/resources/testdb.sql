@@ -26,6 +26,8 @@ INSERT INTO public."user" (id, username, email, password_hash, is_active, is_pri
 INSERT INTO public."user" (id, username, email, password_hash, is_active, is_private, wants_notification, created, updated, role_id) VALUES (2, 'vinxhe', 'nvinzens@hsr.ch', 'abcde', true, true, 'true', NOW(), NULL ,1);
 INSERT INTO public."user" (id, username, email, password_hash, is_active, is_private, wants_notification, created, updated, role_id) VALUES (3, 'student', 'student@hsr.ch', 'abcde', true, true, 'true', NOW(), NULL , 3);
 INSERT INTO public."user" (id, username, email, password_hash, is_active, is_private, wants_notification, created, updated, role_id) VALUES (4, 'deleted', 'deleted@hsr.ch', 'abcde', true, true, 'true', NOW(), NULL , 3);
+INSERT INTO public."user" (id, username, email, password_hash, is_active, is_private, wants_notification, created, updated, role_id) VALUES (5, 'authenticated', 'authenticated@hsr.ch', '$2a$10$gyXbtQebvTC4bb9w02abluftL2dBbHfwOgJdRk0L0x8oKihQn/4m6', true, true, 'true', NOW(), NULL , 3);
+INSERT INTO public."user" (id, username, email, password_hash, is_active, is_private, wants_notification, created, updated, role_id) VALUES (6, 'inactive', 'inactive@hsr.ch', '$2a$10$/XojqMqnwuYCK.OIxZBbHOtYDOIeZ5mCX.ZXlc2RYSaEkLtbNCQQG', false, true, 'true', NOW(), NULL , 3);
 
 -- USER LOG
 INSERT INTO public.user_log (id, ip, action, created, user_id) VALUES (1, '152.96.235.27', 'Login', NOW(), 1);

@@ -4,6 +4,7 @@ import static ch.hsr.adit.util.JsonUtil.jsonTransformer;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
+import ch.hsr.adit.application.app.RestApi;
 import ch.hsr.adit.application.service.MessageService;
 import ch.hsr.adit.domain.model.Message;
 

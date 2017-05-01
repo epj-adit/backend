@@ -1,6 +1,6 @@
 KeyStore.properties
 .project
-
+.fbExcludeFilterFile
 .scannerwork
 target/
 pom.xml.tag

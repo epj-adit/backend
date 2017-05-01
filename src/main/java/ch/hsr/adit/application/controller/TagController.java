@@ -7,6 +7,7 @@ import static spark.Spark.post;
 
 import java.util.List;
 
+import ch.hsr.adit.application.app.RestApi;
 import ch.hsr.adit.application.service.TagService;
 import ch.hsr.adit.domain.model.Tag;
 

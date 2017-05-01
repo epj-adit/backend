@@ -6,6 +6,7 @@ import java.io.InputStream;
 
 import javax.servlet.MultipartConfigElement;
 
+import ch.hsr.adit.application.app.RestApi;
 import ch.hsr.adit.application.service.MediaService;
 
 public class MediaController {

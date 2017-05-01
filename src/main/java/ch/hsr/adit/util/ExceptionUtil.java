@@ -3,19 +3,19 @@ package ch.hsr.adit.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.naming.AuthenticationException;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 
 import org.hibernate.HibernateException;
 import org.hibernate.PropertyValueException;
 
-import spark.HaltException;
-
 public class ExceptionUtil {
 
   private static volatile ExceptionUtil instance;
   private static final int DEFAULT_STATUS_CODE = 500;
   private static final int UNAUTHORIZED = 401;
+  private static final int FORBIDDEN = 403;
   private static final int CONFLICT = 409;
   private static final int NOT_FOUND = 404;
 
@@ -41,8 +41,8 @@ public class ExceptionUtil {
     exceptionUtil.exceptionMapping.put(PropertyValueException.class.getSimpleName(), CONFLICT);
     exceptionUtil.exceptionMapping.put(PersistenceException.class.getSimpleName(), CONFLICT);
     exceptionUtil.exceptionMapping.put(IllegalArgumentException.class.getSimpleName(), CONFLICT);
-    exceptionUtil.exceptionMapping.put(HaltException.class.getSimpleName(), UNAUTHORIZED);
     exceptionUtil.exceptionMapping.put(HibernateException.class.getSimpleName(), NOT_FOUND);
+    exceptionUtil.exceptionMapping.put(AuthenticationException.class.getSimpleName(), UNAUTHORIZED);
     exceptionUtil.exceptionMapping.put(OptimisticLockException.class.getSimpleName(), CONFLICT);
   }
 

@@ -31,6 +31,7 @@ public class User implements DbEntity {
   @Transient
   private String jwtToken;
   
+  //TODO: remove?
   @Transient
   private String passwordPlaintext;
   

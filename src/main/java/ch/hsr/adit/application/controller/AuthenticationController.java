@@ -1,8 +1,9 @@
 package ch.hsr.adit.application.controller;
 
 import static ch.hsr.adit.util.JsonUtil.jsonTransformer;
-import static spark.Spark.get;
+import static spark.Spark.post;
 
+import ch.hsr.adit.application.app.RestApi;
 import ch.hsr.adit.application.service.AuthenticationService;
 
 public class AuthenticationController {
@@ -15,7 +16,7 @@ public class AuthenticationController {
   public AuthenticationController(AuthenticationService authenticationService) {
 
     // authentication
-    get(RestApi.App.AUTHENTICATE, (request, response) -> {
+    post(RestApi.App.AUTHENTICATE, (request, response) -> {
       return authenticationService.authenticate(request);
     }, jsonTransformer());
 
