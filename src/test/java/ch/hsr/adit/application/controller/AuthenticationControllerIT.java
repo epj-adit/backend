@@ -127,4 +127,14 @@ public class AuthenticationControllerIT {
 
     assertEquals(401, response.statusCode);
   }
+  
+  @Test
+  public void testNonexistentCredentials() {
+    Credential credentials = new Credential();
+    credentials.setEmail("nonexistent");
+    credentials.setPlaintextPassword("inactive");
+    TestResponse response = TestUtil.request(HttpMethod.post, "/authenticate", credentials);
+
+    assertEquals(404, response.statusCode);
+  }
 }

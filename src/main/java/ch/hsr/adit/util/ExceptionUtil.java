@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.naming.AuthenticationException;
+import javax.persistence.NoResultException;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 
@@ -42,6 +43,7 @@ public class ExceptionUtil {
     exceptionUtil.exceptionMapping.put(PersistenceException.class.getSimpleName(), CONFLICT);
     exceptionUtil.exceptionMapping.put(IllegalArgumentException.class.getSimpleName(), CONFLICT);
     exceptionUtil.exceptionMapping.put(HibernateException.class.getSimpleName(), NOT_FOUND);
+    exceptionUtil.exceptionMapping.put(NoResultException.class.getSimpleName(), NOT_FOUND);
     exceptionUtil.exceptionMapping.put(AuthenticationException.class.getSimpleName(), UNAUTHORIZED);
     exceptionUtil.exceptionMapping.put(OptimisticLockException.class.getSimpleName(), CONFLICT);
   }
