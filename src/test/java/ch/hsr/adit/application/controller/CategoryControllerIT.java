@@ -134,6 +134,19 @@ public class CategoryControllerIT {
   }
   
   @Test
+  public void updateCategory() {
+    TestResponse response = TestUtil.request(HttpMethod.get, "/category/2", null);
+
+    Category category =
+        JsonUtil.fromJson(response.body, new TypeToken<Category>() {}.getType());
+    category.setName("updated");
+    TestResponse response2 = TestUtil.request(HttpMethod.put, "/category/2", category);
+
+    assertEquals(200, response.statusCode);
+    assertEquals(200, response2.statusCode);
+  }
+  
+  @Test
   public void testDeleteOnReferencedCategory() {
     TestResponse response = TestUtil.request(HttpMethod.get, "/category/1", null);
 

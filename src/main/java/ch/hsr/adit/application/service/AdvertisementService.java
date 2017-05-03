@@ -1,9 +1,11 @@
 package ch.hsr.adit.application.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.ObjectNotFoundException;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -28,7 +30,16 @@ public class AdvertisementService {
   }
 
   public Advertisement updateAdvertisement(Advertisement advertisement) {
-    return advertisementDao.update(advertisement);
+    try {
+      // may throws ObjectNotFoundException
+      advertisementDao.get(advertisement.getId());
+      
+      advertisement.setUpdated(new Date());
+      return advertisementDao.update(advertisement);
+    } catch (ObjectNotFoundException e) {
+      LOGGER.warn("Advertisement with id " + advertisement.getId() + " not found. Nothing updated");
+      throw e;
+    }
   }
 
   public Advertisement deleteAdvertisement(long id) {

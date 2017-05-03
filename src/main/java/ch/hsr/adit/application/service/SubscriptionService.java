@@ -1,8 +1,10 @@
 package ch.hsr.adit.application.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.ObjectNotFoundException;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -26,7 +28,16 @@ public class SubscriptionService {
   }
 
   public Subscription updateSubscription(Subscription subscription) {
-    return subscriptionDao.update(subscription);
+    try {
+      // may throws ObjectNotFoundException
+      subscriptionDao.get(subscription.getId());
+
+      subscription.setLastUpdated(new Date());
+      return subscriptionDao.update(subscription);
+    } catch (ObjectNotFoundException e) {
+      LOGGER.warn("Subscription with id " + subscription.getId() + " not found. Nothing updated");
+      throw e;
+    } 
   }
 
   public boolean deleteSubscription(Subscription subscriptionToDelete) {

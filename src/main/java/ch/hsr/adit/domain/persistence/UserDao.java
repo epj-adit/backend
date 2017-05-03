@@ -2,6 +2,7 @@ package ch.hsr.adit.domain.persistence;
 
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
@@ -24,7 +25,7 @@ public class UserDao extends GenericDao<User, Long> {
       userQuery.setParameter("email", email);
       User user = userQuery.getSingleResult();
       if (user == null) {
-        throw new HibernateException("user with email " + email + " not found");
+        throw new ObjectNotFoundException(email, "user with email not found");
       }
       sessionFactory.getCurrentSession().getTransaction().commit();
       return user;

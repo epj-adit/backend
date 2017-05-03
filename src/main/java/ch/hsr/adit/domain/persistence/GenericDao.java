@@ -8,7 +8,7 @@ import java.util.List;
 import javax.persistence.NoResultException;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
@@ -59,7 +59,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       T object = sessionFactory.getCurrentSession().get(type, id);
       sessionFactory.getCurrentSession().getTransaction().commit();
       if (object == null) {
-        throw new HibernateException(entityName + " with id " + id + " not found");
+        throw new ObjectNotFoundException(id, entityName + " not found");
       }
       return object;
     } catch (Exception e) {

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.google.gson.JsonSyntaxException;
@@ -83,13 +84,15 @@ public class UserService {
       if (user.isWantsNotification() != dbUser.isWantsNotification()) {
         dbUser.setWantsNotification(user.isWantsNotification());
       }
-
       dbUser.setUpdated(new Date());
       return userDao.update(dbUser);
 
-    } catch (HibernateException e) {
+    } catch (ObjectNotFoundException e) {
       LOGGER.warn("User with id " + user.getId() + " not found. Nothing updated");
       throw e;
+    } catch (NullPointerException e) {
+      LOGGER.warn("Nullpointer on user with id" + user.getId() + ". Nothing updated.");
+      throw new IllegalArgumentException(e.getMessage());
     }
   }
 

@@ -103,10 +103,23 @@ public class PermissionControllerIT {
     permission.setName(null);
     TestResponse response2 = TestUtil.request(HttpMethod.put, "/permission/3", permission);
 
-    Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
-    assertEquals("to_update", json.get("name"));
     assertEquals(409, response2.statusCode);
+  }
+  
+  @Test
+  public void updatePermission() {
+    TestResponse response = TestUtil.request(HttpMethod.get, "/permission/3", null);
+
+    Permission permission =
+        JsonUtil.fromJson(response.body, new TypeToken<Permission>() {}.getType());
+    permission.setName("updated");
+    TestResponse response2 = TestUtil.request(HttpMethod.put, "/permission/3", permission);
+    
+    Map<String, Object> json = response2.json();
+    assertEquals(200, response.statusCode);
+    assertEquals("updated", json.get("name"));
+    assertEquals(200, response2.statusCode);
   }
 
 }

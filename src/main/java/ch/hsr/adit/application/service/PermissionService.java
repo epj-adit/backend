@@ -3,6 +3,7 @@ package ch.hsr.adit.application.service;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.ObjectNotFoundException;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -27,7 +28,15 @@ public class PermissionService {
   }
 
   public Permission updatePermission(Permission permission) {
-    return permissionDao.update(permission);
+    try {
+      // may throws ObjectNotFoundException
+      permissionDao.get(permission.getId());
+
+      return permissionDao.update(permission);
+    } catch (ObjectNotFoundException e) {
+      LOGGER.warn("Permission with id " + permission.getId() + " not found. Nothing updated");
+      throw e;
+    }
   }
 
   public boolean deletePermission(Permission permissionToDelete) {
@@ -49,11 +58,11 @@ public class PermissionService {
     Permission permission = permissionDao.get(id);
     return permission;
   }
-  
+
   public List<Permission> getAll() {
     return permissionDao.getAll();
   }
-  
+
   public Permission transformToPermission(Request request) {
     try {
       Permission permission = JsonUtil.fromJson(request.body(), Permission.class);

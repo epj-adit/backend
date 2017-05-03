@@ -1,6 +1,7 @@
 package ch.hsr.adit.application.service;
 
 import org.apache.log4j.Logger;
+import org.hibernate.ObjectNotFoundException;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -24,7 +25,15 @@ public class RoleService {
   }
 
   public Role updateRole(Role role) {
-    return roleDao.update(role);
+    try {
+      // may throws ObjectNotFoundException
+      roleDao.get(role.getId());
+   
+      return roleDao.update(role);
+    } catch (ObjectNotFoundException e) {
+      LOGGER.warn("Role with id " + role.getId() + " not found. Nothing updated");
+      throw e;
+    } 
   }
 
   public boolean deleteRole(Role roleToDelete) {

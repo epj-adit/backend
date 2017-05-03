@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Date;
 import java.util.Map;
 
 import org.junit.Before;
@@ -86,7 +87,7 @@ public class AdvertisementControllerIT {
     assertEquals(200, response.statusCode);
     assertTrue(jsonList.length >= 1);
   }
-  
+
   @Test
   public void getFilteredAndOrTest() {
     // act
@@ -175,6 +176,24 @@ public class AdvertisementControllerIT {
     assertEquals(200, response.statusCode);
     assertEquals(updatedValue, json.get("title"));
     assertNotNull(json.get("id"));
+  }
+
+  @Test
+  public void updateNonExistentAdvertisement() {
+    String updatedValue = "GoF Patterns";
+    Advertisement advertisement = new Advertisement();
+    advertisement.setId(1);
+    advertisement.setTitle(updatedValue);
+    advertisement.setDescription(description);
+    advertisement.setPrice(price);
+    advertisement.setAdvertisementState(advertisementState);
+    advertisement.setUser(user);
+    advertisement.setCategory(category);
+
+    TestResponse response = TestUtil.request(HttpMethod.put, "/advertisement/10000001", advertisement);
+
+
+    assertEquals(404, response.statusCode);
   }
 
   @Test

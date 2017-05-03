@@ -118,6 +118,28 @@ public class SubscriptionControllerIT {
     assertEquals(updatedValue, json.get("interval"));
     assertNotNull(json.get("id"));
   }
+  
+  @Test
+  public void updateSubscriptionWithNullUser() {
+    // arrange
+    Long updatedValue = 6_000_000L;
+    
+    Subscription subscription = new Subscription();
+    subscription.setId(1);
+    subscription.setInterval(updatedValue);
+    subscription.setLastUpdated(new Date());
+    subscription.setUser(null);
+    subscription.setCategory(category);
+
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.put, "/subscription/2", subscription);
+    //fix db
+    subscription.setUser(user);
+    TestResponse response2 = TestUtil.request(HttpMethod.put, "/subscription/2", subscription);
+    // assert
+    Map<String, Object> json = response.json();
+    assertEquals(409, response.statusCode);
+  }
 
   @Test
   public void deleteSubscription() {

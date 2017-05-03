@@ -42,7 +42,7 @@ public class ExceptionUtil {
     exceptionUtil.exceptionMapping.put(PropertyValueException.class.getSimpleName(), CONFLICT);
     exceptionUtil.exceptionMapping.put(PersistenceException.class.getSimpleName(), CONFLICT);
     exceptionUtil.exceptionMapping.put(IllegalArgumentException.class.getSimpleName(), CONFLICT);
-    exceptionUtil.exceptionMapping.put(HibernateException.class.getSimpleName(), NOT_FOUND);
+    exceptionUtil.exceptionMapping.put(ObjectNotFoundException.class.getSimpleName(), NOT_FOUND);
     exceptionUtil.exceptionMapping.put(NoResultException.class.getSimpleName(), NOT_FOUND);
     exceptionUtil.exceptionMapping.put(AuthenticationException.class.getSimpleName(), UNAUTHORIZED);
     exceptionUtil.exceptionMapping.put(OptimisticLockException.class.getSimpleName(), CONFLICT);

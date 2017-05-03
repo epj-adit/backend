@@ -3,6 +3,7 @@ package ch.hsr.adit.application.service;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.ObjectNotFoundException;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -27,7 +28,15 @@ public class CategoryService {
   }
 
   public Category updateCategory(Category category) {
-    return categoryDao.update(category);
+    try {
+      // may throws ObjectNotFoundException
+      categoryDao.get(category.getId());
+     
+      return categoryDao.update(category);
+    } catch (ObjectNotFoundException e) {
+      LOGGER.warn("Category with id " + category.getId() + " not found. Nothing updated");
+      throw e;
+    } 
   }
 
   public boolean deleteCategory(Category categoryToDelete) {
@@ -49,7 +58,7 @@ public class CategoryService {
     Category category = categoryDao.get(id);
     return category;
   }
-  
+
   public List<Category> getAllFiltered(Request request) {
     String name = request.queryParams("name");
     if (name != null && !name.isEmpty()) {
@@ -63,7 +72,7 @@ public class CategoryService {
   public List<Category> getAll() {
     return categoryDao.getAll();
   }
-  
+
   public Category transformToCategory(Request request) {
     try {
       Category category = JsonUtil.fromJson(request.body(), Category.class);

@@ -104,8 +104,21 @@ public class RoleControllerIT {
 
     Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
-    assertEquals("supervisor", json.get("name"));
     assertEquals(409, response2.statusCode);
+  }
+  
+  @Test
+  public void updateRole() {
+    TestResponse response = TestUtil.request(HttpMethod.get, "/role/2", null);
+
+    Role role = JsonUtil.fromJson(response.body, new TypeToken<Role>() {}.getType());
+    role.setName("updated");
+    TestResponse response2 = TestUtil.request(HttpMethod.put, "/role/2", role);
+
+    Map<String, Object> json = response2.json();
+    assertEquals(200, response.statusCode);
+    assertEquals("updated", json.get("name"));
+    assertEquals(200, response2.statusCode);
   }
 
   @Test
