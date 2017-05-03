@@ -66,7 +66,7 @@ public class App {
     // General app filter
     AppFilter appFilter = new AppFilter();
     before(RestApi.App.WILDCARD, appFilter.handleAuthentication);
-    after(RestApi.App.WILDCARD, appFilter.setCorsOrigin);
+    before(RestApi.App.WILDCARD, appFilter.setCorsOrigin);
     after(RestApi.App.WILDCARD, appFilter.setEncoding);
 
     // General handler for exceptions and errors
