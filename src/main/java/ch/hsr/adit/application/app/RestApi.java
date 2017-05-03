@@ -51,7 +51,7 @@ public class RestApi {
   public static class Tag {
     public static final String TAG = "/tag";
     public static final String TAG_BY_ID = "/tag/:id";
-    public static final String TAGS = "/tags";
+    public static final String TAGS = "/tags/";
     public static final String TAGS_FILTERED = "/tags/";
   }
   

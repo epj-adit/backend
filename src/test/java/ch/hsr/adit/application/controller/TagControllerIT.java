@@ -31,7 +31,7 @@ public class TagControllerIT {
     tags.add(tag2);
 
     // act
-    TestResponse response = TestUtil.request(HttpMethod.post, "/tags", tags);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/tags/", tags);
 
     // assert
     Map<String, Object>[] json = response.jsonList();
@@ -53,7 +53,7 @@ public class TagControllerIT {
     tags.add(tag2);
 
     // act
-    TestResponse response = TestUtil.request(HttpMethod.post, "/tags", tags);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/tags/", tags);
 
     // assert
     Map<String, Object>[] json = response.jsonList();
@@ -99,7 +99,7 @@ public class TagControllerIT {
 
     List<Tag> tags = new ArrayList<>();
     tags.add(tag);
-    TestResponse response = TestUtil.request(HttpMethod.post, "/tags", tags);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/tags/", tags);
 
     assertEquals(409, response.statusCode);
   }
