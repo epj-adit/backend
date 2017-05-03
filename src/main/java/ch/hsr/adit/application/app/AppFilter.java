@@ -12,7 +12,8 @@ import spark.Spark;
 public class AppFilter {
 
   public Filter handleAuthentication = (Request request, Response response) -> {
-    if (!request.uri().startsWith(RestApi.App.AUTHENTICATE)) {
+    if (!request.requestMethod().toUpperCase().equals("OPTIONS")
+        && !request.uri().startsWith(RestApi.App.AUTHENTICATE)) {
       String token = request.headers("Authorization");
       if (token == null) {
         throw new AuthenticationException("No token provided!");
