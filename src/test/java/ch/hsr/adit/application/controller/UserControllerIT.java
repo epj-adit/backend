@@ -45,7 +45,7 @@ public class UserControllerIT {
     user.setRole(role);
 
     // act
-    TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/register", user);
 
     // assert
     Map<String, Object> json = response.json();
@@ -167,8 +167,8 @@ public class UserControllerIT {
     user2.setIsActive(isActive);
     user2.setRole(role);
 
-    TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
-    TestResponse response2 = TestUtil.request(HttpMethod.post, "/user", user2);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/register", user);
+    TestResponse response2 = TestUtil.request(HttpMethod.post, "/register", user2);
 
     Map<String, Object> json = response.json();
     Map<String, Object> json2 = response2.json();
@@ -246,8 +246,8 @@ public class UserControllerIT {
     user2.setRole(role);
 
     // act
-    TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
-    TestResponse response2 = TestUtil.request(HttpMethod.post, "/user", user2);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/register", user);
+    TestResponse response2 = TestUtil.request(HttpMethod.post, "/register", user2);
 
     // assert
     assertEquals(200, response.statusCode);
@@ -265,7 +265,7 @@ public class UserControllerIT {
     user.setIsActive(isActive);
     user.setRole(role);
 
-    TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/register", user);
 
     assertEquals(409, response.statusCode);
   }

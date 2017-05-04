@@ -20,7 +20,7 @@ public class UserController {
   public UserController(UserService userService) {
 
     // create
-    post(RestApi.User.USER, (request, response) -> {
+    post(RestApi.User.REGISTER, (request, response) -> {
       User user = userService.transformToUser(request);
       return userService.createUser(user);
     }, jsonTransformer());
