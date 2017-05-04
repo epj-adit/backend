@@ -108,7 +108,7 @@ public class AdvertisementControllerIT {
     // assert
     Map<String, Object>[] jsonList = response.jsonList();
     assertEquals(200, response.statusCode);
-    assertTrue(jsonList.length == 1);
+    assertTrue(jsonList.length == 2);
   }
 
   @Test

@@ -46,14 +46,17 @@ INSERT INTO public.subscription (id, interval, last_updated, category_id, user_i
 -- TAGS
 INSERT INTO public.tag (id, name) VALUES (1, 'Eduard Glatz');
 INSERT INTO public.tag (id, name) VALUES (2, 'Betriebssysteme 1');
+INSERT INTO public.tag (id, name) VALUES (3, 'Gof');
 
 -- ADVERTISEMENTS
-INSERT INTO public.advertisement (id, title, description, price, created, updated, advertisementstate, category_id, user_id) VALUES (1, 'Betriebsysteme', 'Betriebsysteme Buch von Eduard Glatz mit Notizen ', 30000, NOW(), NULL, 3, 1, 3);
-INSERT INTO public.advertisement (id, title, description, price, created, updated, advertisementstate, category_id, user_id) VALUES (2, 'GoF Patterns', 'Buch zu den bekannten Design Pattern der GoF', 20000, NOW(), NULL, 3, 1, 1);
-INSERT INTO public.advertisement (id, title, description, price, created, updated, advertisementstate, category_id, user_id) VALUES (3, 'WG Zimmer Jona', 'WG Zimmer inder Tägernaustrasse Jona', 30000, NOW(), NULL, 3, 3, 1);
+INSERT INTO public.advertisement (id, title, description, price, created, updated, advertisementstate, category_id, user_id) VALUES (1, 'Betriebsysteme', 'Betriebsysteme Buch von Eduard Glatz mit Notizen ', 30000, NOW(), NULL, 2, 1, 3);
+INSERT INTO public.advertisement (id, title, description, price, created, updated, advertisementstate, category_id, user_id) VALUES (2, 'GoF Patterns', 'Buch zu den bekannten Design Pattern der GoF', 20000, NOW(), NULL, 2, 1, 1);
+INSERT INTO public.advertisement (id, title, description, price, created, updated, advertisementstate, category_id, user_id) VALUES (3, 'WG Zimmer Jona', 'WG Zimmer inder Tägernaustrasse Jona', 30000, NOW(), NULL, 2, 3, 1);
 
 INSERT INTO public.advertisement_tag (tag_id, advertisement_id) VALUES (1, 1);
 INSERT INTO public.advertisement_tag (tag_id, advertisement_id) VALUES (2, 1);
+INSERT INTO public.advertisement_tag (tag_id, advertisement_id) VALUES (1, 3);
+INSERT INTO public.advertisement_tag (tag_id, advertisement_id) VALUES (3, 2);
 
 -- MESSAGES
 INSERT INTO public.message (id, message, created, advertisement_id, messagestate, recipient_user_id, sender_user_id) VALUES (1, 'Hallo Welt!', NOW(), null, 1, 1, 2);

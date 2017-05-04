@@ -64,13 +64,13 @@ public class TagControllerIT {
   @Test
   public void getTag() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/tags/?name=ed", null);
+    TestResponse response = TestUtil.request(HttpMethod.get, "/tags/?name=g", null);
 
     // assert
     Map<String, Object>[] json = response.jsonList();
     assertEquals(200, response.statusCode);
     assertNotNull(json[0].get("id"));
-    assertEquals("Eduard Glatz", json[0].get("name"));
+    assertEquals("Gof", json[0].get("name"));
   }
 
   @Test
