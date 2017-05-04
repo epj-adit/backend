@@ -22,8 +22,8 @@ public class TestUtil {
   private static final Logger LOGGER = Logger.getLogger(TestUtil.class);
 
   private static final String ENDPOINT = "http://localhost:4567";
-  public static String testToken = null;
-  public static boolean useToken = true;
+  private static String testToken = null;
+  private static boolean useToken = true;
 
   public static TestResponse request(HttpMethod method, String path, Object entity) {
     if (useToken && testToken == null) {

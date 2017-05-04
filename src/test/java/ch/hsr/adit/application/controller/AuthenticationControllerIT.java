@@ -2,6 +2,7 @@ package ch.hsr.adit.application.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
@@ -55,9 +56,9 @@ public class AuthenticationControllerIT {
     this.user.setId(id);
 
     this.token = tokenUtil.generateToken(user);
-
     this.user.setJwtToken(token);
-
+    
+    TestUtil.setUseToken(true);
   }
 
 
@@ -87,7 +88,6 @@ public class AuthenticationControllerIT {
   @Test
   public void testCreateAdvertisementWithoutToken() {
     //disable default testing token
-    TestUtil.setUseToken(false);
     Advertisement advertisement = new Advertisement();
     advertisement.setTitle("auth");
     advertisement.setDescription("auth");
@@ -96,10 +96,9 @@ public class AuthenticationControllerIT {
     advertisement.setUser(user);
     advertisement.setCategory(category);
 
+    TestUtil.setUseToken(false);
     TestResponse response = TestUtil.request(HttpMethod.post, "/advertisement", advertisement);
     
-    TestUtil.setUseToken(true);
-
     assertEquals(401, response.statusCode);
   }
   
@@ -136,5 +135,31 @@ public class AuthenticationControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.post, "/authenticate", credentials);
 
     assertEquals(404, response.statusCode);
+  }
+  
+  @Test
+  public void claimTwoTokens() {
+    // arrange
+    Credential credentials = new Credential();
+    credentials.setEmail(email);
+    credentials.setPlaintextPassword(password);
+    
+    // act
+    TestResponse response1 = TestUtil.request(HttpMethod.post, "/authenticate", credentials);
+    Map<String, Object> json1 = response1.json();
+    
+    TestResponse response2 = TestUtil.request(HttpMethod.post, "/authenticate", credentials);
+    Map<String, Object> json2 = response2.json();
+    
+    // assert
+    String token1 = (String) json1.get("jwtToken");
+    String token2 = (String) json2.get("jwtToken");
+
+    assertNotNull(token1);
+    assertNotNull(token2);
+    assertTrue(TokenUtil.getInstance().verify(token1));
+    // should be false, but as we cannot recognise 
+    // if a user is currently logged in there is no better solution
+    assertTrue(TokenUtil.getInstance().verify(token2)); 
   }
 }
