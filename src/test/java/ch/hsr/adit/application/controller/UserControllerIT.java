@@ -30,6 +30,8 @@ public class UserControllerIT {
   public void setup() {
     this.role = new Role();
     this.role.setId(1);
+    
+    TestUtil.setUseToken(true);
   }
 
   @Test
@@ -43,10 +45,12 @@ public class UserControllerIT {
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
     user.setRole(role);
+    
+    TestUtil.setUseToken(false);
 
     // act
     TestResponse response = TestUtil.request(HttpMethod.post, "/register", user);
-
+    
     // assert
     Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);

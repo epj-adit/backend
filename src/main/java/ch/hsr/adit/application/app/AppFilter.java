@@ -35,8 +35,8 @@ public class AppFilter {
   
   private boolean needsAuthentication(Request request) {
     return (!request.requestMethod().toUpperCase().equals("OPTIONS")
-        && !request.uri().startsWith(RestApi.App.AUTHENTICATE)
-        && !request.uri().startsWith(RestApi.User.REGISTER));
+        && !(request.uri().startsWith(RestApi.App.AUTHENTICATE)
+        || request.uri().startsWith(RestApi.User.REGISTER)));
   }
 
 }
