@@ -38,11 +38,16 @@ public class AuthenticationService {
       LOGGER.warn("Wrong password given. No token created.");
       throw new AuthenticationException("Wrong password! No token created.");
     }
-    
-    // everything seems fine, we issue a new token
-    String token = TokenUtil.getInstance().generateToken(user);
-    user.setJwtToken(token);
-    return user;
+
+    if (TokenUtil.getInstance().verify(user.getJwtToken())) {
+      // user already have a valid token
+      return user;
+    } else {
+      // everything seems fine, we issue a new token
+      String token = TokenUtil.getInstance().generateToken(user);
+      user.setJwtToken(token);
+      return user;
+    }
   }
 
   private boolean checkPassword(String passwordHash, String plaintextPassword) {

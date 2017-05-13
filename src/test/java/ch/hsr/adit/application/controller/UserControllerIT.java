@@ -30,7 +30,7 @@ public class UserControllerIT {
   public void setup() {
     this.role = new Role();
     this.role.setId(1);
-    
+
     TestUtil.setUseToken(true);
   }
 
@@ -41,16 +41,20 @@ public class UserControllerIT {
     user.setUsername(username);
     user.setEmail("new.student@hsr.ch");
     user.setPasswordPlaintext(password);
+    user.setJwtToken(
+        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGFkaXQuY2giLCJwZXJtaXNzaW9"
+        + "ucyI6WyJ0ZXN0X3Blcm1pc3Npb24iXSwiaXNzIjoiYWRpdCIsImV4cCI6MTQ5N"
+        + "DU3NTgwM30.jtrFwDxg9CoyjtUYaUjG1FRqdu-cv3NdhCjBM44zBec");
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
     user.setRole(role);
-    
+
     TestUtil.setUseToken(false);
 
     // act
     TestResponse response = TestUtil.request(HttpMethod.post, "/register", user);
-    
+
     // assert
     Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
@@ -59,6 +63,7 @@ public class UserControllerIT {
     assertEquals("new.student@hsr.ch", json.get("email"));
     assertNull(json.get("passwordHash"));
     assertNull(json.get("passwortPlaintext"));
+    assertNotNull(json.get("jwtToken"));
     assertEquals(isPrivate, (Boolean) json.get("isPrivate"));
     assertEquals(wantsNotification, (Boolean) json.get("wantsNotification"));
     assertEquals(isActive, (Boolean) json.get("isActive"));
@@ -119,6 +124,10 @@ public class UserControllerIT {
     user.setId(1);
     user.setUsername(username);
     user.setEmail("updatedStudent@hsr.ch");
+    user.setJwtToken(
+        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGFkaXQuY2giLCJwZXJtaXNzaW9"
+        + "ucyI6WyJ0ZXN0X3Blcm1pc3Npb24iXSwiaXNzIjoiYWRpdCIsImV4cCI6MTQ5N"
+        + "DU3NTgwM30.jtrFwDxg9CoyjtUYaUjG1FRqdu-cv3NdhCjBM44zBec");
     user.setPasswordPlaintext(password);
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
@@ -157,6 +166,10 @@ public class UserControllerIT {
     user.setUsername(username);
     user.setEmail("newer.student@hsr.ch");
     user.setPasswordPlaintext(password);
+    user.setJwtToken(
+        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGFkaXQuY2giLCJwZXJtaXNzaW9"
+        + "ucyI6WyJ0ZXN0X3Blcm1pc3Npb24iXSwiaXNzIjoiYWRpdCIsImV4cCI6MTQ5N"
+        + "DU3NTgwM30.jtrFwDxg9CoyjtUYaUjG1FRqdu-cv3NdhCjBM44zBec");
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
@@ -166,6 +179,10 @@ public class UserControllerIT {
     user2.setUsername(username);
     user2.setEmail("newerer.student@hsr.ch");
     user2.setPasswordPlaintext(password);
+    user2.setJwtToken(
+        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGFkaXQuY2giLCJwZXJtaXNzaW9"
+        + "ucyI6WyJ0ZXN0X3Blcm1pc3Npb24iXSwiaXNzIjoiYWRpdCIsImV4cCI6MTQ5N"
+        + "DU3NTgwM30.jtrFwDxg9CoyjtUYaUjG1FRqdu-cv3NdhCjBM44zBec");
     user2.setIsPrivate(isPrivate);
     user2.setWantsNotification(wantsNotification);
     user2.setIsActive(isActive);
@@ -235,6 +252,10 @@ public class UserControllerIT {
     user.setUsername(username);
     user.setEmail("duplicate.student@hsr.ch");
     user.setPasswordPlaintext(password);
+    user.setJwtToken(
+        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGFkaXQuY2giLCJwZXJtaXNzaW9"
+        + "ucyI6WyJ0ZXN0X3Blcm1pc3Npb24iXSwiaXNzIjoiYWRpdCIsImV4cCI6MTQ5N"
+        + "DU3NTgwM30.jtrFwDxg9CoyjtUYaUjG1FRqdu-cv3NdhCjBM44zBec");
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
     user.setIsActive(isActive);
@@ -244,6 +265,10 @@ public class UserControllerIT {
     user2.setUsername(username);
     user2.setEmail("duplicate.student@hsr.ch");
     user2.setPasswordPlaintext(password);
+    user2.setJwtToken(
+        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGFkaXQuY2giLCJwZXJtaXNzaW9"
+        + "ucyI6WyJ0ZXN0X3Blcm1pc3Npb24iXSwiaXNzIjoiYWRpdCIsImV4cCI6MTQ5N"
+        + "DU3NTgwM30.jtrFwDxg9CoyjtUYaUjG1FRqdu-cv3NdhCjBM44zBec");
     user2.setIsPrivate(isPrivate);
     user2.setWantsNotification(wantsNotification);
     user2.setIsActive(isActive);

@@ -31,6 +31,10 @@ public class AuthenticationControllerIT {
   private String email = "authenticated@hsr.ch";
   private String password = "authentication";
   private Long id = 5l;
+  private String jwtToken = 
+      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGFkaXQuY2giLCJwZXJtaXNzaW9"
+      + "ucyI6WyJ0ZXN0X3Blcm1pc3Npb24iXSwiaXNzIjoiYWRpdCIsImV4cCI6MTQ5N"
+      + "DU3NTgwM30.jtrFwDxg9CoyjtUYaUjG1FRqdu-cv3NdhCjBM44zBec";
   private Boolean isPrivate = false;
   private Boolean wantsNotification = true;
   private Boolean isActive = true;
@@ -49,6 +53,7 @@ public class AuthenticationControllerIT {
     this.user.setUsername(username);
     this.user.setEmail(email);
     this.user.setPasswordPlaintext(password);
+    this.user.setJwtToken(jwtToken);
     this.user.setIsPrivate(isPrivate);
     this.user.setWantsNotification(wantsNotification);
     this.user.setIsActive(isActive);
@@ -155,11 +160,6 @@ public class AuthenticationControllerIT {
     String token1 = (String) json1.get("jwtToken");
     String token2 = (String) json2.get("jwtToken");
 
-    assertNotNull(token1);
-    assertNotNull(token2);
-    assertTrue(TokenUtil.getInstance().verify(token1));
-    // should be false, but as we cannot recognise 
-    // if a user is currently logged in there is no better solution
-    assertTrue(TokenUtil.getInstance().verify(token2)); 
+    assertEquals(token1, token2);
   }
 }

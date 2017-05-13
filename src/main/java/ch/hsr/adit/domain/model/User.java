@@ -29,10 +29,6 @@ public class User implements DbEntity {
   private static final long serialVersionUID = 1L;
 
   @Transient
-  private String jwtToken;
-  
-  //TODO: remove?
-  @Transient
   private String passwordPlaintext;
   
   private long id;
@@ -40,6 +36,7 @@ public class User implements DbEntity {
   private String username;
   private String email;
   private String passwordHash;
+  private String jwtToken;
   private boolean isPrivate;
   private boolean wantsNotification;
   private boolean isActive;
@@ -100,7 +97,15 @@ public class User implements DbEntity {
   public void setPasswordHash(String passwordHash) {
     this.passwordHash = passwordHash;
   }
+  
+  @Column(name = "jwttoken", nullable = false)
+  public String getJwtToken() {
+    return this.jwtToken;
+  }
 
+  public void setJwtToken(String jwtToken) {
+    this.jwtToken = jwtToken;
+  }
 
   @Column(name = "is_private", nullable = false)
   public boolean isIsPrivate() {

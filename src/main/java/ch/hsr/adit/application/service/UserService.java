@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -63,6 +62,10 @@ public class UserService {
       String hashed = BCrypt.hashpw(user.getPasswordPlaintext(), BCrypt.gensalt());
       if (!hashed.equals(dbUser.getPasswordHash())) {
         dbUser.setPasswordHash(hashed);
+      }
+      
+      if (!user.getJwtToken().equals(dbUser.getJwtToken())) {
+        dbUser.setJwtToken(user.getJwtToken());
       }
 
       if (!user.getRole().equals(dbUser.getRole())) {
