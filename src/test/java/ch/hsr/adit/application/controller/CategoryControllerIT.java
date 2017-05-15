@@ -53,7 +53,6 @@ public class CategoryControllerIT {
 
     TestResponse response = TestUtil.request(HttpMethod.post, "/category", category);
 
-    Map<String, Object> json = response.json();
     assertEquals(403, response.statusCode);
     
     TestUtil.setNoPermissionsUser(false);

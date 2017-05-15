@@ -2,7 +2,6 @@ package ch.hsr.adit.application.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
@@ -29,7 +28,7 @@ public class AuthenticationControllerIT {
   private String username = "authenticated";
   private String email = "authenticated@hsr.ch";
   private String password = "authentication";
-  private Long id = 5l;
+  private Long id = 5L;
   private Boolean isPrivate = false;
   private Boolean wantsNotification = true;
   private Boolean isActive = true;

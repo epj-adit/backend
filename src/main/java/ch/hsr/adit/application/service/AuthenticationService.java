@@ -17,7 +17,7 @@ public class AuthenticationService {
 
   private static final Logger LOGGER = Logger.getLogger(AuthenticationService.class);
 
-  public UserDao userDao;
+  private final UserDao userDao;
 
   public AuthenticationService(UserDao userDao) {
     this.userDao = userDao;

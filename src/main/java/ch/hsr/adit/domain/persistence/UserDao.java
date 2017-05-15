@@ -1,7 +1,6 @@
 package ch.hsr.adit.domain.persistence;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;

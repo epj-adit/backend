@@ -139,8 +139,8 @@ public class SubscriptionControllerIT {
     subscription.setUser(user);
     TestResponse response2 = TestUtil.request(HttpMethod.put, "/subscription/2", subscription);
     // assert
-    Map<String, Object> json = response.json();
     assertEquals(409, response.statusCode);
+    assertEquals(200, response2.statusCode);
   }
 
   @Test

@@ -5,6 +5,10 @@ import ch.hsr.adit.domain.model.Permission;
 
 public class PermissionUtil {
   
+  private PermissionUtil() {
+    throw new IllegalAccessError("Utility class");
+  }
+  
   public static final Permission BASIC_PERMISSION = new Permission(1L, "basic_permission");
   public static final Permission SUPERVISOR_PERMISSION =
       new Permission(2L, "supervisor_permission");

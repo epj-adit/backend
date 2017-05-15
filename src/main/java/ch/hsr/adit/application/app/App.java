@@ -38,7 +38,6 @@ import ch.hsr.adit.domain.persistence.AdvertisementDao;
 import ch.hsr.adit.domain.persistence.CategoryDao;
 import ch.hsr.adit.domain.persistence.MediaDao;
 import ch.hsr.adit.domain.persistence.MessageDao;
-import ch.hsr.adit.domain.persistence.PermissionDao;
 import ch.hsr.adit.domain.persistence.RoleDao;
 import ch.hsr.adit.domain.persistence.SubscriptionDao;
 import ch.hsr.adit.domain.persistence.TagDao;
@@ -63,19 +62,17 @@ public class App {
     setupKeyStore();
 
     // General app filter
-    AppFilter appFilter = new AppFilter();
-    before(RestApi.App.WILDCARD, appFilter.handleAuthentication);
-    before(RestApi.App.WILDCARD, appFilter.setCorsOrigin);
-    after(RestApi.App.WILDCARD, appFilter.setEncoding);
+    before(RestApi.App.WILDCARD, AppFilter.AUTHENTICATION);
+    before(RestApi.App.WILDCARD, AppFilter.CORS_ORIGIN);
+    after(RestApi.App.WILDCARD, AppFilter.ENCODING);
 
     // General handler for exceptions and errors
-    AppHandler appHandler = new AppHandler();
-    exception(Exception.class, appHandler.exceptionHandler);
-    notFound(appHandler.notFound);
-    internalServerError(appHandler.internalServerError);
+    exception(Exception.class, AppHandler.EXCEPTIONS);
+    notFound(AppHandler.NOT_FOUND);
+    internalServerError(AppHandler.INERNAL_SERVER_ERROR);
 
     // CORS
-    options(RestApi.App.WILDCARD, appHandler.handlerCors);
+    options(RestApi.App.WILDCARD, AppHandler.CORS);
 
 
     /***

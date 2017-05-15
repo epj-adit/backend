@@ -44,7 +44,6 @@ public class UserController {
     }, jsonTransformer());
 
     get(RestApi.User.USERS_FILTERED, (request, response) -> {
-      // TODO: check admin permissions
       return userService.getAllFiltered(request);
     }, jsonTransformer());
 

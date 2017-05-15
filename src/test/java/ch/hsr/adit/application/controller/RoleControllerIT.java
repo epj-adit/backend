@@ -54,7 +54,6 @@ public class RoleControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.post, "/role", role);
 
     // assert
-    Map<String, Object> json = response.json();
     assertEquals(403, response.statusCode);
   }
 
@@ -136,7 +135,6 @@ public class RoleControllerIT {
     role.setName(null);
     TestResponse response2 = TestUtil.request(HttpMethod.put, "/role/2", role);
 
-    Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
     assertEquals(409, response2.statusCode);
   }

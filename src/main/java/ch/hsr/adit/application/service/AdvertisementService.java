@@ -11,7 +11,6 @@ import com.google.gson.JsonSyntaxException;
 
 import ch.hsr.adit.domain.model.Advertisement;
 import ch.hsr.adit.domain.model.AdvertisementState;
-import ch.hsr.adit.domain.model.exception.ForbiddenException;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
 import ch.hsr.adit.util.JsonUtil;
 import spark.Request;

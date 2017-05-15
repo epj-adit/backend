@@ -12,7 +12,6 @@ import ch.hsr.adit.application.app.RestApi;
 import ch.hsr.adit.application.service.CategoryService;
 import ch.hsr.adit.application.service.PermissionService;
 import ch.hsr.adit.domain.model.Category;
-import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.domain.model.exception.ForbiddenException;
 import spark.Request;
 

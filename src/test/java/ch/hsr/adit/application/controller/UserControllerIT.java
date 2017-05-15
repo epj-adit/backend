@@ -296,7 +296,6 @@ public class UserControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.get, "/user/2", null);
 
     // assert
-    Map<String, Object> json = response.json();
     assertEquals(403, response.statusCode);
   }
 
@@ -322,7 +321,6 @@ public class UserControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.put, "/user/2", user);
 
     // assert
-    Map<String, Object> json = response.json();
     assertEquals(403, response.statusCode);
   }
 }

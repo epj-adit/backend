@@ -23,13 +23,15 @@ public class Permission implements DbEntity {
   private long id;
   private String name;
   
+  public Permission() {
+    // default constructor is needed for tests
+  }
+
   public Permission(Long id, String name) {
     this.name = name;
     this.id = id;
   }
   
-  public Permission() {}
-
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "permission_id_seq")
   @SequenceGenerator(name = "permission_id_seq", sequenceName = "permission_id_seq",

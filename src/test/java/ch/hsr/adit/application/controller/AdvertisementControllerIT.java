@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -289,13 +288,13 @@ public class AdvertisementControllerIT {
     TestUtil.setUseToken(false);
     
     //user needs any random permission so theres no nullpointerexceptions
-    Set<Permission> permissions = new HashSet<>();
     Permission perm = new Permission();
     perm.setId(1);
     perm.setName("review");
     Permission perm2 = new Permission();
     perm2.setId(2);
     perm2.setName("ban");
+    Set<Permission> permissions = new HashSet<>();
     permissions.add(perm);
     permissions.add(perm2);
 
@@ -333,13 +332,14 @@ public class AdvertisementControllerIT {
   public void deleteAdThatUserDoesntOwn() {
     TestUtil.setNoPermissionsUser(true);
     TestUtil.setTestToken(null);
-    Set<Permission> permissions = new HashSet<>();
     Permission perm = new Permission();
     perm.setId(1);
     perm.setName("review");
     Permission perm2 = new Permission();
     perm2.setId(2);
     perm2.setName("ban");
+
+    Set<Permission> permissions = new HashSet<>();
     permissions.add(perm);
     permissions.add(perm2);
 

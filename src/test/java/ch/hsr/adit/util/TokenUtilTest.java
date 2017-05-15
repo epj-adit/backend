@@ -138,7 +138,6 @@ public class TokenUtilTest {
     SecretKey secret = keyStore.loadKey();
     JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret.getEncoded())).withIssuer("adit")
         .withSubject(user.getEmail()).acceptLeeway(0).acceptExpiresAt(1).build();
-    JWT jwt = JWT.decode(token);
     verifier.verify(token);
 
     // reset tokenUtil
