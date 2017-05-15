@@ -147,6 +147,14 @@ public class UserService {
   public User transformToUser(Request request) {
     try {
       User user = JsonUtil.fromJson(request.body(), User.class);
+      
+      String token = request.headers("Authorization");
+      if (token != null && !token.isEmpty()) {
+        user.setJwtToken(token);
+      } else {
+        LOGGER.warn("User transformed, but no token provided.");
+      }
+      
       LOGGER.info("Received JSON data: " + user.toString());
       return user;
     } catch (JsonSyntaxException e) {

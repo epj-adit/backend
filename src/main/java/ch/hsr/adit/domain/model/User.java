@@ -98,7 +98,7 @@ public class User implements DbEntity {
     this.passwordHash = passwordHash;
   }
   
-  @Column(name = "jwttoken", nullable = false)
+  @Column(name = "jwttoken", nullable = true)
   public String getJwtToken() {
     return this.jwtToken;
   }

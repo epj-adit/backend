@@ -46,6 +46,7 @@ public class AuthenticationService {
       // everything seems fine, we issue a new token
       String token = TokenUtil.getInstance().generateToken(user);
       user.setJwtToken(token);
+      userDao.update(user);
       return user;
     }
   }
