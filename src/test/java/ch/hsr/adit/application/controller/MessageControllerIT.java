@@ -25,6 +25,8 @@ public class MessageControllerIT {
 
   @Before
   public void setUp() {
+    TestUtil.setUseToken(true);
+    
     this.sender = new User();
     this.sender.setId(1);
     this.recipient = new User();

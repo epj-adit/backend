@@ -25,6 +25,8 @@ public class SubscriptionControllerIT {
 
   @Before
   public void setup() {
+    TestUtil.setUseToken(true);
+    
     this.category = new Category();
     this.category.setId(1);
 

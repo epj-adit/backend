@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gson.reflect.TypeToken;
@@ -18,6 +19,13 @@ import spark.route.HttpMethod;
 
 public class RoleControllerIT {
 
+  @Before
+  public void setup() {
+    TestUtil.setUseToken(true);
+    TestUtil.setNoPermissionsUser(false);
+    TestUtil.setTestToken(null);
+  }
+  
   @Test
   public void createRole() {
     // arrange
@@ -32,6 +40,22 @@ public class RoleControllerIT {
     Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
     assertEquals(name, json.get("name"));
+  }
+  
+  @Test
+  public void createWithoutEditRolePermission() {
+    TestUtil.setNoPermissionsUser(true);
+    
+    String name = new String("no permission");
+    Role role = new Role();
+    role.setName(name);
+
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.post, "/role", role);
+
+    // assert
+    Map<String, Object> json = response.json();
+    assertEquals(403, response.statusCode);
   }
 
   @Test
@@ -61,6 +85,16 @@ public class RoleControllerIT {
     // assert
     assertEquals(200, response.statusCode);
     assertTrue(Boolean.parseBoolean(response.body));
+  }
+  
+  @Test
+  public void deleteWithoutEditRolePermission() {
+    TestUtil.setNoPermissionsUser(true);
+    
+    TestResponse response = TestUtil.request(HttpMethod.delete, "/role/3", null);
+
+    // assert
+    assertEquals(403, response.statusCode);
   }
 
   @Test
@@ -119,6 +153,20 @@ public class RoleControllerIT {
     assertEquals(200, response.statusCode);
     assertEquals("updated", json.get("name"));
     assertEquals(200, response2.statusCode);
+  }
+  
+  @Test
+  public void updateWithoutEditRolePermission() {
+    TestUtil.setNoPermissionsUser(true);
+    
+    TestResponse response = TestUtil.request(HttpMethod.get, "/role/2", null);
+
+    Role role = JsonUtil.fromJson(response.body, new TypeToken<Role>() {}.getType());
+    role.setName("updated");
+    TestResponse response2 = TestUtil.request(HttpMethod.put, "/role/2", role);
+
+    assertEquals(200, response.statusCode);
+    assertEquals(403, response2.statusCode);
   }
 
   @Test

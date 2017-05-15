@@ -20,7 +20,6 @@ import ch.hsr.adit.application.controller.AuthenticationController;
 import ch.hsr.adit.application.controller.CategoryController;
 import ch.hsr.adit.application.controller.MediaController;
 import ch.hsr.adit.application.controller.MessageController;
-import ch.hsr.adit.application.controller.PermissionController;
 import ch.hsr.adit.application.controller.RoleController;
 import ch.hsr.adit.application.controller.SubscriptionController;
 import ch.hsr.adit.application.controller.TagController;
@@ -86,7 +85,7 @@ public class App {
      */
 
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    
+
     // Message
     MessageDao messageDao = new MessageDao(sessionFactory);
     MessageService messageService = new MessageService(messageDao);
@@ -95,8 +94,13 @@ public class App {
     // User
     UserDao userDao = new UserDao(sessionFactory);
     UserService userService = new UserService(userDao, messageDao);
-    new UserController(userService);
     
+
+    // Permission
+    PermissionService permissionService = new PermissionService(userService);
+    
+    new UserController(userService, permissionService);
+
     // Authenticate
     AuthenticationService authenticationService = new AuthenticationService(userDao);
     new AuthenticationController(authenticationService);
@@ -104,7 +108,7 @@ public class App {
     // User
     AdvertisementDao advertisementDao = new AdvertisementDao(sessionFactory);
     AdvertisementService advertisementService = new AdvertisementService(advertisementDao);
-    new AdvertisementController(advertisementService);
+    new AdvertisementController(advertisementService, permissionService);
 
     // Media
     MediaDao mediaDao = new MediaDao(sessionFactory);
@@ -119,12 +123,7 @@ public class App {
     // Category
     CategoryDao categoryDao = new CategoryDao(sessionFactory);
     CategoryService categoryService = new CategoryService(categoryDao);
-    new CategoryController(categoryService);
-
-    // Permission
-    PermissionDao permissionDao = new PermissionDao(sessionFactory);
-    PermissionService permissionService = new PermissionService(permissionDao);
-    new PermissionController(permissionService);
+    new CategoryController(categoryService, permissionService);
 
     // Subscription
     SubscriptionDao subscriptionDao = new SubscriptionDao(sessionFactory);
@@ -134,7 +133,7 @@ public class App {
     // Role
     RoleDao roleDao = new RoleDao(sessionFactory);
     RoleService roleService = new RoleService(roleDao);
-    new RoleController(roleService);
+    new RoleController(roleService, permissionService);
 
     // wait for jetty
     awaitInitialization();

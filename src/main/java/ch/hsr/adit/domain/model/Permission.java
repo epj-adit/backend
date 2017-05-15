@@ -22,6 +22,13 @@ public class Permission implements DbEntity {
 
   private long id;
   private String name;
+  
+  public Permission(Long id, String name) {
+    this.name = name;
+    this.id = id;
+  }
+  
+  public Permission() {}
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "permission_id_seq")

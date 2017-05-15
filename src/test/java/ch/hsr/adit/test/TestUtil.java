@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import ch.hsr.adit.domain.model.Permission;
 import ch.hsr.adit.domain.model.Role;
 import ch.hsr.adit.domain.model.User;
+import ch.hsr.adit.util.PermissionUtil;
 import ch.hsr.adit.util.TokenUtil;
 import spark.route.HttpMethod;
 import spark.utils.IOUtils;
@@ -23,7 +24,8 @@ public class TestUtil {
 
   private static final String ENDPOINT = "http://localhost:4567";
   private static String testToken = null;
-  private static boolean useToken = true;
+  private static boolean useToken;
+  private static boolean useNoPermissionsUser = false;
 
   public static TestResponse request(HttpMethod method, String path, Object entity) {
     if (useToken && testToken == null) {
@@ -36,9 +38,7 @@ public class TestUtil {
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod(method.toString().toUpperCase());
       connection.setDoOutput(true);
-      if (useToken) {
-        connection.setRequestProperty("Authorization", testToken);
-      }
+      connection.setRequestProperty("Authorization", testToken);
 
       // post data
       if (entity != null) {
@@ -61,27 +61,49 @@ public class TestUtil {
   }
 
   private static void createToken() {
-    User user = createTestUser();
+    User user;
+    if (useNoPermissionsUser) {
+      user = createTestUserWithoutPermissions();
+    } else {
+      user = createTestUser();
+    }
     testToken = TokenUtil.getInstance().generateToken(user);
   }
-  
+
   private static User createTestUser() {
+    // all actions that need permissions are performed by this user
     User user = new User();
-    user.setEmail("test@adit.ch");
-    
+    user.setEmail("student@hsr.ch");
+
     Role role = new Role();
-    Permission permission = new Permission();
-    permission.setName("test_permission");
-    Set<Permission> permissions = new  HashSet<>();
+    Permission permission = PermissionUtil.BASIC_PERMISSION;
+    Set<Permission> permissions = new HashSet<>();
     permissions.add(permission);
     role.setPermissions(permissions);
-    
+
+    user.setRole(role);
+    return user;
+  }
+
+  private static User createTestUserWithoutPermissions() {
+    User user = new User();
+    user.setEmail("mwieland@hsr.ch");
+
+    Role role = new Role();
     user.setRole(role);
     return user;
   }
 
   public static void setUseToken(boolean use) {
     useToken = use;
+  }
+
+  public static void setTestToken(String token) {
+    testToken = token;
+  }
+
+  public static void setNoPermissionsUser(boolean use) {
+    useNoPermissionsUser = use;
   }
 
 }

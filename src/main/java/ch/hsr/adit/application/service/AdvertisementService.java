@@ -11,6 +11,7 @@ import com.google.gson.JsonSyntaxException;
 
 import ch.hsr.adit.domain.model.Advertisement;
 import ch.hsr.adit.domain.model.AdvertisementState;
+import ch.hsr.adit.domain.model.exception.ForbiddenException;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
 import ch.hsr.adit.util.JsonUtil;
 import spark.Request;
@@ -31,9 +32,9 @@ public class AdvertisementService {
 
   public Advertisement updateAdvertisement(Advertisement advertisement) {
     try {
-      // may throws ObjectNotFoundException
+      // may throw ObjectNotFoundException
       advertisementDao.get(advertisement.getId());
-      
+
       advertisement.setUpdated(new Date());
       return advertisementDao.update(advertisement);
     } catch (ObjectNotFoundException e) {
@@ -42,8 +43,7 @@ public class AdvertisementService {
     }
   }
 
-  public Advertisement deleteAdvertisement(long id) {
-    Advertisement advertisement = get(id);
+  public Advertisement deleteAdvertisement(Advertisement advertisement) {
     advertisement.setAdvertisementState(AdvertisementState.CLOSED);
     advertisementDao.update(advertisement);
     return advertisement;
@@ -113,5 +113,4 @@ public class AdvertisementService {
       throw e;
     }
   }
-
 }

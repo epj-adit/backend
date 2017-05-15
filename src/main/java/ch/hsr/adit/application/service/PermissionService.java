@@ -1,78 +1,81 @@
 package ch.hsr.adit.application.service;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.hibernate.ObjectNotFoundException;
-
-import com.google.gson.JsonSyntaxException;
-
-import ch.hsr.adit.domain.model.Permission;
-import ch.hsr.adit.domain.persistence.PermissionDao;
-import ch.hsr.adit.util.JsonUtil;
-import spark.Request;
+import ch.hsr.adit.domain.model.User;
+import ch.hsr.adit.util.PermissionUtil;
+import ch.hsr.adit.util.TokenUtil;
 
 
 public class PermissionService {
 
-  private static final Logger LOGGER = Logger.getLogger(PermissionService.class);
-  private final PermissionDao permissionDao;
+  private final UserService userService;
+  private final TokenUtil tokenUtil;
 
 
-  public PermissionService(PermissionDao permissionDao) {
-    this.permissionDao = permissionDao;
+  public PermissionService(UserService userService) {
+    this.userService = userService;
+    this.tokenUtil = TokenUtil.getInstance();
   }
 
-  public Permission createPermission(Permission permission) {
-    return (Permission) permissionDao.persist(permission);
-  }
-
-  public Permission updatePermission(Permission permission) {
-    try {
-      // may throws ObjectNotFoundException
-      permissionDao.get(permission.getId());
-
-      return permissionDao.update(permission);
-    } catch (ObjectNotFoundException e) {
-      LOGGER.warn("Permission with id " + permission.getId() + " not found. Nothing updated");
-      throw e;
+  public boolean checkBasicPermissions(User user, String token) {
+    User dbUser = getUserFromToken(token);
+    //user that has non-basic permissions should be admin or supervisor
+    if (!isAdmin(dbUser) || !isSupervisor(dbUser)) {
+      if (user.getId() != dbUser.getId()) {
+        return false;
+      }
+      if (!user.getRole().getPermissions().contains(PermissionUtil.BASIC_PERMISSION)) {
+        return false;
+      }
     }
-  }
-
-  public boolean deletePermission(Permission permissionToDelete) {
-    permissionDao.delete(permissionToDelete);
     return true;
   }
 
-  public boolean deletePermission(long id) {
-    Permission permission = get(id);
-    deletePermission(permission);
+  public boolean checkEditCategoriesPermission(String token) {
+    User user = getUserFromToken(token);
+
+    if (!user.getRole().getPermissions().contains(PermissionUtil.EDIT_CATEGORIES)) {
+      return false;
+    }
     return true;
   }
 
-  public Permission get(Permission permission) {
-    return get(permission.getId());
-  }
+  public boolean checkEditRolesPermission(String token) {
+    User user = getUserFromToken(token);
 
-  public Permission get(Long id) {
-    Permission permission = permissionDao.get(id);
-    return permission;
-  }
-
-  public List<Permission> getAll() {
-    return permissionDao.getAll();
-  }
-
-  public Permission transformToPermission(Request request) {
-    try {
-      Permission permission = JsonUtil.fromJson(request.body(), Permission.class);
-      LOGGER.info("Received JSON data: " + permission.toString());
-      return permission;
-    } catch (JsonSyntaxException e) {
-      LOGGER.error("Cannot parse JSON: " + request.body());
-      throw e;
+    if (!user.getRole().getPermissions().contains(PermissionUtil.EDIT_ROLE)) {
+      return false;
     }
+    return true;
   }
 
+  public boolean checkEditIsActivePermission(String token) {
+    User user = getUserFromToken(token);
 
+    if (!user.getRole().getPermissions().contains(PermissionUtil.EDIT_ISACTIVE)) {
+      return false;
+    }
+    return true;
+  }
+
+  public boolean checkReviewAdvertisementPermission(String token) {
+    User user = getUserFromToken(token);
+
+    if (!user.getRole().getPermissions().contains(PermissionUtil.REVIEW_ADVERTISEMENTS)) {
+      return false;
+    }
+    return true;
+  }
+
+  private boolean isAdmin(User user) {
+    return user.getRole().getPermissions().contains(PermissionUtil.ADMINISTRATOR_PERMISSION);
+  }
+
+  private boolean isSupervisor(User user) {
+    return user.getRole().getPermissions().contains(PermissionUtil.SUPERVISOR_PERMISSION);
+  }
+
+  private User getUserFromToken(String token) {
+    String email = tokenUtil.getEmailFromToken(token);
+    return userService.getByEmail(email);
+  }
 }

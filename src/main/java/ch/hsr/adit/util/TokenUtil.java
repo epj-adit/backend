@@ -1,10 +1,13 @@
 package ch.hsr.adit.util;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
 
@@ -14,9 +17,12 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
 
 import ch.hsr.adit.domain.model.Permission;
 import ch.hsr.adit.domain.model.User;
+
+import spark.Request;
 
 
 public final class TokenUtil {
@@ -60,7 +66,7 @@ public final class TokenUtil {
       Permission permission = it.next();
       permissions[i] = permission.getName();
     }
-    
+
     // get expiration date
     Calendar cal = Calendar.getInstance();
     cal.setTime(new Date());
@@ -86,12 +92,23 @@ public final class TokenUtil {
       return false;
     }
   }
-  
+
   public static void setTimeout(int timeout) {
     tokenTimeout = timeout;
   }
-  
+
   public static void setLeeway(int leeway) {
     tokenLeeway = leeway;
+  }
+  public String getEmailFromToken(String token) {
+    JWT jwt = JWT.decode(token);
+    return jwt.getSubject();
+  }
+
+  public String[] getPermissions(Request request) {
+    String token = request.headers("Authorization");
+    JWT jwt = JWT.decode(token);
+    return jwt.getClaim("permissions").asArray(String.class);
+//    Set<Permission> permissionSet = Arrays.stream(permissions).collect(Collectors.toSet());
   }
 }

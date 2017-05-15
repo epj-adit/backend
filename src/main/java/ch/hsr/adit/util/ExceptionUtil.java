@@ -11,6 +11,8 @@ import javax.persistence.PersistenceException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.PropertyValueException;
 
+import ch.hsr.adit.domain.model.exception.ForbiddenException;
+
 public class ExceptionUtil {
 
   private static volatile ExceptionUtil instance;
@@ -46,6 +48,7 @@ public class ExceptionUtil {
     exceptionUtil.exceptionMapping.put(NoResultException.class.getSimpleName(), NOT_FOUND);
     exceptionUtil.exceptionMapping.put(AuthenticationException.class.getSimpleName(), UNAUTHORIZED);
     exceptionUtil.exceptionMapping.put(OptimisticLockException.class.getSimpleName(), CONFLICT);
+    exceptionUtil.exceptionMapping.put(ForbiddenException.class.getSimpleName(), FORBIDDEN);
   }
 
   public Integer getHttpErrorCode(String exceptionType) {

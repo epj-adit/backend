@@ -6,15 +6,19 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.hsr.adit.domain.model.Permission;
 import ch.hsr.adit.domain.model.Role;
 import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.test.TestResponse;
 import ch.hsr.adit.test.TestUtil;
+import ch.hsr.adit.util.PermissionUtil;
 import spark.route.HttpMethod;
 
 public class UserControllerIT {
@@ -32,6 +36,13 @@ public class UserControllerIT {
     this.role.setId(1);
 
     TestUtil.setUseToken(true);
+    Set<Permission> permissions = new HashSet<>();
+    permissions.add(PermissionUtil.BASIC_PERMISSION);
+    this.role.setPermissions(permissions);
+    
+    TestUtil.setNoPermissionsUser(false);
+    TestUtil.setTestToken(null);
+    TestUtil.setUseToken(true);
   }
 
   @Test
@@ -46,6 +57,7 @@ public class UserControllerIT {
     user.setIsActive(isActive);
     user.setRole(role);
 
+    TestUtil.setTestToken("");
     TestUtil.setUseToken(false);
 
     // act
@@ -117,20 +129,21 @@ public class UserControllerIT {
   public void updateUserTest() {
     // arrange
     User user = new User();
-    user.setId(1);
+    user.setId(3);
     user.setUsername(username);
-    user.setEmail("updatedStudent@hsr.ch");
+    user.setEmail("notactiveanymore@hsr.ch");
     user.setPasswordPlaintext(password);
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
-    user.setIsActive(isActive);
+    //test if is_active permission is enforced
+    user.setIsActive(false);
     user.setRole(role);
 
     String updatedValue = "Niguaran";
 
     // act
     user.setUsername(updatedValue);
-    TestResponse response = TestUtil.request(HttpMethod.put, "/user/1", user);
+    TestResponse response = TestUtil.request(HttpMethod.put, "/user/7", user);
 
     // assert
     Map<String, Object> json = response.json();
@@ -201,7 +214,7 @@ public class UserControllerIT {
 
     // act
     user.setEmail(updatedValue);
-    TestResponse response = TestUtil.request(HttpMethod.put, "/user/1", user);
+    TestResponse response = TestUtil.request(HttpMethod.put, "/user/3", user);
 
     // assert
     assertEquals(409, response.statusCode);
@@ -275,4 +288,41 @@ public class UserControllerIT {
     assertEquals(409, response.statusCode);
   }
 
+  @Test
+  public void getDifferentUserWithBasicPermission() {
+    TestUtil.setNoPermissionsUser(true);
+    TestUtil.setTestToken(null);
+
+    TestResponse response = TestUtil.request(HttpMethod.get, "/user/2", null);
+
+    // assert
+    Map<String, Object> json = response.json();
+    assertEquals(403, response.statusCode);
+  }
+
+  @Test
+  public void updateDifferentUserWithBasicPermission() {
+    TestUtil.setNoPermissionsUser(true);
+    TestUtil.setTestToken(null);
+    
+    User user = new User();
+    user.setId(1);
+    user.setUsername(username);
+    user.setEmail("updatedStudent@hsr.ch");
+    user.setPasswordPlaintext(password);
+    user.setIsPrivate(isPrivate);
+    user.setWantsNotification(wantsNotification);
+    user.setIsActive(isActive);
+    user.setRole(role);
+
+    String updatedValue = "illegal update";
+
+    // act
+    user.setUsername(updatedValue);
+    TestResponse response = TestUtil.request(HttpMethod.put, "/user/2", user);
+
+    // assert
+    Map<String, Object> json = response.json();
+    assertEquals(403, response.statusCode);
+  }
 }

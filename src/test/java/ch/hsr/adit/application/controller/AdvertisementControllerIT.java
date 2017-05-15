@@ -5,7 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,15 +15,20 @@ import org.junit.Test;
 import ch.hsr.adit.domain.model.Advertisement;
 import ch.hsr.adit.domain.model.AdvertisementState;
 import ch.hsr.adit.domain.model.Category;
+import ch.hsr.adit.domain.model.Permission;
+import ch.hsr.adit.domain.model.Role;
 import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.test.TestResponse;
 import ch.hsr.adit.test.TestUtil;
+import ch.hsr.adit.util.PermissionUtil;
+import ch.hsr.adit.util.TokenUtil;
 import spark.route.HttpMethod;
 
 public class AdvertisementControllerIT {
 
   private Category category;
   private User user;
+  private Role role;
 
   private String title = "Betriebsysteme";
   private String description = "Ein Buch von Eduard Glatz für die Vorlesung Bsys1 und Bsys2";
@@ -30,11 +37,20 @@ public class AdvertisementControllerIT {
 
   @Before
   public void setup() {
+    TestUtil.setUseToken(true);
     this.category = new Category();
     this.category.setId(1);
-
+    
+    role = new Role();
+    Permission permission = PermissionUtil.BASIC_PERMISSION;
+    Set<Permission> permissions = new HashSet<>();
+    permissions.add(permission);
+    role.setPermissions(permissions);
+    
     this.user = new User();
-    this.user.setId(1);
+    this.user.setUsername("student@hsr.ch");
+    this.user.setId(3);
+    this.user.setRole(role);
   }
 
   @Test
@@ -169,7 +185,7 @@ public class AdvertisementControllerIT {
     advertisement.setCategory(category);
 
     // act
-    TestResponse response = TestUtil.request(HttpMethod.put, "/advertisement/1", advertisement);
+    TestResponse response = TestUtil.request(HttpMethod.put, "/advertisement/5", advertisement);
 
     // assert
     Map<String, Object> json = response.json();
@@ -189,9 +205,9 @@ public class AdvertisementControllerIT {
     advertisement.setAdvertisementState(advertisementState);
     advertisement.setUser(user);
     advertisement.setCategory(category);
-
-    TestResponse response = TestUtil.request(HttpMethod.put, "/advertisement/10000001", advertisement);
-
+    
+    TestResponse response =
+        TestUtil.request(HttpMethod.put, "/advertisement/10000001", advertisement);
 
     assertEquals(404, response.statusCode);
   }
@@ -199,7 +215,7 @@ public class AdvertisementControllerIT {
   @Test
   public void deleteAdvertisement() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.delete, "/advertisement/3", null);
+    TestResponse response = TestUtil.request(HttpMethod.delete, "/advertisement/4", null);
 
     // assert
     Map<String, Object> json = response.json();
@@ -268,4 +284,91 @@ public class AdvertisementControllerIT {
     assertEquals(200, response.statusCode);
   }
 
+  @Test
+  public void updateAdThatUserDoesntOwn() {
+    TestUtil.setUseToken(false);
+    
+    //user needs any random permission so theres no nullpointerexceptions
+    Set<Permission> permissions = new HashSet<>();
+    Permission perm = new Permission();
+    perm.setId(1);
+    perm.setName("review");
+    Permission perm2 = new Permission();
+    perm2.setId(2);
+    perm2.setName("ban");
+    permissions.add(perm);
+    permissions.add(perm2);
+
+    Role role = new Role();
+    role.setId(2);
+    role.setPermissions(permissions);
+    role.setName("bla");
+
+    Advertisement advertisement = new Advertisement();
+    advertisement.setTitle("abcd");
+    advertisement.setDescription("abcd");
+    advertisement.setPrice(10000);
+    advertisement.setAdvertisementState(advertisementState);
+    advertisement.setCategory(category);
+    advertisement.setId(3);
+
+    User newUser = new User();
+    newUser.setEmail("illegaluser@hsr.ch");
+    newUser.setId(2);
+    newUser.setRole(role);
+
+    TokenUtil tokenUtil = TokenUtil.getInstance();
+    String token = tokenUtil.generateToken(newUser);
+    newUser.setJwtToken(token);
+    advertisement.setUser(newUser);
+
+    TestResponse response = TestUtil.request(HttpMethod.put, "/advertisement/1", advertisement);
+
+    assertEquals(403, response.statusCode);
+    TestUtil.setUseToken(true);
+
+  }
+  
+  @Test
+  public void deleteAdThatUserDoesntOwn() {
+    TestUtil.setNoPermissionsUser(true);
+    TestUtil.setTestToken(null);
+    Set<Permission> permissions = new HashSet<>();
+    Permission perm = new Permission();
+    perm.setId(1);
+    perm.setName("review");
+    Permission perm2 = new Permission();
+    perm2.setId(2);
+    perm2.setName("ban");
+    permissions.add(perm);
+    permissions.add(perm2);
+
+    Role role = new Role();
+    role.setId(2);
+    role.setPermissions(permissions);
+    role.setName("bla");
+
+    Advertisement advertisement = new Advertisement();
+    advertisement.setTitle("abcd");
+    advertisement.setDescription("abcd");
+    advertisement.setPrice(10000);
+    advertisement.setAdvertisementState(advertisementState);
+    advertisement.setCategory(category);
+    advertisement.setId(3);
+
+    User newUser = new User();
+    newUser.setEmail("illegaluser@hsr.ch");
+    newUser.setId(2);
+    newUser.setRole(role);
+
+    TokenUtil tokenUtil = TokenUtil.getInstance();
+    String token = tokenUtil.generateToken(newUser);
+    newUser.setJwtToken(token);
+    advertisement.setUser(newUser);
+
+    TestResponse response = TestUtil.request(HttpMethod.delete, "/advertisement/2", null);
+
+    assertEquals(403, response.statusCode);
+    TestUtil.setUseToken(true);
+  }
 }

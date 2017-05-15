@@ -93,6 +93,7 @@ public class AuthenticationControllerIT {
     advertisement.setUser(user);
     advertisement.setCategory(category);
 
+    TestUtil.setTestToken("");
     TestUtil.setUseToken(false);
     TestResponse response = TestUtil.request(HttpMethod.post, "/advertisement", advertisement);
     
@@ -109,6 +110,9 @@ public class AuthenticationControllerIT {
     advertisement.setUser(user);
     advertisement.setCategory(category);
     
+    //make sure new valid Token gets created
+    TestUtil.setUseToken(true);
+    TestUtil.setTestToken(null);
     TestResponse response = TestUtil.request(HttpMethod.post, "/advertisement", advertisement);
     
     assertEquals(200, response.statusCode);

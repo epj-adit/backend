@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gson.reflect.TypeToken;
@@ -18,6 +19,13 @@ import spark.route.HttpMethod;
 
 public class CategoryControllerIT {
 
+  @Before
+  public void setup() {
+    TestUtil.setUseToken(true);
+    TestUtil.setNoPermissionsUser(false);
+    TestUtil.setTestToken(null);
+  }
+  
   @Test
   public void createCategory() {
     // arrange
@@ -32,6 +40,23 @@ public class CategoryControllerIT {
     Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
     assertEquals(name, json.get("name"));
+  }
+  
+  @Test
+  public void createCategoryWithoutEditCategoriesPermission() {
+    // force creation of new token with different user
+    TestUtil.setNoPermissionsUser(true);
+    
+    String name = new String("no permission");
+    Category category = new Category();
+    category.setName(name);
+
+    TestResponse response = TestUtil.request(HttpMethod.post, "/category", category);
+
+    Map<String, Object> json = response.json();
+    assertEquals(403, response.statusCode);
+    
+    TestUtil.setNoPermissionsUser(false);
   }
 
   @Test
@@ -144,6 +169,21 @@ public class CategoryControllerIT {
 
     assertEquals(200, response.statusCode);
     assertEquals(200, response2.statusCode);
+  }
+  
+  @Test
+  public void updateCategoryWithoutEditCategoriesPermission() {
+    TestUtil.setNoPermissionsUser(true);
+    
+    TestResponse response = TestUtil.request(HttpMethod.get, "/category/2", null);
+
+    Category category =
+        JsonUtil.fromJson(response.body, new TypeToken<Category>() {}.getType());
+    category.setName("updated");
+    TestResponse response2 = TestUtil.request(HttpMethod.put, "/category/2", category);
+
+    assertEquals(200, response.statusCode);
+    assertEquals(403, response2.statusCode);
   }
   
   @Test

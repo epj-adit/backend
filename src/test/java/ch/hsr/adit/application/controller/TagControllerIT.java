@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import ch.hsr.adit.domain.model.Tag;
@@ -17,6 +18,11 @@ import spark.route.HttpMethod;
 
 public class TagControllerIT {
 
+  @Before
+  public void setup() {
+    TestUtil.setUseToken(true);
+  }
+  
   @Test
   public void createTags() {
     // arrange
@@ -64,7 +70,7 @@ public class TagControllerIT {
   @Test
   public void getTag() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/tags/?name=g", null);
+    TestResponse response = TestUtil.request(HttpMethod.get, "/tags/?name=go", null);
 
     // assert
     Map<String, Object>[] json = response.jsonList();
