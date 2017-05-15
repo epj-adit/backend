@@ -1,6 +1,7 @@
 package ch.hsr.adit.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -96,16 +97,16 @@ public class TokenUtilTest {
     assertTrue(TokenUtil.getInstance().verify(generatedToken));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void nullArgumentTest() {
     TokenUtil tokenUtil = TokenUtil.getInstance();
-    tokenUtil.verify(null);
+    assertFalse(tokenUtil.verify(null));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void emptyArgumentTest() {
     TokenUtil tokenUtil = TokenUtil.getInstance();
-    tokenUtil.verify("");
+    assertFalse(tokenUtil.verify(""));
   }
 
   @Test(expected = JWTVerificationException.class)

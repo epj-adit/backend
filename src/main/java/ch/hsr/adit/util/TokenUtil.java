@@ -72,7 +72,7 @@ public final class TokenUtil {
 
   public boolean verify(String token) {
     if (token == null || token.isEmpty()) {
-      throw new IllegalArgumentException("Token must be provided");
+      return false;
     }
     JWT jwt = JWT.decode(token);
     String subject = jwt.getSubject();
