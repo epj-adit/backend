@@ -91,11 +91,11 @@ public class App {
     // User
     UserDao userDao = new UserDao(sessionFactory);
     UserService userService = new UserService(userDao, messageDao);
-    
+
 
     // Permission
     PermissionService permissionService = new PermissionService(userService);
-    
+
     new UserController(userService, permissionService);
 
     // Authenticate
@@ -140,8 +140,10 @@ public class App {
     try {
       KeyStore keyStore = KeyStore.getInstance();
       keyStore.generateKey(KEY_FILE);
-    } catch (NoSuchAlgorithmException | IOException e) {
-      LOGGER.error("Cannot instantiate keystore: " + e.getMessage());
+    } catch (NoSuchAlgorithmException e) {
+      LOGGER.error("Cannot instantiate keystore. No maching algorithm found: " + e.getMessage());
+    } catch (IOException ioEx) {
+      LOGGER.error("Cannot instantiate keystore. Keyfile not found: " + ioEx.getMessage());
     }
   }
 

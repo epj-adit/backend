@@ -80,7 +80,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
         sessionFactory.getCurrentSession().getTransaction().commit();
         return object;
       } catch (NoResultException e) {
-        LOGGER.info("No entity found with name " + name);
+        LOGGER.info("No entity found with name " + name + ": " + e.getMessage());
         sessionFactory.getCurrentSession().getTransaction().rollback();
         return null;
       }

@@ -84,7 +84,7 @@ public final class TokenUtil {
       verifier.verify(token);
       return true;
     } catch (JWTVerificationException e) {
-      LOGGER.error("Verification failed. Token is invalid");
+      LOGGER.error("Verification failed. Token is invalid. Message: " + e.getMessage());
       return false;
     }
   }
