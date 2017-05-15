@@ -100,6 +100,7 @@ public final class TokenUtil {
   public static void setLeeway(int leeway) {
     tokenLeeway = leeway;
   }
+
   public String getEmailFromToken(String token) {
     JWT jwt = JWT.decode(token);
     return jwt.getSubject();
@@ -109,6 +110,6 @@ public final class TokenUtil {
     String token = request.headers("Authorization");
     JWT jwt = JWT.decode(token);
     return jwt.getClaim("permissions").asArray(String.class);
-//    Set<Permission> permissionSet = Arrays.stream(permissions).collect(Collectors.toSet());
+    // Set<Permission> permissionSet = Arrays.stream(permissions).collect(Collectors.toSet());
   }
 }
