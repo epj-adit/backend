@@ -3,7 +3,7 @@ package ch.hsr.adit.application.controller;
 import static ch.hsr.adit.util.JsonUtil.jsonTransformer;
 import static spark.Spark.post;
 
-import ch.hsr.adit.application.app.RestApi;
+import ch.hsr.adit.application.controller.api.RestApi;
 import ch.hsr.adit.application.service.AuthenticationService;
 
 public class AuthenticationController {

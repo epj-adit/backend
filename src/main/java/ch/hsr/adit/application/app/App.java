@@ -21,6 +21,7 @@ import ch.hsr.adit.application.controller.CategoryController;
 import ch.hsr.adit.application.controller.RoleController;
 import ch.hsr.adit.application.controller.TagController;
 import ch.hsr.adit.application.controller.UserController;
+import ch.hsr.adit.application.controller.api.RestApi;
 import ch.hsr.adit.application.service.AdvertisementService;
 import ch.hsr.adit.application.service.AuthenticationService;
 import ch.hsr.adit.application.service.CategoryService;

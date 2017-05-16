@@ -8,7 +8,7 @@ import static spark.Spark.put;
 
 import org.apache.log4j.Logger;
 
-import ch.hsr.adit.application.app.RestApi;
+import ch.hsr.adit.application.controller.api.RestApi;
 import ch.hsr.adit.application.service.AdvertisementService;
 import ch.hsr.adit.application.service.PermissionService;
 import ch.hsr.adit.domain.model.Advertisement;

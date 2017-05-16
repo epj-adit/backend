@@ -3,6 +3,7 @@ package ch.hsr.adit.application.app;
 
 import javax.naming.AuthenticationException;
 
+import ch.hsr.adit.application.controller.api.RestApi;
 import ch.hsr.adit.util.TokenUtil;
 import spark.Filter;
 import spark.Request;
