@@ -140,10 +140,9 @@ public class App {
     try {
       KeyStore keyStore = KeyStore.getInstance();
       keyStore.generateKey(KEY_FILE);
-    } catch (NoSuchAlgorithmException e) {
-      LOGGER.error("Cannot instantiate keystore. No maching algorithm found: " + e.getMessage());
-    } catch (IOException ioEx) {
-      LOGGER.error("Cannot instantiate keystore. Keyfile not found: " + ioEx.getMessage());
+    } catch (NoSuchAlgorithmException | IOException e) {
+      LOGGER.error("Cannot instantiate keystore");
+      LOGGER.error(e);
     }
   }
 

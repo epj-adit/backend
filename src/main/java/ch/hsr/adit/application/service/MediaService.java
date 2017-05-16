@@ -96,7 +96,8 @@ public class MediaService {
     try (InputStream is = request.raw().getPart("uploaded_file").getInputStream()) {
       return IOUtils.toByteArray(is);
     } catch (IOException | ServletException e) {
-      LOGGER.error("Unable to create file. Message: " + e.getMessage());
+      LOGGER.error("Unable to create file");
+      LOGGER.error(e);
       return new byte[] {};
     }
   }

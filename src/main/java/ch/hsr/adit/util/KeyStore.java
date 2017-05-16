@@ -66,8 +66,8 @@ public class KeyStore {
       prop.setProperty("secret", String.valueOf(hex));
       prop.store(out, null);
     } catch (IOException e) {
-      LOGGER.error("Failed to store secretKey in file: " + file.getAbsolutePath() + ". Message: "
-          + e.getMessage());
+      LOGGER.error("Failed to store secretKey in file: " + file.getAbsolutePath());
+      LOGGER.error(e);
     }
   }
 
@@ -81,8 +81,8 @@ public class KeyStore {
       String secretString = prop.getProperty("secret");
       encoded = decodeHex(secretString.toCharArray());
     } catch (DecoderException e) {
-      LOGGER.error("Cannot load and decode given secret " + file.getAbsolutePath() + ". Message: "
-          + e.getMessage());
+      LOGGER.error("Cannot load and decode given secret " + file.getAbsolutePath());
+      LOGGER.error(e);
     }
     return new SecretKeySpec(encoded, "AES");
   }

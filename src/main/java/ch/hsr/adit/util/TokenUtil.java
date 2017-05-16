@@ -44,7 +44,8 @@ public final class TokenUtil {
             TokenUtil.algorithm = Algorithm.HMAC256(secret.getEncoded());
             instance = new TokenUtil();
           } catch (IOException e) {
-            LOGGER.error("Cannot load keystore: " + e.getMessage());
+            LOGGER.error("Cannot load keystore");
+            LOGGER.error(e);
           }
         }
       }
@@ -84,7 +85,8 @@ public final class TokenUtil {
       verifier.verify(token);
       return true;
     } catch (JWTVerificationException e) {
-      LOGGER.error("Verification failed. Token is invalid. Message: " + e.getMessage());
+      LOGGER.error("Verification failed. Token is invalid");
+      LOGGER.error(e);
       return false;
     }
   }

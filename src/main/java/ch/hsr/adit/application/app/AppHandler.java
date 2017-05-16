@@ -29,10 +29,11 @@ public class AppHandler {
 
   private static final String getExceptionMessageChain(Throwable throwable) {
     StringBuilder builder = new StringBuilder();
-    while (throwable != null) {
-      builder.append(throwable.getMessage());
-      throwable = throwable.getCause();
-      if (throwable != null) {
+    Throwable root = throwable;
+    while (root != null) {
+      builder.append(root.getMessage());
+      root = root.getCause();
+      if (root != null) {
         builder.append("\n");
       }
     }
