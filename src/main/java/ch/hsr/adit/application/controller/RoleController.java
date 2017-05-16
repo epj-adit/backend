@@ -39,6 +39,10 @@ public class RoleController {
       long id = Long.parseLong(request.params(":id"));
       return roleService.get(id);
     }, jsonTransformer());
+    
+    get(RestApi.Role.ROLES, (request, response) -> {
+      return roleService.getAll();
+    }, jsonTransformer());
 
     // update
     put(RestApi.Role.ROLE_BY_ID, (request, response) -> {

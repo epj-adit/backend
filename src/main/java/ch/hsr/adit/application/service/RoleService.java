@@ -1,5 +1,7 @@
 package ch.hsr.adit.application.service;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.hibernate.ObjectNotFoundException;
 
@@ -55,6 +57,10 @@ public class RoleService {
     return roleDao.get(id);
   }
   
+  public List<Role> getAll() {
+    return roleDao.getAll();
+  }
+  
   public Role transformToRole(Request request) {
     try {
       Role role = JsonUtil.fromJson(request.body(), Role.class);
@@ -68,3 +74,4 @@ public class RoleService {
 
 
 }
+ 

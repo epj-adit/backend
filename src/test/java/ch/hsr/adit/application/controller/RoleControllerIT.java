@@ -66,6 +66,14 @@ public class RoleControllerIT {
     assertNotNull(json.get("id"));
     assertEquals("admin", json.get("name"));
   }
+  
+  @Test
+  public void getAllRoles() {
+    TestResponse response = TestUtil.request(HttpMethod.get, "/roles/", null);
+    Map<String, Object>[] json = response.jsonList();
+    assertEquals(200, response.statusCode);
+    assertTrue(json.length > 2);
+  }
 
   @Test
   public void getNonExistentRole() {
