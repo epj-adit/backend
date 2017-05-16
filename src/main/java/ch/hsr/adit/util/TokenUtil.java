@@ -103,10 +103,4 @@ public final class TokenUtil {
     JWT jwt = JWT.decode(token);
     return jwt.getSubject();
   }
-
-  public String[] getPermissions(Request request) {
-    String token = request.headers("Authorization");
-    JWT jwt = JWT.decode(token);
-    return jwt.getClaim("permissions").asArray(String.class);
-  }
 }

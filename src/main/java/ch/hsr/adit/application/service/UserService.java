@@ -1,10 +1,7 @@
 package ch.hsr.adit.application.service;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.ObjectNotFoundException;
@@ -12,9 +9,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import com.google.gson.JsonSyntaxException;
 
-import ch.hsr.adit.domain.model.Message;
 import ch.hsr.adit.domain.model.User;
-import ch.hsr.adit.domain.persistence.MessageDao;
 import ch.hsr.adit.domain.persistence.UserDao;
 import ch.hsr.adit.util.JsonUtil;
 import spark.Request;
@@ -24,11 +19,9 @@ public class UserService {
 
   private static final Logger LOGGER = Logger.getLogger(UserService.class);
   private final UserDao userDao;
-  private final MessageDao messageDao;
 
-  public UserService(UserDao userDao, MessageDao messageDao) {
+  public UserService(UserDao userDao) {
     this.userDao = userDao;
-    this.messageDao = messageDao;
   }
 
   public User createUser(User user) {
@@ -63,7 +56,7 @@ public class UserService {
       if (!hashed.equals(dbUser.getPasswordHash())) {
         dbUser.setPasswordHash(hashed);
       }
-      
+
       if (!user.getJwtToken().equals(dbUser.getJwtToken())) {
         dbUser.setJwtToken(user.getJwtToken());
       }
@@ -119,42 +112,21 @@ public class UserService {
     return user;
   }
 
-  public List<User> getAll() {
-    return userDao.getAll();
-  }
-
   public List<User> getAllFiltered(Request request) {
-    if (request.queryParams("conversationUserId") != null) {
-      Long conversationUserId = Long.parseLong(request.queryParams("conversationUserId"));
-      return getByConversation(conversationUserId);
-    }
-
     return userDao.getAll();
-  }
-
-  private List<User> getByConversation(Long conversationUserId) {
-    List<Message> messages = messageDao.getByConversation(conversationUserId);
-
-    // we use a Set to suppress duplicates
-    Set<User> conversationUsers = new HashSet<>();
-    for (Message message : messages) {
-      conversationUsers.add(message.getUserByRecipientUserId());
-      conversationUsers.add(message.getUserBySenderUserId());
-    }
-    return Arrays.asList(conversationUsers.toArray(new User[conversationUsers.size()]));
   }
 
   public User transformToUser(Request request) {
     try {
       User user = JsonUtil.fromJson(request.body(), User.class);
-      
+
       String token = request.headers("Authorization");
       if (token != null && !token.isEmpty()) {
         user.setJwtToken(token);
       } else {
         LOGGER.warn("User transformed, but no token provided.");
       }
-      
+
       LOGGER.info("Received JSON data: " + user.toString());
       return user;
     } catch (JsonSyntaxException e) {

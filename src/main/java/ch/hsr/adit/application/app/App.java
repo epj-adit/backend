@@ -18,28 +18,19 @@ import org.hibernate.SessionFactory;
 import ch.hsr.adit.application.controller.AdvertisementController;
 import ch.hsr.adit.application.controller.AuthenticationController;
 import ch.hsr.adit.application.controller.CategoryController;
-import ch.hsr.adit.application.controller.MediaController;
-import ch.hsr.adit.application.controller.MessageController;
 import ch.hsr.adit.application.controller.RoleController;
-import ch.hsr.adit.application.controller.SubscriptionController;
 import ch.hsr.adit.application.controller.TagController;
 import ch.hsr.adit.application.controller.UserController;
 import ch.hsr.adit.application.service.AdvertisementService;
 import ch.hsr.adit.application.service.AuthenticationService;
 import ch.hsr.adit.application.service.CategoryService;
-import ch.hsr.adit.application.service.MediaService;
-import ch.hsr.adit.application.service.MessageService;
 import ch.hsr.adit.application.service.PermissionService;
 import ch.hsr.adit.application.service.RoleService;
-import ch.hsr.adit.application.service.SubscriptionService;
 import ch.hsr.adit.application.service.TagService;
 import ch.hsr.adit.application.service.UserService;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
 import ch.hsr.adit.domain.persistence.CategoryDao;
-import ch.hsr.adit.domain.persistence.MediaDao;
-import ch.hsr.adit.domain.persistence.MessageDao;
 import ch.hsr.adit.domain.persistence.RoleDao;
-import ch.hsr.adit.domain.persistence.SubscriptionDao;
 import ch.hsr.adit.domain.persistence.TagDao;
 import ch.hsr.adit.domain.persistence.UserDao;
 import ch.hsr.adit.util.HibernateUtil;
@@ -83,14 +74,9 @@ public class App {
 
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
-    // Message
-    MessageDao messageDao = new MessageDao(sessionFactory);
-    MessageService messageService = new MessageService(messageDao);
-    new MessageController(messageService);
-
     // User
     UserDao userDao = new UserDao(sessionFactory);
-    UserService userService = new UserService(userDao, messageDao);
+    UserService userService = new UserService(userDao);
 
 
     // Permission
@@ -107,11 +93,6 @@ public class App {
     AdvertisementService advertisementService = new AdvertisementService(advertisementDao);
     new AdvertisementController(advertisementService, permissionService);
 
-    // Media
-    MediaDao mediaDao = new MediaDao(sessionFactory);
-    MediaService mediaService = new MediaService(mediaDao, advertisementService);
-    new MediaController(mediaService);
-
     // Tag
     TagDao tagDao = new TagDao(sessionFactory);
     TagService tagService = new TagService(tagDao, advertisementDao);
@@ -121,11 +102,6 @@ public class App {
     CategoryDao categoryDao = new CategoryDao(sessionFactory);
     CategoryService categoryService = new CategoryService(categoryDao);
     new CategoryController(categoryService, permissionService);
-
-    // Subscription
-    SubscriptionDao subscriptionDao = new SubscriptionDao(sessionFactory);
-    SubscriptionService subscriptionService = new SubscriptionService(subscriptionDao);
-    new SubscriptionController(subscriptionService);
 
     // Role
     RoleDao roleDao = new RoleDao(sessionFactory);

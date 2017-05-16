@@ -115,17 +115,6 @@ public class UserControllerIT {
   }
 
   @Test
-  public void getUserByConversation() {
-    // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/users/?conversationUserId=1", null);
-
-    // assert
-    Map<String, Object>[] jsonList = response.jsonList();
-    assertEquals(200, response.statusCode);
-    assertEquals(2, jsonList.length);
-  }
-
-  @Test
   public void updateUserTest() {
     // arrange
     User user = new User();

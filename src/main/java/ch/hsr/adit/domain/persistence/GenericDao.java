@@ -2,7 +2,6 @@ package ch.hsr.adit.domain.persistence;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -122,10 +121,6 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
     }
   }
 
-  public void updateAll(Collection<T> objects) {
-    objects.forEach(o -> update(o));
-  }
-
   public void delete(T object) {
     try {
       LOGGER.info("Try to delete " + entityName);
@@ -139,9 +134,4 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       throw e;
     }
   }
-
-  public void deleteAll(Collection<T> objects) {
-    objects.forEach(o -> delete(o));
-  }
-
 }

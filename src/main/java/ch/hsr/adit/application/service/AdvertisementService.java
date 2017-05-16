@@ -53,10 +53,6 @@ public class AdvertisementService {
     return advertisement;
   }
 
-  public List<Advertisement> getAll() {
-    return advertisementDao.getAll();
-  }
-
   public List<Advertisement> getAllFiltered(Request request) {
     Long userId = null;
     if (request.queryParams("userId") != null) {

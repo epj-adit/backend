@@ -34,15 +34,11 @@
 		<!-- mapping classes -->
 		<mapping class="ch.hsr.adit.domain.model.Advertisement" />
 		<mapping class="ch.hsr.adit.domain.model.Category" />
-		<mapping class="ch.hsr.adit.domain.model.Media" />
-		<mapping class="ch.hsr.adit.domain.model.Message" />
 		<mapping class="ch.hsr.adit.domain.model.Permission" />
 		<mapping class="ch.hsr.adit.domain.model.Role" />
-		<mapping class="ch.hsr.adit.domain.model.Subscription" />
 		<mapping class="ch.hsr.adit.domain.model.Tag" />
 		<mapping class="ch.hsr.adit.domain.model.User" />
-		<mapping class="ch.hsr.adit.domain.model.UserLog" />
-
+		
 	</session-factory>
 
 </hibernate-configuration>

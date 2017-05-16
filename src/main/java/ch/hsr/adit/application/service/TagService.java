@@ -64,10 +64,6 @@ public class TagService {
     return deleteTag(tag);
   }
 
-  public Tag get(Tag tag) {
-    return get(tag.getId());
-  }
-
   public Tag get(Long id) {
     Tag tag = tagDao.get(id);
     return tag;

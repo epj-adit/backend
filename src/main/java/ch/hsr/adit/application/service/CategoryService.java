@@ -68,11 +68,6 @@ public class CategoryService {
     }
   }
 
-
-  public List<Category> getAll() {
-    return categoryDao.getAll();
-  }
-
   public Category transformToCategory(Request request) {
     try {
       Category category = JsonUtil.fromJson(request.body(), Category.class);
