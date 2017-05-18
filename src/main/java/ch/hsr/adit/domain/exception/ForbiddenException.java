@@ -1,4 +1,4 @@
-package ch.hsr.adit.domain.model.exception;
+package ch.hsr.adit.domain.exception;
 
 public class ForbiddenException extends RuntimeException {
   

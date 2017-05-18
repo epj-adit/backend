@@ -11,7 +11,7 @@ import javax.persistence.PersistenceException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.PropertyValueException;
 
-import ch.hsr.adit.domain.model.exception.ForbiddenException;
+import ch.hsr.adit.domain.exception.ForbiddenException;
 
 public class ExceptionUtil {
 

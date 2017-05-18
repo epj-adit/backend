@@ -11,8 +11,8 @@ import org.apache.log4j.Logger;
 import ch.hsr.adit.application.controller.api.RestApi;
 import ch.hsr.adit.application.service.PermissionService;
 import ch.hsr.adit.application.service.RoleService;
+import ch.hsr.adit.domain.exception.ForbiddenException;
 import ch.hsr.adit.domain.model.Role;
-import ch.hsr.adit.domain.model.exception.ForbiddenException;
 import spark.Request;
 
 public class RoleController {
