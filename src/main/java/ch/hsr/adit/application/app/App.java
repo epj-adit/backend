@@ -53,12 +53,12 @@ public class App {
     setupKeyStore();
 
     // General app filter
-    before(RestApi.App.WILDCARD, AppFilter.AUTHENTICATION);
     before(RestApi.App.WILDCARD, AppFilter.CORS);
+    before(RestApi.App.WILDCARD, AppFilter.AUTHENTICATION);
     after(RestApi.App.WILDCARD, AppFilter.ENCODING);
 
     // General handler for exceptions and errors
-    exception(Exception.class, AppHandler.EXCEPTIONS);
+    exception(Exception.class, AppHandler.EXCEPTION);
     notFound(AppHandler.NOT_FOUND);
     internalServerError(AppHandler.INERNAL_SERVER_ERROR);
 
