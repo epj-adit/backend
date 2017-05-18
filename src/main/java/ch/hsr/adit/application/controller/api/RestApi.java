@@ -3,7 +3,7 @@ package ch.hsr.adit.application.controller.api;
 public class RestApi {
   
   public static class App {
-    public static final String WILDCARD = "*";
+    public static final String WILDCARD = "/*";
     public static final String AUTHENTICATE = "/authenticate";
   }
 

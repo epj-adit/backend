@@ -6,6 +6,7 @@ import static spark.Spark.before;
 import static spark.Spark.exception;
 import static spark.Spark.internalServerError;
 import static spark.Spark.notFound;
+import static spark.Spark.options;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,6 +63,9 @@ public class App {
     notFound(AppHandler.NOT_FOUND);
     internalServerError(AppHandler.INERNAL_SERVER_ERROR);
 
+    // Map Options Calls
+    options(RestApi.App.WILDCARD, AppHandler.CORS) ;
+    
     /***
      *
      * DEPENDENCY INJECTION
