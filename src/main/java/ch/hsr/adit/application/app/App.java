@@ -6,7 +6,6 @@ import static spark.Spark.before;
 import static spark.Spark.exception;
 import static spark.Spark.internalServerError;
 import static spark.Spark.notFound;
-import static spark.Spark.options;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,17 +54,13 @@ public class App {
 
     // General app filter
     before(RestApi.App.WILDCARD, AppFilter.AUTHENTICATION);
-    before(RestApi.App.WILDCARD, AppFilter.CORS_ORIGIN);
+    before(RestApi.App.WILDCARD, AppFilter.CORS);
     after(RestApi.App.WILDCARD, AppFilter.ENCODING);
 
     // General handler for exceptions and errors
     exception(Exception.class, AppHandler.EXCEPTIONS);
     notFound(AppHandler.NOT_FOUND);
     internalServerError(AppHandler.INERNAL_SERVER_ERROR);
-
-    // CORS
-    options(RestApi.App.WILDCARD, AppHandler.CORS);
-
 
     /***
      *
