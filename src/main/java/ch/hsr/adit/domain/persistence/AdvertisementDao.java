@@ -61,15 +61,15 @@ public class AdvertisementDao extends GenericDao<Advertisement> {
       queryString.append("and a.user.id = :userId ");
     }
 
-    if (filter.getAdvertisementStates() != null && !filter.getAdvertisementStates().isEmpty()) {
+    if (!filter.getAdvertisementStates().isEmpty()) {
       queryString.append("and a.advertisementState IN (:advertisementStates) ");
     }
 
-    if (filter.getCategoryIds() != null && !filter.getCategoryIds().isEmpty()) {
+    if (!filter.getCategoryIds().isEmpty()) {
       queryString.append("and a.category.id IN (:categoryIds) ");
     }
 
-    if (filter.getTagIds() != null && !filter.getTagIds().isEmpty()) {
+    if (!filter.getTagIds().isEmpty()) {
       queryString.append("and t.id IN (:tagIds) ");
     }
 
@@ -101,15 +101,15 @@ public class AdvertisementDao extends GenericDao<Advertisement> {
         query.setParameter("userId", filter.getUserId());
       }
 
-      if (filter.getAdvertisementStates() != null && !filter.getAdvertisementStates().isEmpty()) {
+      if (!filter.getAdvertisementStates().isEmpty()) {
         query.setParameter("advertisementStates", filter.getAdvertisementStates());
       }
 
-      if (filter.getCategoryIds() != null && !filter.getCategoryIds().isEmpty()) {
+      if (!filter.getCategoryIds().isEmpty()) {
         query.setParameter("categoryIds", filter.getCategoryIds());
       }
 
-      if (filter.getTagIds() != null && !filter.getTagIds().isEmpty()) {
+      if (!filter.getTagIds().isEmpty()) {
         query.setParameter("tagIds", filter.getTagIds());
       }
 
