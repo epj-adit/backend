@@ -8,7 +8,6 @@ import static spark.Spark.put;
 
 import org.apache.log4j.Logger;
 
-import ch.hsr.adit.application.controller.api.RestApi;
 import ch.hsr.adit.application.service.AdvertisementService;
 import ch.hsr.adit.application.service.PermissionService;
 import ch.hsr.adit.domain.exception.ForbiddenException;
@@ -18,6 +17,11 @@ import spark.Request;
 public class AdvertisementController {
 
   private static final Logger LOGGER = Logger.getLogger(AdvertisementController.class);
+  
+  private static final String ADVERTISEMENT_ROUTE = "/advertisement";
+  private static final String ADVERTISEMENT_BY_ID_ROUTE = "/advertisement/:id";
+  private static final String ADVERTISEMENTS_FILTERED_ROUTE = "/advertisements/";
+  
   private final PermissionService permissionService;
 
   /**
@@ -30,22 +34,22 @@ public class AdvertisementController {
     this.permissionService = permissionService;
 
     // create
-    post(RestApi.Advertisement.ADVERTISEMENT, (request, response) -> {
+    post(ADVERTISEMENT_ROUTE, (request, response) -> {
       Advertisement advertisement = advertisementService.transformToAdvertisement(request);
       return advertisementService.createAdvertisement(advertisement);
     }, jsonTransformer());
 
     // read
-    get(RestApi.Advertisement.ADVERTISEMENT_BY_ID, (request, response) -> {
+    get(ADVERTISEMENT_BY_ID_ROUTE, (request, response) -> {
       long id = Long.parseLong(request.params(":id"));
       return advertisementService.get(id);
     }, jsonTransformer());
 
-    get(RestApi.Advertisement.ADVERTISEMENTS_FILTERED,
+    get(ADVERTISEMENTS_FILTERED_ROUTE,
         (request, response) -> advertisementService.getAllFiltered(request), jsonTransformer());
 
     // update
-    put(RestApi.Advertisement.ADVERTISEMENT_BY_ID, (request, response) -> {
+    put(ADVERTISEMENT_BY_ID_ROUTE, (request, response) -> {
       Advertisement advertisement = advertisementService.transformToAdvertisement(request);
       long id = Long.parseLong(request.params(":id"));
       advertisement.setId(id);
@@ -58,7 +62,7 @@ public class AdvertisementController {
     }, jsonTransformer());
 
     // delete
-    delete(RestApi.Advertisement.ADVERTISEMENT_BY_ID, (request, response) -> {
+    delete(ADVERTISEMENT_BY_ID_ROUTE, (request, response) -> {
       long id = Long.parseLong(request.params(":id"));
       Advertisement advertisement = advertisementService.get(id);
 

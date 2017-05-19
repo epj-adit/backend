@@ -3,10 +3,11 @@ package ch.hsr.adit.application.controller;
 import static ch.hsr.adit.util.JsonUtil.jsonTransformer;
 import static spark.Spark.post;
 
-import ch.hsr.adit.application.controller.api.RestApi;
 import ch.hsr.adit.application.service.AuthenticationService;
 
 public class AuthenticationController {
+
+  public static final String AUTHENTICATE_ROUTE = "/authenticate";
 
   /**
    * API Controller for /authentication requests.
@@ -16,7 +17,7 @@ public class AuthenticationController {
   public AuthenticationController(AuthenticationService authenticationService) {
 
     // authentication
-    post(RestApi.App.AUTHENTICATE,
-        (request, response) -> authenticationService.authenticate(request), jsonTransformer());
+    post(AUTHENTICATE_ROUTE, (request, response) -> authenticationService.authenticate(request),
+        jsonTransformer());
   }
 }

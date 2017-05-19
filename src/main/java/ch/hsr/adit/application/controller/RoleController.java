@@ -8,7 +8,6 @@ import static spark.Spark.put;
 
 import org.apache.log4j.Logger;
 
-import ch.hsr.adit.application.controller.api.RestApi;
 import ch.hsr.adit.application.service.PermissionService;
 import ch.hsr.adit.application.service.RoleService;
 import ch.hsr.adit.domain.exception.ForbiddenException;
@@ -17,6 +16,11 @@ import spark.Request;
 
 public class RoleController {
   private static final Logger LOGGER = Logger.getLogger(RoleController.class);
+  
+  private static final String ROLE_ROUTE = "/role";
+  private static final String ROLES_ROUTE = "/roles/";
+  private static final String ROLE_BY_ID_ROUTE = "/role/:id";
+  
   private final PermissionService permissionService;
 
   /**
@@ -27,7 +31,7 @@ public class RoleController {
   public RoleController(RoleService roleService, PermissionService permissionService) {
     this.permissionService = permissionService;
     // create
-    post(RestApi.Role.ROLE, (request, response) -> {
+    post(ROLE_ROUTE, (request, response) -> {
       checkEditRolesPermission(getToken(request));
 
       Role role = roleService.transformToRole(request);
@@ -35,15 +39,15 @@ public class RoleController {
     }, jsonTransformer());
 
     // read
-    get(RestApi.Role.ROLE_BY_ID, (request, response) -> {
+    get(ROLE_BY_ID_ROUTE, (request, response) -> {
       long id = Long.parseLong(request.params(":id"));
       return roleService.get(id);
     }, jsonTransformer());
 
-    get(RestApi.Role.ROLES, (request, response) -> roleService.getAll(), jsonTransformer());
+    get(ROLES_ROUTE, (request, response) -> roleService.getAll(), jsonTransformer());
 
     // update
-    put(RestApi.Role.ROLE_BY_ID, (request, response) -> {
+    put(ROLE_BY_ID_ROUTE, (request, response) -> {
       Role role = roleService.transformToRole(request);
       long id = Long.parseLong(request.params(":id"));
       role.setId(id);
@@ -56,7 +60,7 @@ public class RoleController {
     }, jsonTransformer());
 
     // delete
-    delete(RestApi.Role.ROLE_BY_ID, (request, response) -> {
+    delete(ROLE_BY_ID_ROUTE, (request, response) -> {
       long id = Long.parseLong(request.params(":id"));
 
 

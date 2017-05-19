@@ -8,7 +8,6 @@ import static spark.Spark.put;
 
 import org.apache.log4j.Logger;
 
-import ch.hsr.adit.application.controller.api.RestApi;
 import ch.hsr.adit.application.service.PermissionService;
 import ch.hsr.adit.application.service.UserService;
 import ch.hsr.adit.domain.exception.ForbiddenException;
@@ -16,8 +15,15 @@ import ch.hsr.adit.domain.model.User;
 import spark.Request;
 
 public class UserController {
+ 
   private static final Logger LOGGER = Logger.getLogger(UserController.class);
+
+  private static final String USERS_ROUTE = "/users/";
+  private static final String USER_BY_ID_ROUTE = "/user/:id";
+  public static final String REGISTER_ROUTE = "/register";
+  
   private final PermissionService permissionService;
+
 
   /**
    * API Controller for /user requests.
@@ -28,13 +34,13 @@ public class UserController {
     this.permissionService = permissionService;
 
     // create
-    post(RestApi.User.REGISTER, (request, response) -> {
+    post(REGISTER_ROUTE, (request, response) -> {
       User user = userService.transformToUser(request);
       return userService.createUser(user);
     }, jsonTransformer());
 
     // read
-    get(RestApi.User.USER_BY_ID, (request, response) -> {
+    get(USER_BY_ID_ROUTE, (request, response) -> {
       long id = Long.parseLong(request.params(":id"));
       User user = userService.get(id);
 
@@ -43,10 +49,10 @@ public class UserController {
       return user;
     }, jsonTransformer());
 
-    get(RestApi.User.USERS, (request, response) -> userService.getAll(), jsonTransformer());
+    get(USERS_ROUTE, (request, response) -> userService.getAll(), jsonTransformer());
 
     // update
-    put(RestApi.User.USER_BY_ID, (request, response) -> {
+    put(USER_BY_ID_ROUTE, (request, response) -> {
       User user = userService.transformToUser(request);
       long id = Long.parseLong(request.params(":id"));
       user.setId(id);
@@ -61,7 +67,7 @@ public class UserController {
     }, jsonTransformer());
 
     // delete
-    delete(RestApi.User.USER_BY_ID, (request, response) -> {
+    delete(USER_BY_ID_ROUTE, (request, response) -> {
       long id = Long.parseLong(request.params(":id"));
       User user = userService.get(id);
 

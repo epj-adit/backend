@@ -21,7 +21,6 @@ import ch.hsr.adit.application.controller.CategoryController;
 import ch.hsr.adit.application.controller.RoleController;
 import ch.hsr.adit.application.controller.TagController;
 import ch.hsr.adit.application.controller.UserController;
-import ch.hsr.adit.application.controller.api.RestApi;
 import ch.hsr.adit.application.service.AdvertisementService;
 import ch.hsr.adit.application.service.AuthenticationService;
 import ch.hsr.adit.application.service.CategoryService;
@@ -41,6 +40,8 @@ public class App {
 
   private static final Logger LOGGER = Logger.getLogger(App.class);
   private static final File KEY_FILE = new File("KeyStore.properties");
+  
+  private static final String WILDCARD_ROUTE = "/*";
 
   public static void main(String[] args) {
 
@@ -54,9 +55,9 @@ public class App {
     setupKeyStore();
 
     // General app filter
-    before(RestApi.App.WILDCARD, AppFilter.CORS);
-    before(RestApi.App.WILDCARD, AppFilter.AUTHENTICATION);
-    after(RestApi.App.WILDCARD, AppFilter.ENCODING);
+    before(WILDCARD_ROUTE, AppFilter.CORS);
+    before(WILDCARD_ROUTE, AppFilter.AUTHENTICATION);
+    after(WILDCARD_ROUTE, AppFilter.ENCODING);
 
     // General handler for exceptions and errors
     exception(Exception.class, AppHandler.EXCEPTION);
@@ -64,8 +65,8 @@ public class App {
     internalServerError(AppHandler.INERNAL_SERVER_ERROR);
 
     // Map Options Calls
-    options(RestApi.App.WILDCARD, AppHandler.CORS) ;
-    
+    options(WILDCARD_ROUTE, AppHandler.CORS);
+
     /***
      *
      * DEPENDENCY INJECTION

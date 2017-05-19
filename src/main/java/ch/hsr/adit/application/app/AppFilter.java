@@ -3,7 +3,8 @@ package ch.hsr.adit.application.app;
 
 import javax.naming.AuthenticationException;
 
-import ch.hsr.adit.application.controller.api.RestApi;
+import ch.hsr.adit.application.controller.AuthenticationController;
+import ch.hsr.adit.application.controller.UserController;
 import ch.hsr.adit.util.TokenUtil;
 import spark.Filter;
 import spark.Request;
@@ -50,8 +51,8 @@ public class AppFilter {
 
   private static final boolean needsAuthentication(Request request) {
     return !"OPTIONS".equalsIgnoreCase(request.requestMethod())
-        && !(request.uri().startsWith(RestApi.App.AUTHENTICATE)
-            || request.uri().startsWith(RestApi.User.REGISTER));
+        && !(request.uri().startsWith(AuthenticationController.AUTHENTICATE_ROUTE)
+            || request.uri().startsWith(UserController.REGISTER_ROUTE));
   }
 
 }
