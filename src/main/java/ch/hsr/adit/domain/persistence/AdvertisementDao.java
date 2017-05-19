@@ -41,10 +41,11 @@ public class AdvertisementDao extends GenericDao<Advertisement> {
         new StringBuilder("SELECT DISTINCT a FROM Advertisement as a WHERE ");
 
     // optional join
-    if (filter.getTagIds() != null && !filter.getTagIds().isEmpty()) {
+    if (!filter.getTagIds().isEmpty()) {
       queryString.insert(queryString.indexOf("WHERE"), " JOIN a.tags as t ");
     }
 
+    // search in title OR description if both are given
     if (filter.getTitle() != null) {
       if (filter.getDescription() != null) {
         queryString.append(" (");
@@ -57,6 +58,8 @@ public class AdvertisementDao extends GenericDao<Advertisement> {
         queryString.append(") ");
       }
     }
+    
+    // other filters
     if (filter.getUserId() != null) {
       queryString.append("and a.user.id = :userId ");
     }

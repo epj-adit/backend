@@ -17,7 +17,14 @@ public class AdvertisementFilter {
   private List<Long> tagIds = new ArrayList<>();
 
   public boolean isEmpty() {
-    return title == null && description == null && userId == null && advertisementStates.isEmpty()
-        && tagIds.isEmpty() && categoryIds.isEmpty();
+    return fieldsEmpty() && listsEmpty();
+  }
+
+  private boolean fieldsEmpty() {
+    return title == null && description == null && userId == null;
+  }
+
+  private boolean listsEmpty() {
+    return advertisementStates.isEmpty() && tagIds.isEmpty() && categoryIds.isEmpty();
   }
 }
