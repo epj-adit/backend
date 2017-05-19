@@ -23,7 +23,7 @@ public class RoleService {
   }
   
   public Role createRole(Role role) {
-    return (Role) roleDao.persist(role);
+    return roleDao.persist(role);
   }
 
   public Role updateRole(Role role) {

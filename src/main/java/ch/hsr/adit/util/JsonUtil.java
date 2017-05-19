@@ -17,6 +17,10 @@ public class JsonUtil {
 
   private static Gson gson = setup();
 
+  private JsonUtil() {
+    throw new IllegalAccessError("Utility class");
+  }
+  
   private static Gson setup() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(User.class, new UserSerializer());

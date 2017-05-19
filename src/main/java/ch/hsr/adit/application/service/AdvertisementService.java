@@ -26,7 +26,7 @@ public class AdvertisementService {
   }
 
   public Advertisement createAdvertisement(Advertisement advertisement) {
-    return (Advertisement) advertisementDao.persist(advertisement);
+    return advertisementDao.persist(advertisement);
   }
 
   public Advertisement updateAdvertisement(Advertisement advertisement) {
@@ -49,8 +49,7 @@ public class AdvertisementService {
   }
 
   public Advertisement get(Long id) {
-    Advertisement advertisement = advertisementDao.get(id);
-    return advertisement;
+    return advertisementDao.get(id);
   }
 
   public List<Advertisement> getAllFiltered(Request request) {
@@ -89,9 +88,10 @@ public class AdvertisementService {
     String description = request.queryParams("description");
 
 
-    if (title == null && description == null && userId == null && states.isEmpty()
-        && tagIds.isEmpty() && categoryIds.isEmpty()) {
-
+    boolean allFilterEmpty = title == null && description == null && userId == null
+        && states.isEmpty() && tagIds.isEmpty() && categoryIds.isEmpty();
+  
+    if (allFilterEmpty) {
       return advertisementDao.getAll();
     } else {
       return advertisementDao.get(title, description, userId, states, categoryIds, tagIds);

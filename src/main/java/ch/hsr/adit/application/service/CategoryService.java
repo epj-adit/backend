@@ -24,7 +24,7 @@ public class CategoryService {
   }
 
   public Category createCategory(Category category) {
-    return (Category) categoryDao.persist(category);
+    return categoryDao.persist(category);
   }
 
   public Category updateCategory(Category category) {
@@ -55,8 +55,7 @@ public class CategoryService {
   }
 
   public Category get(Long id) {
-    Category category = categoryDao.get(id);
-    return category;
+    return categoryDao.get(id);
   }
 
   public List<Category> getAllFiltered(Request request) {

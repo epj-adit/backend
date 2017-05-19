@@ -54,7 +54,6 @@ public class TagService {
       if (relatedAdvertisements == null || relatedAdvertisements.isEmpty()) {
         tagDao.delete(tagToDelete);
       }
-      // TODO should we return false, if do not delete anything?
     }
     return true;
   }
@@ -65,8 +64,7 @@ public class TagService {
   }
 
   public Tag get(Long id) {
-    Tag tag = tagDao.get(id);
-    return tag;
+    return tagDao.get(id);
   }
 
   public List<Tag> getAllFiltered(Request request) {
@@ -76,17 +74,16 @@ public class TagService {
           .filter(t -> t.getName().toLowerCase().contains(name.toLowerCase()))
           .collect(Collectors.toList());
     } else {
-      return new ArrayList<Tag>();
+      return new ArrayList<>();
     }
   }
 
   public List<Tag> getActiveTags() {
     final List<Advertisement> advertisements = advertisementDao.get(null, null, null,
         Arrays.asList(AdvertisementState.ACTIVE), null, null);
+    
     List<Tag> activeTags = new ArrayList<>();
-    advertisements.forEach(a -> {
-      activeTags.addAll(a.getTags());
-    });
+    advertisements.forEach(a -> activeTags.addAll(a.getTags()));
 
     return activeTags;
   }

@@ -42,7 +42,7 @@ public class Advertisement implements DbEntity {
   private int price;
   private Date created;
   private Date updated;
-  private Set<Tag> tags = new HashSet<Tag>(0);
+  private Set<Tag> tags = new HashSet<>(0);
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "advert_id_seq")

@@ -31,14 +31,12 @@ public class TagController {
       long id = Long.parseLong(request.params(":id"));
       return tagService.get(id);
     }, jsonTransformer());
-    
-    get(RestApi.Tag.TAGS_FILTERED, (request, response) -> {
-      return tagService.getAllFiltered(request);
-    }, jsonTransformer());
+
+    get(RestApi.Tag.TAGS_FILTERED, (request, response) -> tagService.getAllFiltered(request),
+        jsonTransformer());
 
     // delete
     delete(RestApi.Tag.TAG_BY_ID, (request, response) -> {
-      // TODO check for permisisons
       long id = Long.parseLong(request.params(":id"));
       return tagService.deleteTag(id);
     }, jsonTransformer());

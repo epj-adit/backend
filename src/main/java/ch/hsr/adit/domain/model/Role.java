@@ -29,7 +29,7 @@ public class Role implements DbEntity {
 
   private long id;
   private String name;
-  private Set<Permission> permissions = new HashSet<Permission>(0);
+  private Set<Permission> permissions = new HashSet<>(0);
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_id_seq")

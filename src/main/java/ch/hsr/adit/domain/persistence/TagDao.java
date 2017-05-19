@@ -8,8 +8,6 @@ import ch.hsr.adit.domain.model.Tag;
 
 public class TagDao extends GenericDao<Tag, Long> {
 
-  private static final Logger LOGGER = Logger.getLogger(TagDao.class);
-
   public TagDao(SessionFactory sessionFactory) {
     super(sessionFactory);
   }

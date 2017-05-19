@@ -12,6 +12,10 @@ import spark.Spark;
 
 public class AppFilter {
 
+  private AppFilter() {
+    throw new IllegalAccessError("Utility class");
+  }
+
   public static final Filter AUTHENTICATION = (Request request, Response response) -> {
     if (needsAuthentication(request)) {
       String token = request.headers("Authorization");
@@ -24,7 +28,7 @@ public class AppFilter {
       }
     }
   };
-  
+
   public static final Filter CORS = (Request request, Response response) -> {
     String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
     if (accessControlRequestHeaders != null) {
@@ -35,7 +39,7 @@ public class AppFilter {
     if (accessControlRequestMethod != null) {
       response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
     }
-    
+
     response.header("Access-Control-Allow-Origin", "*");
   };
 
@@ -45,9 +49,9 @@ public class AppFilter {
   };
 
   private static final boolean needsAuthentication(Request request) {
-    return (!"OPTIONS".equalsIgnoreCase(request.requestMethod())
+    return !"OPTIONS".equalsIgnoreCase(request.requestMethod())
         && !(request.uri().startsWith(RestApi.App.AUTHENTICATE)
-        || request.uri().startsWith(RestApi.User.REGISTER)));
+            || request.uri().startsWith(RestApi.User.REGISTER));
   }
 
 }

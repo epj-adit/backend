@@ -108,11 +108,10 @@ public class UserService {
   }
 
   public User get(Long id) {
-    User user = userDao.get(id);
-    return user;
+    return userDao.get(id);
   }
 
-  public List<User> getAllFiltered(Request request) {
+  public List<User> getAll() {
     return userDao.getAll();
   }
 

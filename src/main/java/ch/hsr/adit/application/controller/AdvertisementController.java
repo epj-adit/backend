@@ -41,16 +41,15 @@ public class AdvertisementController {
       return advertisementService.get(id);
     }, jsonTransformer());
 
-    get(RestApi.Advertisement.ADVERTISEMENTS_FILTERED, (request, response) -> {
-      return advertisementService.getAllFiltered(request);
-    }, jsonTransformer());
+    get(RestApi.Advertisement.ADVERTISEMENTS_FILTERED,
+        (request, response) -> advertisementService.getAllFiltered(request), jsonTransformer());
 
     // update
     put(RestApi.Advertisement.ADVERTISEMENT_BY_ID, (request, response) -> {
       Advertisement advertisement = advertisementService.transformToAdvertisement(request);
       long id = Long.parseLong(request.params(":id"));
       advertisement.setId(id);
-      
+
       String token = getToken(request);
       checkBasicPermissions(advertisement, token);
       checkReviewAdvertisementPermission(token);
@@ -77,7 +76,7 @@ public class AdvertisementController {
           + advertisement.getId() + " !");
     }
   }
-  
+
   private void checkReviewAdvertisementPermission(String token) {
     if (!permissionService.checkReviewAdvertisementPermission(token)) {
       LOGGER.warn("Additional permission is needed for editing other users status'!");

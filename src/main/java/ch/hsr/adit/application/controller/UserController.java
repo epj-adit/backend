@@ -43,10 +43,7 @@ public class UserController {
       return user;
     }, jsonTransformer());
 
-    // TODO: rename?
-    get(RestApi.User.USERS_FILTERED, (request, response) -> {
-      return userService.getAllFiltered(request);
-    }, jsonTransformer());
+    get(RestApi.User.USERS, (request, response) -> userService.getAll(), jsonTransformer());
 
     // update
     put(RestApi.User.USER_BY_ID, (request, response) -> {

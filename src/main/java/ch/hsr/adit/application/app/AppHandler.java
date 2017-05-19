@@ -14,6 +14,10 @@ public class AppHandler {
 
   private static final Logger LOGGER = Logger.getLogger(AppHandler.class);
 
+  private AppHandler() {
+    throw new IllegalAccessError("Utility class");
+  }
+  
   public static final ExceptionHandler EXCEPTION =
       (Exception e, Request request, Response response) -> {
         LOGGER.error("Exception occured with message: " + getExceptionMessageChain(e));

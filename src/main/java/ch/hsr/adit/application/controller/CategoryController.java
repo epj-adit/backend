@@ -26,11 +26,11 @@ public class CategoryController {
    */
   public CategoryController(CategoryService categoryService, PermissionService permissionService) {
     this.permissionService = permissionService;
-    
+
     // create
     post(RestApi.Category.CATEGORY, (request, response) -> {
       checkEditCategoriesPermission(getToken(request));
-      
+
       Category category = categoryService.transformToCategory(request);
       return categoryService.createCategory(category);
     }, jsonTransformer());
@@ -41,17 +41,16 @@ public class CategoryController {
       return categoryService.get(id);
     }, jsonTransformer());
 
-    get(RestApi.Category.CATEGORIES_FILTERED, (request, response) -> {
-      return categoryService.getAllFiltered(request);
-    }, jsonTransformer());
-    
+    get(RestApi.Category.CATEGORIES_FILTERED,
+        (request, response) -> categoryService.getAllFiltered(request), jsonTransformer());
+
     // update
     put(RestApi.Category.CATEGORY_BY_ID, (request, response) -> {
       Category category = categoryService.transformToCategory(request);
       long id = Long.parseLong(request.params(":id"));
       category.setId(id);
-      
-      //check if category exists
+
+      // check if category exists
       categoryService.get(category);
       checkEditCategoriesPermission(getToken(request));
 
@@ -61,22 +60,22 @@ public class CategoryController {
     // delete
     delete(RestApi.Category.CATEGORY_BY_ID, (request, response) -> {
       long id = Long.parseLong(request.params(":id"));
-      
-      //check if category exists
+
+      // check if category exists
       categoryService.get(id);
       checkEditCategoriesPermission(getToken(request));
-      
+
       return categoryService.deleteCategory(id);
     }, jsonTransformer());
   }
-  
+
   private void checkEditCategoriesPermission(String token) {
     if (!permissionService.checkEditCategoriesPermission(token)) {
       LOGGER.warn("User does not have permission to edit categories!");
       throw new ForbiddenException("User does not have permission to edit categories!");
     }
   }
-  
+
   private String getToken(Request request) {
     return request.headers("Authorization");
   }

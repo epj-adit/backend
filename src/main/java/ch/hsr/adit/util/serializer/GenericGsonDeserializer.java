@@ -23,7 +23,7 @@ public class GenericGsonDeserializer implements JsonDeserializer<Map<String, Obj
 
   public Object recursiveRead(JsonElement in) {
     if (in.isJsonObject()) {
-      Map<String, Object> map = new HashMap<String, Object>();
+      Map<String, Object> map = new HashMap<>();
       JsonObject jsonObject = in.getAsJsonObject();
       Set<Map.Entry<String, JsonElement>> entitySet = jsonObject.entrySet();
       for (Map.Entry<String, JsonElement> entry : entitySet) {

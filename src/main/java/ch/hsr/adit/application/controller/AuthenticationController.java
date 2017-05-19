@@ -16,9 +16,7 @@ public class AuthenticationController {
   public AuthenticationController(AuthenticationService authenticationService) {
 
     // authentication
-    post(RestApi.App.AUTHENTICATE, (request, response) -> {
-      return authenticationService.authenticate(request);
-    }, jsonTransformer());
-
+    post(RestApi.App.AUTHENTICATE,
+        (request, response) -> authenticationService.authenticate(request), jsonTransformer());
   }
 }

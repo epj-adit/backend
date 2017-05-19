@@ -8,7 +8,7 @@ public class RestApi {
   }
 
   public static class User {
-    public static final String USERS_FILTERED = "/users/";
+    public static final String USERS = "/users/";
     public static final String USER_FILTERED = "/user/";
     public static final String USER_BY_ID = "/user/:id";
     public static final String REGISTER = "/register";

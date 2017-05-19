@@ -74,16 +74,8 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       sessionFactory.getCurrentSession().beginTransaction();
       Query<T> query = createQuery("SELECT e FROM " + entityName + " as e WHERE e.name = :name");
       query.setParameter("name", name);
-      try {
-        T object = query.getSingleResult();
-        sessionFactory.getCurrentSession().getTransaction().commit();
-        return object;
-      } catch (NoResultException e) {
-        LOGGER.info("No entity found with name " + name);
-        LOGGER.info(e);
-        sessionFactory.getCurrentSession().getTransaction().rollback();
-        return null;
-      }
+
+      return getSingleObject(query);
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
       LOGGER.error("Failed to fetch " + entityName + ". Transaction rolled back.");
@@ -91,6 +83,19 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
     }
   }
 
+  private T getSingleObject(Query<T> query) {
+    try {
+      T object = query.getSingleResult();
+      sessionFactory.getCurrentSession().getTransaction().commit();
+      return object;
+    } catch (NoResultException e) {
+      LOGGER.info("No single entity found");
+      LOGGER.info(e);
+      sessionFactory.getCurrentSession().getTransaction().rollback();
+      return null;
+    }
+  }
+  
   public List<T> getAll() {
     try {
       LOGGER.info("Try to fetch all " + entityName + " objects");

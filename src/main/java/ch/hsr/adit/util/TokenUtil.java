@@ -17,7 +17,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 
 import ch.hsr.adit.domain.model.Permission;
 import ch.hsr.adit.domain.model.User;
-import spark.Request;
 
 
 public final class TokenUtil {
