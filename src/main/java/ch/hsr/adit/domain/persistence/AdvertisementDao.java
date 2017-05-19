@@ -9,7 +9,7 @@ import org.hibernate.query.Query;
 import ch.hsr.adit.domain.model.Advertisement;
 import ch.hsr.adit.domain.model.AdvertisementState;
 
-public class AdvertisementDao extends GenericDao<Advertisement, Long> {
+public class AdvertisementDao extends GenericDao<Advertisement> {
 
   private static final Logger LOGGER = Logger.getLogger(AdvertisementDao.class);
 

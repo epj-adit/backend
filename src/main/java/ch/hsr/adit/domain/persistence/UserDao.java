@@ -8,7 +8,7 @@ import org.hibernate.query.Query;
 import ch.hsr.adit.domain.model.User;
 
 
-public class UserDao extends GenericDao<User, Long> {
+public class UserDao extends GenericDao<User> {
 
   private static final Logger LOGGER = Logger.getLogger(UserDao.class);
 

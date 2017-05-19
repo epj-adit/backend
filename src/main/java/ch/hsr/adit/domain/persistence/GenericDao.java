@@ -13,7 +13,7 @@ import org.hibernate.query.Query;
 
 import ch.hsr.adit.domain.model.DbEntity;
 
-public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
+public abstract class GenericDao<T extends DbEntity> {
 
   private static final Logger LOGGER = Logger.getLogger(GenericDao.class);
 
