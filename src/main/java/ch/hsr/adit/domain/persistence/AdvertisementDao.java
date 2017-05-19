@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
 import ch.hsr.adit.domain.model.Advertisement;
-import ch.hsr.adit.domain.model.AdvertisementState;
+import ch.hsr.adit.domain.model.filter.AdvertisementFilter;
 
 public class AdvertisementDao extends GenericDao<Advertisement> {
 
@@ -28,44 +28,48 @@ public class AdvertisementDao extends GenericDao<Advertisement> {
    * @param tagIds array of tag ids
    * @return List of advertisement
    */
-  public List<Advertisement> get(String title, String description, Long userId,
-      List<AdvertisementState> advertisementStates, List<Long> categoryIds, List<Long> tagIds) {
-
+  public List<Advertisement> get(AdvertisementFilter filter) {
     LOGGER.info("Try to fetch filtered advertisements");
+
+    String query = createQueryString(filter);
+    return executeQuery(query, filter);
+  }
+
+  private String createQueryString(AdvertisementFilter filter) {
 
     StringBuilder queryString =
         new StringBuilder("SELECT DISTINCT a FROM Advertisement as a WHERE ");
 
     // optional join
-    if (tagIds != null && !tagIds.isEmpty()) {
+    if (filter.getTagIds() != null && !filter.getTagIds().isEmpty()) {
       queryString.insert(queryString.indexOf("WHERE"), " JOIN a.tags as t ");
     }
 
-    if (title != null) {
-      if (description != null) {
+    if (filter.getTitle() != null) {
+      if (filter.getDescription() != null) {
         queryString.append(" (");
       }
       queryString.append("and lower(a.title) LIKE :title ");
     }
-    if (description != null) {
+    if (filter.getDescription() != null) {
       queryString.append("or lower(a.description) LIKE :description ");
-      if (title != null) {
+      if (filter.getTitle() != null) {
         queryString.append(") ");
       }
     }
-    if (userId != null) {
+    if (filter.getUserId() != null) {
       queryString.append("and a.user.id = :userId ");
     }
 
-    if (advertisementStates != null && !advertisementStates.isEmpty()) {
+    if (filter.getAdvertisementStates() != null && !filter.getAdvertisementStates().isEmpty()) {
       queryString.append("and a.advertisementState IN (:advertisementStates) ");
     }
 
-    if (categoryIds != null && !categoryIds.isEmpty()) {
+    if (filter.getCategoryIds() != null && !filter.getCategoryIds().isEmpty()) {
       queryString.append("and a.category.id IN (:categoryIds) ");
     }
 
-    if (tagIds != null && !tagIds.isEmpty()) {
+    if (filter.getTagIds() != null && !filter.getTagIds().isEmpty()) {
       queryString.append("and t.id IN (:tagIds) ");
     }
 
@@ -73,36 +77,40 @@ public class AdvertisementDao extends GenericDao<Advertisement> {
     int index = queryString.indexOf("and");
     if (index == -1) {
       index = queryString.indexOf("or");
-    } 
+    }
     if (index != -1) {
       queryString.replace(index, index + 3, "");
     }
-    
+
+    return queryString.toString();
+  }
+
+  private List<Advertisement> executeQuery(String queryString, AdvertisementFilter filter) {
     try {
       sessionFactory.getCurrentSession().beginTransaction();
 
       // set parameter
-      Query<Advertisement> query = createQuery(queryString.toString());
-      if (title != null) {
-        query.setParameter("title", "%" + title.toLowerCase() + "%");
+      Query<Advertisement> query = createQuery(queryString);
+      if (filter.getTitle() != null) {
+        query.setParameter("title", "%" + filter.getTitle().toLowerCase() + "%");
       }
-      if (description != null) {
-        query.setParameter("description", "%" + description.toLowerCase() + "%");
+      if (filter.getDescription() != null) {
+        query.setParameter("description", "%" + filter.getDescription().toLowerCase() + "%");
       }
-      if (userId != null) {
-        query.setParameter("userId", userId);
-      }
-
-      if (advertisementStates != null && !advertisementStates.isEmpty()) {
-        query.setParameter("advertisementStates", advertisementStates);
+      if (filter.getUserId() != null) {
+        query.setParameter("userId", filter.getUserId());
       }
 
-      if (categoryIds != null && !categoryIds.isEmpty()) {
-        query.setParameter("categoryIds", categoryIds);
+      if (filter.getAdvertisementStates() != null && !filter.getAdvertisementStates().isEmpty()) {
+        query.setParameter("advertisementStates", filter.getAdvertisementStates());
       }
 
-      if (tagIds != null && !tagIds.isEmpty()) {
-        query.setParameter("tagIds", tagIds);
+      if (filter.getCategoryIds() != null && !filter.getCategoryIds().isEmpty()) {
+        query.setParameter("categoryIds", filter.getCategoryIds());
+      }
+
+      if (filter.getTagIds() != null && !filter.getTagIds().isEmpty()) {
+        query.setParameter("tagIds", filter.getTagIds());
       }
 
       List<Advertisement> result = query.getResultList();

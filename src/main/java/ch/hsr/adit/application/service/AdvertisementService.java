@@ -1,6 +1,5 @@
 package ch.hsr.adit.application.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import com.google.gson.JsonSyntaxException;
 
 import ch.hsr.adit.domain.model.Advertisement;
 import ch.hsr.adit.domain.model.AdvertisementState;
+import ch.hsr.adit.domain.model.filter.AdvertisementFilter;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
 import ch.hsr.adit.util.JsonUtil;
 import spark.Request;
@@ -53,48 +53,44 @@ public class AdvertisementService {
   }
 
   public List<Advertisement> getAllFiltered(Request request) {
-    Long userId = null;
+
+    AdvertisementFilter filter = new AdvertisementFilter();
+
     if (request.queryParams("userId") != null) {
-      userId = Long.parseLong(request.queryParams("userId"));
+      Long userId = Long.parseLong(request.queryParams("userId"));
+      filter.setUserId(userId);
     }
 
-    List<AdvertisementState> states = new ArrayList<>();
     if (request.queryParamsValues("advertisementState") != null) {
       String[] tags = request.queryParamsValues("advertisementState");
       for (int i = 0; i < tags.length; i++) {
         Integer ordinal = Integer.parseInt(tags[i]);
-        states.add(AdvertisementState.values()[ordinal]);
+        filter.getAdvertisementStates().add(AdvertisementState.values()[ordinal]);
       }
     }
 
-    List<Long> tagIds = new ArrayList<>();
     if (request.queryParamsValues("tagId") != null) {
       String[] tags = request.queryParamsValues("tagId");
       for (int i = 0; i < tags.length; i++) {
-        tagIds.add(Long.valueOf(tags[i]));
+        filter.getTagIds().add(Long.valueOf(tags[i]));
       }
     }
 
-    List<Long> categoryIds = new ArrayList<>();
     if (request.queryParams("categoryId") != null) {
       String[] categories = request.queryParamsValues("categoryId");
       for (int i = 0; i < categories.length; i++) {
-        categoryIds.add(Long.valueOf(categories[i]));
+        filter.getCategoryIds().add(Long.valueOf(categories[i]));
       }
     }
 
+    filter.setTitle(request.queryParams("title"));
+    filter.setDescription(request.queryParams("description"));
 
-    String title = request.queryParams("title");
-    String description = request.queryParams("description");
 
-
-    boolean allFilterEmpty = title == null && description == null && userId == null
-        && states.isEmpty() && tagIds.isEmpty() && categoryIds.isEmpty();
-  
-    if (allFilterEmpty) {
+    if (filter.isEmpty()) {
       return advertisementDao.getAll();
     } else {
-      return advertisementDao.get(title, description, userId, states, categoryIds, tagIds);
+      return advertisementDao.get(filter);
     }
   }
 

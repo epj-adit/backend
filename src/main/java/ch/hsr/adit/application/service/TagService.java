@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import ch.hsr.adit.domain.model.Advertisement;
 import ch.hsr.adit.domain.model.AdvertisementState;
 import ch.hsr.adit.domain.model.Tag;
+import ch.hsr.adit.domain.model.filter.AdvertisementFilter;
 import ch.hsr.adit.domain.persistence.AdvertisementDao;
 import ch.hsr.adit.domain.persistence.TagDao;
 import ch.hsr.adit.util.JsonUtil;
@@ -79,9 +80,10 @@ public class TagService {
   }
 
   public List<Tag> getActiveTags() {
-    final List<Advertisement> advertisements = advertisementDao.get(null, null, null,
-        Arrays.asList(AdvertisementState.ACTIVE), null, null);
-    
+    AdvertisementFilter filter = new AdvertisementFilter();
+    filter.setAdvertisementStates(Arrays.asList(AdvertisementState.ACTIVE));
+    final List<Advertisement> advertisements = advertisementDao.get(filter);
+
     List<Tag> activeTags = new ArrayList<>();
     advertisements.forEach(a -> activeTags.addAll(a.getTags()));
 
