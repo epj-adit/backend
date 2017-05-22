@@ -7,9 +7,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
 import ch.hsr.adit.domain.model.Advertisement;
-import ch.hsr.adit.domain.model.AdvertisementState;
+import ch.hsr.adit.domain.model.filter.AdvertisementFilter;
 
-public class AdvertisementDao extends GenericDao<Advertisement, Long> {
+public class AdvertisementDao extends GenericDao<Advertisement> {
 
   private static final Logger LOGGER = Logger.getLogger(AdvertisementDao.class);
 
@@ -28,70 +28,92 @@ public class AdvertisementDao extends GenericDao<Advertisement, Long> {
    * @param tagIds array of tag ids
    * @return List of advertisement
    */
-  public List<Advertisement> get(String title, String description, Long userId,
-      List<AdvertisementState> advertisementStates, List<Long> categoryIds, List<Long> tagIds) {
-
+  public List<Advertisement> get(AdvertisementFilter filter) {
     LOGGER.info("Try to fetch filtered advertisements");
+
+    String query = createQueryString(filter);
+    return executeQuery(query, filter);
+  }
+
+  private String createQueryString(AdvertisementFilter filter) {
 
     StringBuilder queryString =
         new StringBuilder("SELECT DISTINCT a FROM Advertisement as a WHERE ");
 
     // optional join
-    if (tagIds != null && !tagIds.isEmpty()) {
+    if (!filter.getTagIds().isEmpty()) {
       queryString.insert(queryString.indexOf("WHERE"), " JOIN a.tags as t ");
     }
 
-    if (title != null) {
+    // search in title OR description if both are given
+    if (filter.getTitle() != null) {
+      if (filter.getDescription() != null) {
+        queryString.append(" (");
+      }
       queryString.append("and lower(a.title) LIKE :title ");
     }
-    if (description != null) {
-      queryString.append("and lower(a.description) LIKE :description ");
+    if (filter.getDescription() != null) {
+      queryString.append("or lower(a.description) LIKE :description ");
+      if (filter.getTitle() != null) {
+        queryString.append(") ");
+      }
     }
-    if (userId != null) {
+    
+    // other filters
+    if (filter.getUserId() != null) {
       queryString.append("and a.user.id = :userId ");
     }
-    
-    if (advertisementStates != null && !advertisementStates.isEmpty()) {
+
+    if (!filter.getAdvertisementStates().isEmpty()) {
       queryString.append("and a.advertisementState IN (:advertisementStates) ");
     }
-    
-    if (categoryIds != null && !categoryIds.isEmpty()) {
+
+    if (!filter.getCategoryIds().isEmpty()) {
       queryString.append("and a.category.id IN (:categoryIds) ");
     }
 
-    if (tagIds != null && !tagIds.isEmpty()) {
+    if (!filter.getTagIds().isEmpty()) {
       queryString.append("and t.id IN (:tagIds) ");
     }
 
     // remove first "AND"
     int index = queryString.indexOf("and");
-    queryString.replace(index, index + 3, "");
+    if (index == -1) {
+      index = queryString.indexOf("or");
+    }
+    if (index != -1) {
+      queryString.replace(index, index + 3, "");
+    }
 
+    return queryString.toString();
+  }
+
+  private List<Advertisement> executeQuery(String queryString, AdvertisementFilter filter) {
     try {
       sessionFactory.getCurrentSession().beginTransaction();
 
       // set parameter
-      Query<Advertisement> query = createQuery(queryString.toString());
-      if (title != null) {
-        query.setParameter("title", "%" + title.toLowerCase() + "%");
+      Query<Advertisement> query = createQuery(queryString);
+      if (filter.getTitle() != null) {
+        query.setParameter("title", "%" + filter.getTitle().toLowerCase() + "%");
       }
-      if (description != null) {
-        query.setParameter("description", "%" + description.toLowerCase() + "%");
+      if (filter.getDescription() != null) {
+        query.setParameter("description", "%" + filter.getDescription().toLowerCase() + "%");
       }
-      if (userId != null) {
-        query.setParameter("userId", userId);
+      if (filter.getUserId() != null) {
+        query.setParameter("userId", filter.getUserId());
       }
-      
-      if (advertisementStates != null && !advertisementStates.isEmpty()) {
-        query.setParameter("advertisementStates", advertisementStates);
+
+      if (!filter.getAdvertisementStates().isEmpty()) {
+        query.setParameter("advertisementStates", filter.getAdvertisementStates());
       }
-      
-      if (categoryIds != null && !categoryIds.isEmpty()) {
-        query.setParameter("categoryIds", categoryIds);
+
+      if (!filter.getCategoryIds().isEmpty()) {
+        query.setParameter("categoryIds", filter.getCategoryIds());
       }
-      
-      if (tagIds != null && !tagIds.isEmpty()) {
-        query.setParameter("tagIds", tagIds);
+
+      if (!filter.getTagIds().isEmpty()) {
+        query.setParameter("tagIds", filter.getTagIds());
       }
 
       List<Advertisement> result = query.getResultList();

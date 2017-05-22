@@ -46,10 +46,10 @@ public class KeyStore {
     if (file == null) {
       throw new FileNotFoundException("Please provide a file for the keystore");
     }
-    
+
     this.file = file;
-    
-    if (! file.exists()) {
+
+    if (!file.exists()) {
       KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
       keyGenerator.init(256); // 128 default; 192 and 256 also possible
       SecretKey secretKey = keyGenerator.generateKey();
@@ -67,6 +67,7 @@ public class KeyStore {
       prop.store(out, null);
     } catch (IOException e) {
       LOGGER.error("Failed to store secretKey in file: " + file.getAbsolutePath());
+      LOGGER.error(e);
     }
   }
 
@@ -81,6 +82,7 @@ public class KeyStore {
       encoded = decodeHex(secretString.toCharArray());
     } catch (DecoderException e) {
       LOGGER.error("Cannot load and decode given secret " + file.getAbsolutePath());
+      LOGGER.error(e);
     }
     return new SecretKeySpec(encoded, "AES");
   }

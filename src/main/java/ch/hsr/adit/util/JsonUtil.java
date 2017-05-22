@@ -9,14 +9,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import ch.hsr.adit.domain.model.User;
-import ch.hsr.adit.domain.model.serializer.GenericGsonDeserializer;
-import ch.hsr.adit.domain.model.serializer.UserSerializer;
+import ch.hsr.adit.util.serializer.GenericGsonDeserializer;
+import ch.hsr.adit.util.serializer.UserSerializer;
 import spark.ResponseTransformer;
 
 public class JsonUtil {
 
   private static Gson gson = setup();
 
+  private JsonUtil() {
+    throw new IllegalAccessError("Utility class");
+  }
+  
   private static Gson setup() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(User.class, new UserSerializer());

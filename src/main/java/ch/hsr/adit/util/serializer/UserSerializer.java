@@ -1,4 +1,4 @@
-package ch.hsr.adit.domain.model.serializer;
+package ch.hsr.adit.util.serializer;
 
 import java.lang.reflect.Type;
 import java.util.Date;

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import ch.hsr.adit.domain.model.Tag;
@@ -17,6 +18,11 @@ import spark.route.HttpMethod;
 
 public class TagControllerIT {
 
+  @Before
+  public void setup() {
+    TestUtil.setUseToken(true);
+  }
+  
   @Test
   public void createTags() {
     // arrange
@@ -31,7 +37,7 @@ public class TagControllerIT {
     tags.add(tag2);
 
     // act
-    TestResponse response = TestUtil.request(HttpMethod.post, "/tags", tags);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/tags/", tags);
 
     // assert
     Map<String, Object>[] json = response.jsonList();
@@ -53,7 +59,7 @@ public class TagControllerIT {
     tags.add(tag2);
 
     // act
-    TestResponse response = TestUtil.request(HttpMethod.post, "/tags", tags);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/tags/", tags);
 
     // assert
     Map<String, Object>[] json = response.jsonList();
@@ -64,13 +70,13 @@ public class TagControllerIT {
   @Test
   public void getTag() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/tags/?name=ed", null);
+    TestResponse response = TestUtil.request(HttpMethod.get, "/tags/?name=go", null);
 
     // assert
     Map<String, Object>[] json = response.jsonList();
     assertEquals(200, response.statusCode);
     assertNotNull(json[0].get("id"));
-    assertEquals("Eduard Glatz", json[0].get("name"));
+    assertEquals("Gof", json[0].get("name"));
   }
 
   @Test
@@ -99,7 +105,7 @@ public class TagControllerIT {
 
     List<Tag> tags = new ArrayList<>();
     tags.add(tag);
-    TestResponse response = TestUtil.request(HttpMethod.post, "/tags", tags);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/tags/", tags);
 
     assertEquals(409, response.statusCode);
   }

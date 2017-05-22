@@ -11,6 +11,10 @@ public class DateUtil {
   private static final Logger LOGGER = Logger.getLogger(DateUtil.class);
   private static final String DATE_FORMAT = "dd.MM.yyyy";
 
+  private DateUtil() {
+    throw new IllegalAccessError("Utility class");
+  }
+  
   public static String formatDate(Date date) {
     return new SimpleDateFormat(DATE_FORMAT).format(date);
   }

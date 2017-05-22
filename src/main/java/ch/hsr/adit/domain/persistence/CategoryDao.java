@@ -9,7 +9,7 @@ import org.hibernate.query.Query;
 import ch.hsr.adit.domain.model.Category;
 
 
-public class CategoryDao extends GenericDao<Category, Long> {
+public class CategoryDao extends GenericDao<Category> {
   
   private static final Logger LOGGER = Logger.getLogger(CategoryDao.class);
 

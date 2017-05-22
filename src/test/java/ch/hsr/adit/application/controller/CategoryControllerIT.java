@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gson.reflect.TypeToken;
@@ -18,6 +19,13 @@ import spark.route.HttpMethod;
 
 public class CategoryControllerIT {
 
+  @Before
+  public void setup() {
+    TestUtil.setUseToken(true);
+    TestUtil.setNoPermissionsUser(false);
+    TestUtil.setTestToken(null);
+  }
+  
   @Test
   public void createCategory() {
     // arrange
@@ -32,6 +40,22 @@ public class CategoryControllerIT {
     Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
     assertEquals(name, json.get("name"));
+  }
+  
+  @Test
+  public void createCategoryWithoutEditCategoriesPermission() {
+    // force creation of new token with different user
+    TestUtil.setNoPermissionsUser(true);
+    
+    String name = new String("no permission");
+    Category category = new Category();
+    category.setName(name);
+
+    TestResponse response = TestUtil.request(HttpMethod.post, "/category", category);
+
+    assertEquals(403, response.statusCode);
+    
+    TestUtil.setNoPermissionsUser(false);
   }
 
   @Test
@@ -55,6 +79,18 @@ public class CategoryControllerIT {
     assertNotNull(json[0].get("id"));
     assertEquals("Bücher", json[0].get("name"));
   }
+  
+  @Test
+  public void getAllCategory() {
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.get, "/categories/", null);
+
+    // assert
+    Map<String, Object>[] json = response.jsonList();
+    assertEquals(200, response.statusCode);
+    assertTrue(json.length >= 3);
+  }
+
 
   @Test
   public void getNonExistentCategory() {
@@ -68,7 +104,7 @@ public class CategoryControllerIT {
   @Test
   public void deleteCategory() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.delete, "/category/3", null);
+    TestResponse response = TestUtil.request(HttpMethod.delete, "/category/4", null);
 
     // assert
     assertEquals(200, response.statusCode);
@@ -119,6 +155,34 @@ public class CategoryControllerIT {
     assertEquals(200, response.statusCode);
     assertEquals("Jobs", json.get("name"));
     assertEquals(409, response2.statusCode);
+  }
+  
+  @Test
+  public void updateCategory() {
+    TestResponse response = TestUtil.request(HttpMethod.get, "/category/2", null);
+
+    Category category =
+        JsonUtil.fromJson(response.body, new TypeToken<Category>() {}.getType());
+    category.setName("updated");
+    TestResponse response2 = TestUtil.request(HttpMethod.put, "/category/2", category);
+
+    assertEquals(200, response.statusCode);
+    assertEquals(200, response2.statusCode);
+  }
+  
+  @Test
+  public void updateCategoryWithoutEditCategoriesPermission() {
+    TestUtil.setNoPermissionsUser(true);
+    
+    TestResponse response = TestUtil.request(HttpMethod.get, "/category/2", null);
+
+    Category category =
+        JsonUtil.fromJson(response.body, new TypeToken<Category>() {}.getType());
+    category.setName("updated");
+    TestResponse response2 = TestUtil.request(HttpMethod.put, "/category/2", category);
+
+    assertEquals(200, response.statusCode);
+    assertEquals(403, response2.statusCode);
   }
   
   @Test

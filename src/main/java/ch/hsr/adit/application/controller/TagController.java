@@ -12,6 +12,10 @@ import ch.hsr.adit.domain.model.Tag;
 
 public class TagController {
 
+  private static final String TAG_BY_ID_ROUTE = "/tag/:id";
+  private static final String TAGS_ROUTE = "/tags/";
+  private static final String TAGS_FILTERED_ROUTE = "/tags/";
+  
   /**
    * API Controller for /advertisement requests.
    * 
@@ -20,24 +24,22 @@ public class TagController {
   public TagController(TagService tagService) {
 
     // create
-    post(RestApi.Tag.TAGS, (request, response) -> {
+    post(TAGS_ROUTE, (request, response) -> {
       List<Tag> tags = tagService.transformToTags(request);
       return tagService.createTags(tags);
     }, jsonTransformer());
 
     // read
-    get(RestApi.Tag.TAG_BY_ID, (request, response) -> {
+    get(TAG_BY_ID_ROUTE, (request, response) -> {
       long id = Long.parseLong(request.params(":id"));
       return tagService.get(id);
     }, jsonTransformer());
-    
-    get(RestApi.Tag.TAGS_FILTERED, (request, response) -> {
-      return tagService.getAllFiltered(request);
-    }, jsonTransformer());
+
+    get(TAGS_FILTERED_ROUTE, (request, response) -> tagService.getAllFiltered(request),
+        jsonTransformer());
 
     // delete
-    delete(RestApi.Tag.TAG_BY_ID, (request, response) -> {
-      // TODO check for permisisons
+    delete(TAG_BY_ID_ROUTE, (request, response) -> {
       long id = Long.parseLong(request.params(":id"));
       return tagService.deleteTag(id);
     }, jsonTransformer());

@@ -2,19 +2,18 @@ package ch.hsr.adit.domain.persistence;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.NoResultException;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
 import ch.hsr.adit.domain.model.DbEntity;
 
-public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
+public abstract class GenericDao<T extends DbEntity> {
 
   private static final Logger LOGGER = Logger.getLogger(GenericDao.class);
 
@@ -59,7 +58,7 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       T object = sessionFactory.getCurrentSession().get(type, id);
       sessionFactory.getCurrentSession().getTransaction().commit();
       if (object == null) {
-        throw new HibernateException(entityName + " with id " + id + " not found");
+        throw new ObjectNotFoundException(id, entityName + " not found");
       }
       return object;
     } catch (Exception e) {
@@ -75,14 +74,8 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       sessionFactory.getCurrentSession().beginTransaction();
       Query<T> query = createQuery("SELECT e FROM " + entityName + " as e WHERE e.name = :name");
       query.setParameter("name", name);
-      try {
-        T object = query.getSingleResult();
-        sessionFactory.getCurrentSession().getTransaction().commit();
-        return object;
-      } catch (NoResultException e) {
-        sessionFactory.getCurrentSession().getTransaction().rollback();
-        return null;
-      }
+
+      return getSingleObject(query);
     } catch (Exception e) {
       sessionFactory.getCurrentSession().getTransaction().rollback();
       LOGGER.error("Failed to fetch " + entityName + ". Transaction rolled back.");
@@ -90,6 +83,19 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
     }
   }
 
+  private T getSingleObject(Query<T> query) {
+    try {
+      T object = query.getSingleResult();
+      sessionFactory.getCurrentSession().getTransaction().commit();
+      return object;
+    } catch (NoResultException e) {
+      LOGGER.info("No single entity found");
+      LOGGER.info(e);
+      sessionFactory.getCurrentSession().getTransaction().rollback();
+      return null;
+    }
+  }
+  
   public List<T> getAll() {
     try {
       LOGGER.info("Try to fetch all " + entityName + " objects");
@@ -120,10 +126,6 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
     }
   }
 
-  public void updateAll(Collection<T> objects) {
-    objects.forEach(o -> update(o));
-  }
-
   public void delete(T object) {
     try {
       LOGGER.info("Try to delete " + entityName);
@@ -137,9 +139,4 @@ public abstract class GenericDao<T extends DbEntity, P extends Serializable> {
       throw e;
     }
   }
-
-  public void deleteAll(Collection<T> objects) {
-    objects.forEach(o -> delete(o));
-  }
-
 }

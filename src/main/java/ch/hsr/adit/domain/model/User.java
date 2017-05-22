@@ -25,20 +25,16 @@ import lombok.Data;
 @Table(name = "user", schema = "public",
     uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User implements DbEntity {
-  
+
   private static final long serialVersionUID = 1L;
 
-  @Transient
-  private String jwtToken;
-  
-  @Transient
-  private String passwordPlaintext;
-  
   private long id;
   private Role role;
   private String username;
   private String email;
   private String passwordHash;
+  private String passwordPlaintext;
+  private String jwtToken;
   private boolean isPrivate;
   private boolean wantsNotification;
   private boolean isActive;
@@ -49,8 +45,8 @@ public class User implements DbEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
-  @SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq",
-      initialValue = 10, allocationSize = 1)
+  @SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq", initialValue = 10,
+      allocationSize = 1)
   @Column(name = "id", unique = true, nullable = false)
   public long getId() {
     return this.id;
@@ -100,6 +96,23 @@ public class User implements DbEntity {
     this.passwordHash = passwordHash;
   }
 
+  @Transient
+  public String getPasswordPlaintext() {
+    return this.passwordPlaintext;
+  }
+
+  public void setPasswordPlaintext(String passwordPlaintext) {
+    this.passwordPlaintext = passwordPlaintext;
+  }
+
+  @Column(name = "jwttoken", length = 1000, nullable = true)
+  public String getJwtToken() {
+    return this.jwtToken;
+  }
+
+  public void setJwtToken(String jwtToken) {
+    this.jwtToken = jwtToken;
+  }
 
   @Column(name = "is_private", nullable = false)
   public boolean isIsPrivate() {

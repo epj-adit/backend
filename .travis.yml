@@ -2,6 +2,8 @@ sudo: required
 language: generic
 services:
   - docker
+git:
+  depth: 999999
 cache:
   directories:
     - .m2

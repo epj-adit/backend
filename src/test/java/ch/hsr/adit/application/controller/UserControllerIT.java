@@ -6,15 +6,19 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.hsr.adit.domain.model.Permission;
 import ch.hsr.adit.domain.model.Role;
 import ch.hsr.adit.domain.model.User;
 import ch.hsr.adit.test.TestResponse;
 import ch.hsr.adit.test.TestUtil;
+import ch.hsr.adit.util.PermissionUtil;
 import spark.route.HttpMethod;
 
 public class UserControllerIT {
@@ -30,6 +34,15 @@ public class UserControllerIT {
   public void setup() {
     this.role = new Role();
     this.role.setId(1);
+
+    TestUtil.setUseToken(true);
+    Set<Permission> permissions = new HashSet<>();
+    permissions.add(PermissionUtil.BASIC_PERMISSION);
+    this.role.setPermissions(permissions);
+    
+    TestUtil.setNoPermissionsUser(false);
+    TestUtil.setTestToken(null);
+    TestUtil.setUseToken(true);
   }
 
   @Test
@@ -44,8 +57,11 @@ public class UserControllerIT {
     user.setIsActive(isActive);
     user.setRole(role);
 
+    TestUtil.setTestToken("");
+    TestUtil.setUseToken(false);
+
     // act
-    TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/register", user);
 
     // assert
     Map<String, Object> json = response.json();
@@ -55,6 +71,7 @@ public class UserControllerIT {
     assertEquals("new.student@hsr.ch", json.get("email"));
     assertNull(json.get("passwordHash"));
     assertNull(json.get("passwortPlaintext"));
+    assertNull(json.get("jwtToken")); // is set after registration
     assertEquals(isPrivate, (Boolean) json.get("isPrivate"));
     assertEquals(wantsNotification, (Boolean) json.get("wantsNotification"));
     assertEquals(isActive, (Boolean) json.get("isActive"));
@@ -89,7 +106,7 @@ public class UserControllerIT {
   @Test
   public void getAllUser() {
     // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/users", null);
+    TestResponse response = TestUtil.request(HttpMethod.get, "/users/", null);
 
     // assert
     Map<String, Object>[] jsonList = response.jsonList();
@@ -98,34 +115,24 @@ public class UserControllerIT {
   }
 
   @Test
-  public void getUserByConversation() {
-    // act
-    TestResponse response = TestUtil.request(HttpMethod.get, "/users/?conversationUserId=1", null);
-
-    // assert
-    Map<String, Object>[] jsonList = response.jsonList();
-    assertEquals(200, response.statusCode);
-    assertEquals(2, jsonList.length);
-  }
-
-  @Test
   public void updateUserTest() {
     // arrange
     User user = new User();
-    user.setId(1);
+    user.setId(3);
     user.setUsername(username);
-    user.setEmail("updatedStudent@hsr.ch");
+    user.setEmail("notactiveanymore@hsr.ch");
     user.setPasswordPlaintext(password);
     user.setIsPrivate(isPrivate);
     user.setWantsNotification(wantsNotification);
-    user.setIsActive(isActive);
+    //test if is_active permission is enforced
+    user.setIsActive(false);
     user.setRole(role);
 
     String updatedValue = "Niguaran";
 
     // act
     user.setUsername(updatedValue);
-    TestResponse response = TestUtil.request(HttpMethod.put, "/user/1", user);
+    TestResponse response = TestUtil.request(HttpMethod.put, "/user/7", user);
 
     // assert
     Map<String, Object> json = response.json();
@@ -142,8 +149,9 @@ public class UserControllerIT {
     TestResponse response = TestUtil.request(HttpMethod.delete, "/user/4", null);
 
     // assert
+    Map<String, Object> json = response.json();
     assertEquals(200, response.statusCode);
-    assertTrue(Boolean.parseBoolean(response.body));
+    assertFalse((Boolean) json.get("isActive"));
   }
 
   @Test
@@ -166,8 +174,8 @@ public class UserControllerIT {
     user2.setIsActive(isActive);
     user2.setRole(role);
 
-    TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
-    TestResponse response2 = TestUtil.request(HttpMethod.post, "/user", user2);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/register", user);
+    TestResponse response2 = TestUtil.request(HttpMethod.post, "/register", user2);
 
     Map<String, Object> json = response.json();
     Map<String, Object> json2 = response2.json();
@@ -175,14 +183,6 @@ public class UserControllerIT {
     assertNotNull(json.get("id"));
     assertNotNull(json2.get("id"));
     assertEquals((Long) json.get("id") + 1, json2.get("id"));
-  }
-
-  @Test
-  public void deleteReferencedUserTest() {
-    TestResponse response = TestUtil.request(HttpMethod.delete, "/user/1", null);
-
-    assertEquals(409, response.statusCode);
-    assertFalse(Boolean.parseBoolean(response.body));
   }
 
   @Test
@@ -203,7 +203,7 @@ public class UserControllerIT {
 
     // act
     user.setEmail(updatedValue);
-    TestResponse response = TestUtil.request(HttpMethod.put, "/user/1", user);
+    TestResponse response = TestUtil.request(HttpMethod.put, "/user/3", user);
 
     // assert
     assertEquals(409, response.statusCode);
@@ -211,22 +211,15 @@ public class UserControllerIT {
 
   @Test
   public void insertUserWithPut() {
-    // Both Http PUT and POST can be used for creating.
+    // arrange
     User user = new User();
-    user.setId(10000000);
-    user.setUsername(username);
-    user.setEmail("somethingNew@hsr.ch");
-    user.setPasswordPlaintext(password);
-    user.setIsPrivate(isPrivate);
-    user.setWantsNotification(wantsNotification);
-    user.setIsActive(isActive);
-    user.setRole(role);
+    user.setEmail("update@hsr.ch");
 
     // act
     TestResponse response = TestUtil.request(HttpMethod.put, "/user/10000000", user);
 
     // assert
-    assertEquals(200, response.statusCode);
+    assertEquals(404, response.statusCode);
   }
 
   @Test
@@ -260,8 +253,8 @@ public class UserControllerIT {
     user2.setRole(role);
 
     // act
-    TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
-    TestResponse response2 = TestUtil.request(HttpMethod.post, "/user", user2);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/register", user);
+    TestResponse response2 = TestUtil.request(HttpMethod.post, "/register", user2);
 
     // assert
     assertEquals(200, response.statusCode);
@@ -279,9 +272,44 @@ public class UserControllerIT {
     user.setIsActive(isActive);
     user.setRole(role);
 
-    TestResponse response = TestUtil.request(HttpMethod.post, "/user", user);
+    TestResponse response = TestUtil.request(HttpMethod.post, "/register", user);
 
     assertEquals(409, response.statusCode);
   }
 
+  @Test
+  public void getDifferentUserWithBasicPermission() {
+    TestUtil.setNoPermissionsUser(true);
+    TestUtil.setTestToken(null);
+
+    TestResponse response = TestUtil.request(HttpMethod.get, "/user/2", null);
+
+    // assert
+    assertEquals(403, response.statusCode);
+  }
+
+  @Test
+  public void updateDifferentUserWithBasicPermission() {
+    TestUtil.setNoPermissionsUser(true);
+    TestUtil.setTestToken(null);
+    
+    User user = new User();
+    user.setId(1);
+    user.setUsername(username);
+    user.setEmail("updatedStudent@hsr.ch");
+    user.setPasswordPlaintext(password);
+    user.setIsPrivate(isPrivate);
+    user.setWantsNotification(wantsNotification);
+    user.setIsActive(isActive);
+    user.setRole(role);
+
+    String updatedValue = "illegal update";
+
+    // act
+    user.setUsername(updatedValue);
+    TestResponse response = TestUtil.request(HttpMethod.put, "/user/2", user);
+
+    // assert
+    assertEquals(403, response.statusCode);
+  }
 }
