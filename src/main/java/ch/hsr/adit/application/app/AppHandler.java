@@ -45,7 +45,7 @@ public class AppHandler {
   }
 
   public static final Route NOT_FOUND = (Request request, Response response) -> {
-    LOGGER.error("404, page not found:: " + request.url());
+    LOGGER.error("404, page not found: " + request.url());
     response.status(404);
     return response;
   };
