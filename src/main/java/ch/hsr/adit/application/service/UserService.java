@@ -59,10 +59,6 @@ public class UserService {
         }
       }
 
-      if (!user.getJwtToken().equals(dbUser.getJwtToken())) {
-        dbUser.setJwtToken(user.getJwtToken());
-      }
-
       if (!user.getRole().equals(dbUser.getRole())) {
         dbUser.setRole(user.getRole());
       }

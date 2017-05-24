@@ -39,16 +39,10 @@ public class AuthenticationService {
       throw new AuthenticationException("Wrong password! No token created.");
     }
 
-    if (TokenUtil.getInstance().verify(user.getJwtToken())) {
-      // user already have a valid token
-      return user;
-    } else {
-      // everything seems fine, we issue a new token
-      String token = TokenUtil.getInstance().generateToken(user);
-      user.setJwtToken(token);
-      userDao.update(user);
-      return user;
-    }
+    // everything seems fine, we issue a new token
+    String token = TokenUtil.getInstance().generateToken(user);
+    user.setJwtToken(token);
+    return user;
   }
 
   private boolean checkPassword(String passwordHash, String plaintextPassword) {
