@@ -148,7 +148,10 @@ public class UserControllerIT {
     // arrange
     User user = new User();
     user.setId(7);
+    user.setEmail("nonull@hsr.ch");
     user.setUsername("updated");
+    user.setRole(role);
+
     user.setPasswordPlaintext(null);
 
     // act
