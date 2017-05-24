@@ -52,9 +52,11 @@ public class UserService {
         dbUser.setEmail(user.getEmail());
       }
 
-      String hashed = BCrypt.hashpw(user.getPasswordPlaintext(), BCrypt.gensalt());
-      if (!hashed.equals(dbUser.getPasswordHash())) {
-        dbUser.setPasswordHash(hashed);
+      if (user.getPasswordPlaintext() != null && !user.getPasswordPlaintext().isEmpty()) {
+        String hashed = BCrypt.hashpw(user.getPasswordPlaintext(), BCrypt.gensalt());
+        if (!hashed.equals(dbUser.getPasswordHash())) {
+          dbUser.setPasswordHash(hashed);
+        }
       }
 
       if (!user.getJwtToken().equals(dbUser.getJwtToken())) {
