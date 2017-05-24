@@ -142,6 +142,26 @@ public class UserControllerIT {
     assertNull(json.get("passwortPlaintext"));
     assertNotNull(json.get("id"));
   }
+  
+  @Test
+  public void updateUserWithoutPassword() {
+    // arrange
+    User user = new User();
+    user.setId(7);
+    user.setEmail("nonull@hsr.ch");
+    user.setUsername("updated");
+    user.setRole(role);
+
+    user.setPasswordPlaintext(null);
+
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.put, "/user/7", user);
+
+    // assert
+    Map<String, Object> json = response.json();
+    assertEquals(200, response.statusCode);
+    assertNull(json.get("passwortPlaintext"));
+  }
 
   @Test
   public void deleteUser() {

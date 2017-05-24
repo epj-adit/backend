@@ -52,13 +52,11 @@ public class UserService {
         dbUser.setEmail(user.getEmail());
       }
 
-      String hashed = BCrypt.hashpw(user.getPasswordPlaintext(), BCrypt.gensalt());
-      if (!hashed.equals(dbUser.getPasswordHash())) {
-        dbUser.setPasswordHash(hashed);
-      }
-
-      if (!user.getJwtToken().equals(dbUser.getJwtToken())) {
-        dbUser.setJwtToken(user.getJwtToken());
+      if (user.getPasswordPlaintext() != null && !user.getPasswordPlaintext().isEmpty()) {
+        String hashed = BCrypt.hashpw(user.getPasswordPlaintext(), BCrypt.gensalt());
+        if (!hashed.equals(dbUser.getPasswordHash())) {
+          dbUser.setPasswordHash(hashed);
+        }
       }
 
       if (!user.getRole().equals(dbUser.getRole())) {
@@ -119,11 +117,13 @@ public class UserService {
     try {
       User user = JsonUtil.fromJson(request.body(), User.class);
 
-      String token = request.headers("Authorization");
-      if (token != null && !token.isEmpty()) {
-        user.setJwtToken(token);
-      } else {
-        LOGGER.warn("User transformed, but no token provided.");
+      if (user.getJwtToken() == null || user.getJwtToken().isEmpty()) {
+        String token = request.headers("Authorization");
+        if (token != null && !token.isEmpty()) {
+          user.setJwtToken(token);
+        } else {
+          LOGGER.warn("User transformed, but no token provided.");
+        }
       }
 
       LOGGER.info("Received JSON data: " + user.toString());

@@ -105,7 +105,7 @@ public class User implements DbEntity {
     this.passwordPlaintext = passwordPlaintext;
   }
 
-  @Column(name = "jwttoken", length = 1000, nullable = true)
+  @Transient
   public String getJwtToken() {
     return this.jwtToken;
   }
