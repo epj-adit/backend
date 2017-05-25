@@ -36,7 +36,10 @@ public class AdvertisementControllerIT {
 
   @Before
   public void setup() {
+    TestUtil.setNoPermissionsUser(false);
+    TestUtil.setTestToken(null);
     TestUtil.setUseToken(true);
+    
     this.category = new Category();
     this.category.setId(1);
     
@@ -192,6 +195,39 @@ public class AdvertisementControllerIT {
     assertEquals(updatedValue, json.get("title"));
     assertNotNull(json.get("id"));
   }
+  
+  @Test
+  public void updateAdvertisementWithNoPermissionsUser() {
+    TestUtil.setNoPermissionsUser(true);
+    // arrange
+    User newUser = new User();
+    newUser.setEmail("mwieland@hsr.ch");
+    newUser.setId(1);
+
+    Role role = new Role();
+    newUser.setRole(role);
+
+    newUser.setRole(role);
+    
+    String updatedValue = "GoF Patterns";
+    Advertisement advertisement = new Advertisement();
+    advertisement.setId(1);
+    advertisement.setTitle(updatedValue);
+    advertisement.setDescription(description);
+    advertisement.setPrice(price);
+    advertisement.setAdvertisementState(advertisementState);
+    advertisement.setUser(newUser);
+    advertisement.setCategory(category);
+
+    // act
+    TestResponse response = TestUtil.request(HttpMethod.put, "/advertisement/6", advertisement);
+
+    // assert
+    Map<String, Object> json = response.json();
+    assertEquals(200, response.statusCode);
+    assertEquals(updatedValue, json.get("title"));
+    assertNotNull(json.get("id"));
+  }
 
   @Test
   public void updateNonExistentAdvertisement() {
@@ -285,24 +321,8 @@ public class AdvertisementControllerIT {
 
   @Test
   public void updateAdThatUserDoesntOwn() {
-    TestUtil.setUseToken(false);
+    TestUtil.setNoPermissionsUser(true);
     
-    //user needs any random permission so theres no nullpointerexceptions
-    Permission perm = new Permission();
-    perm.setId(1);
-    perm.setName("review");
-    Permission perm2 = new Permission();
-    perm2.setId(2);
-    perm2.setName("ban");
-    Set<Permission> permissions = new HashSet<>();
-    permissions.add(perm);
-    permissions.add(perm2);
-
-    Role role = new Role();
-    role.setId(2);
-    role.setPermissions(permissions);
-    role.setName("bla");
-
     Advertisement advertisement = new Advertisement();
     advertisement.setTitle("abcd");
     advertisement.setDescription("abcd");
@@ -310,16 +330,7 @@ public class AdvertisementControllerIT {
     advertisement.setAdvertisementState(advertisementState);
     advertisement.setCategory(category);
     advertisement.setId(3);
-
-    User newUser = new User();
-    newUser.setEmail("illegaluser@hsr.ch");
-    newUser.setId(2);
-    newUser.setRole(role);
-
-    TokenUtil tokenUtil = TokenUtil.getInstance();
-    String token = tokenUtil.generateToken(newUser);
-    newUser.setJwtToken(token);
-    advertisement.setUser(newUser);
+    advertisement.setUser(user);
 
     TestResponse response = TestUtil.request(HttpMethod.put, "/advertisement/1", advertisement);
 

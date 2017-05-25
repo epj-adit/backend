@@ -56,7 +56,7 @@ public class AdvertisementController {
 
       String token = getToken(request);
       checkBasicPermissions(advertisement, token);
-      checkReviewAdvertisementPermission(token);
+      checkReviewAdvertisementPermission(advertisement, token);
 
       return advertisementService.updateAdvertisement(advertisement);
     }, jsonTransformer());
@@ -81,8 +81,8 @@ public class AdvertisementController {
     }
   }
 
-  private void checkReviewAdvertisementPermission(String token) {
-    if (!permissionService.checkReviewAdvertisementPermission(token)) {
+  private void checkReviewAdvertisementPermission(Advertisement advertisement, String token) {
+    if (!permissionService.checkReviewAdvertisementPermission(advertisement.getUser(), token)) {
       LOGGER.warn("Additional permission is needed for editing other users status'!");
       throw new ForbiddenException(
           "Additional permission is needed for editing other users status'!");

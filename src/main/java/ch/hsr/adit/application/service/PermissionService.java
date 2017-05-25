@@ -20,10 +20,10 @@ public class PermissionService {
     User dbUser = getUserFromToken(token);
     //user that has non-basic permissions should be admin or supervisor
     if (!isAdmin(dbUser) && !isSupervisor(dbUser)) {
-      if (user.getId() != dbUser.getId()) {
+      if (!checkIds(user, dbUser)) {
         return false;
       }
-      if (!user.getRole().getPermissions().contains(PermissionUtil.BASIC_PERMISSION)) {
+      if (!dbUser.getRole().getPermissions().contains(PermissionUtil.BASIC_PERMISSION)) {
         return false;
       }
     }
@@ -57,10 +57,12 @@ public class PermissionService {
     return true;
   }
 
-  public boolean checkReviewAdvertisementPermission(String token) {
-    User user = getUserFromToken(token);
-
-    if (!user.getRole().getPermissions().contains(PermissionUtil.REVIEW_ADVERTISEMENTS)) {
+  public boolean checkReviewAdvertisementPermission(User user, String token) {
+    User dbUser = getUserFromToken(token);
+    if (checkIds(user, dbUser)) {
+      return true;
+    }
+    if (!dbUser.getRole().getPermissions().contains(PermissionUtil.REVIEW_ADVERTISEMENTS)) {
       return false;
     }
     return true;
@@ -77,5 +79,12 @@ public class PermissionService {
   private User getUserFromToken(String token) {
     String email = tokenUtil.getEmailFromToken(token);
     return userService.getByEmail(email);
+  }
+  
+  private boolean checkIds(User user, User dbUser) {
+    if (user.getId() != dbUser.getId()) {
+      return false;
+    }
+    return true;
   }
 }
