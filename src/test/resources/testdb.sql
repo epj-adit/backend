@@ -27,7 +27,9 @@ INSERT INTO public.role_permission (permission_id, role_id) VALUES (7, 1);
 INSERT INTO public.role_permission (permission_id, role_id) VALUES (1, 2);
 INSERT INTO public.role_permission (permission_id, role_id) VALUES (5, 2);
 INSERT INTO public.role_permission (permission_id, role_id) VALUES (2, 2);
+INSERT INTO public.role_permission (permission_id, role_id) VALUES (4, 2);
 INSERT INTO public.role_permission (permission_id, role_id) VALUES (1, 3);
+
 
 
 
@@ -36,7 +38,7 @@ INSERT INTO public.role_permission (permission_id, role_id) VALUES (1, 3);
 -- **************************************************
 
 -- USERS
-INSERT INTO public."user" (id, username, email, password_hash, is_active, is_private, wants_notification, created, updated, role_id) VALUES (1, 'rantaplan', 'mwieland@hsr.ch', 'abcde', false, true, 'true', NOW(), NULL ,2);
+INSERT INTO public."user" (id, username, email, password_hash, is_active, is_private, wants_notification, created, updated, role_id) VALUES (1, 'rantaplan', 'mwieland@hsr.ch', 'abcde', false, true, 'true', NOW(), NULL ,3);
 INSERT INTO public."user" (id, username, email, password_hash, is_active, is_private, wants_notification, created, updated, role_id) VALUES (2, 'vinxhe', 'nvinzens@hsr.ch', 'abcde', true, true, 'true', NOW(), NULL ,2);
 INSERT INTO public."user" (id, username, email, password_hash, is_active, is_private, wants_notification, created, updated, role_id) VALUES (3, 'student', 'student@hsr.ch', 'abcde', true, true, 'true', NOW(), NULL , 1);
 INSERT INTO public."user" (id, username, email, password_hash, is_active, is_private, wants_notification, created, updated, role_id) VALUES (4, 'deleted', 'deleted@hsr.ch', 'abcde', true, true, 'true', NOW(), NULL , 3);

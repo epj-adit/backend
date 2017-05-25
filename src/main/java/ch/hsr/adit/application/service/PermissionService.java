@@ -19,7 +19,7 @@ public class PermissionService {
   public boolean checkBasicPermissions(User user, String token) {
     User dbUser = getUserFromToken(token);
     //user that has non-basic permissions should be admin or supervisor
-    if (!isAdmin(dbUser) || !isSupervisor(dbUser)) {
+    if (!isAdmin(dbUser) && !isSupervisor(dbUser)) {
       if (user.getId() != dbUser.getId()) {
         return false;
       }
