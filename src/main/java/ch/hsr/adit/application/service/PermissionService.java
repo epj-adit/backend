@@ -48,10 +48,12 @@ public class PermissionService {
     return true;
   }
 
-  public boolean checkEditIsActivePermission(String token) {
-    User user = getUserFromToken(token);
-
-    if (!user.getRole().getPermissions().contains(PermissionUtil.EDIT_ISACTIVE)) {
+  public boolean checkEditIsActivePermission(User user, String token) {
+    User dbUser = getUserFromToken(token);
+    if (checkIds(user, dbUser)) {
+      return true;
+    }
+    if (!dbUser.getRole().getPermissions().contains(PermissionUtil.EDIT_ISACTIVE)) {
       return false;
     }
     return true;

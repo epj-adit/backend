@@ -61,7 +61,7 @@ public class UserController {
       userService.get(user);
 
       checkBasicPermissions(user, getToken(request));
-      checkEditIsActivePermission(getToken(request));
+      checkEditIsActivePermission(user, getToken(request));
 
       return userService.updateUser(user);
     }, jsonTransformer());
@@ -85,8 +85,8 @@ public class UserController {
     }
   }
 
-  private void checkEditIsActivePermission(String token) {
-    if (!permissionService.checkEditIsActivePermission(token)) {
+  private void checkEditIsActivePermission(User user, String token) {
+    if (!permissionService.checkEditIsActivePermission(user, token)) {
       LOGGER.warn("Additional permission is needed for editing other users status'!");
       throw new ForbiddenException(
           "Additional permission is needed for editing other users status'!");

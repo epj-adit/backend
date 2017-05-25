@@ -118,7 +118,7 @@ public class UserControllerIT {
   public void updateUserTest() {
     // arrange
     User user = new User();
-    user.setId(3);
+    user.setId(7);
     user.setUsername(username);
     user.setEmail("notactiveanymore@hsr.ch");
     user.setPasswordPlaintext(password);
