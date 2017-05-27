@@ -1,4 +1,4 @@
-# Engineering Projekt Backend Application (Server)
+# Engineering Project Backend Application (Server)
   
 The backend (server) application of the engineering project adit, 2017. See https://adit.github.io/ for more information.
 
