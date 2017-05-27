@@ -40,6 +40,7 @@ INSERT INTO public.role_permission (permission_id, role_id) VALUES (7, 1);
 INSERT INTO public.role_permission (permission_id, role_id) VALUES (1, 2);
 INSERT INTO public.role_permission (permission_id, role_id) VALUES (5, 2);
 INSERT INTO public.role_permission (permission_id, role_id) VALUES (2, 2);
+INSERT INTO public.role_permission (permission_id, role_id) VALUES (4, 2);
 INSERT INTO public.role_permission (permission_id, role_id) VALUES (1, 3);
 
 
