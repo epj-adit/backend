@@ -137,24 +137,4 @@ public class AuthenticationControllerIT {
     assertEquals(404, response.statusCode);
   }
   
-  @Test
-  public void claimTwoTokens() {
-    // arrange
-    Credential credentials = new Credential();
-    credentials.setEmail(email);
-    credentials.setPlaintextPassword(password);
-    
-    // act
-    TestResponse response1 = TestUtil.request(HttpMethod.post, "/authenticate", credentials);
-    Map<String, Object> json1 = response1.json();
-    
-    TestResponse response2 = TestUtil.request(HttpMethod.post, "/authenticate", credentials);
-    Map<String, Object> json2 = response2.json();
-    
-    // assert
-    String token1 = (String) json1.get("jwtToken");
-    String token2 = (String) json2.get("jwtToken");
-
-    assertEquals(token1, token2);
-  }
 }
