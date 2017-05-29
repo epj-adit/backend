@@ -33,7 +33,7 @@ public class UserService {
       user.setPasswordHash(null);
     }
 
-    return (User) userDao.persist(user);
+    return userDao.persist(user);
   }
 
   /**
@@ -85,7 +85,8 @@ public class UserService {
       LOGGER.warn("User with id " + user.getId() + " not found. Nothing updated");
       throw e;
     } catch (NullPointerException e) {
-      LOGGER.warn("Nullpointer on user with id" + user.getId() + ". Nothing updated.");
+      LOGGER.error("Nullpointer on user with id" + user.getId() + ". Nothing updated.");
+      LOGGER.error(e);
       throw new IllegalArgumentException(e.getMessage());
     }
   }
